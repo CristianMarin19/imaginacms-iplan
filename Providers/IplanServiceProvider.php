@@ -1,0 +1,131 @@
+<?php
+
+namespace Modules\Iplan\Providers;
+
+use Illuminate\Support\ServiceProvider;
+use Modules\Core\Traits\CanPublishConfiguration;
+use Modules\Core\Events\BuildingSidebar;
+use Modules\Core\Events\LoadingBackendTranslations;
+use Modules\Iplan\Events\Handlers\RegisterIplanidebar;
+
+class IplanServiceProvider extends ServiceProvider
+{
+    use CanPublishConfiguration;
+    /**
+     * Indicates if loading of the provider is deferred.
+     *
+     * @var bool
+     */
+    protected $defer = false;
+
+    /**
+     * Register the service provider.
+     *
+     * @return void
+     */
+    public function register()
+    {
+        $this->registerBindings();
+        $this->app['events']->listen(BuildingSidebar::class, RegisterIplanidebar::class);
+
+        $this->app['events']->listen(LoadingBackendTranslations::class, function (LoadingBackendTranslations $event) {
+            $event->load('categories', array_dot(trans('iplan::categories')));
+            $event->load('plans', array_dot(trans('iplan::plans')));
+            $event->load('limits', array_dot(trans('iplan::limits')));
+            $event->load('subscriptions', array_dot(trans('iplan::subscriptions')));
+            $event->load('subscriptionlimits', array_dot(trans('iplan::subscriptionlimits')));
+            // append translations
+
+
+
+        });
+    }
+
+    public function boot()
+    {
+        $this->publishConfig('iplan', 'permissions');
+
+        $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
+    }
+
+    /**
+     * Get the services provided by the provider.
+     *
+     * @return array
+     */
+    public function provides()
+    {
+        return array();
+    }
+
+    private function registerBindings()
+    {
+        $this->app->bind(
+            'Modules\Iplan\Repositories\CategoryRepository',
+            function () {
+                $repository = new \Modules\Iplan\Repositories\Eloquent\EloquentCategoryRepository(new \Modules\Iplan\Entities\Category());
+
+                if (! config('app.cache')) {
+                    return $repository;
+                }
+
+                return new \Modules\Iplan\Repositories\Cache\CacheCategoryDecorator($repository);
+            }
+        );
+        $this->app->bind(
+            'Modules\Iplan\Repositories\PlanRepository',
+            function () {
+                $repository = new \Modules\Iplan\Repositories\Eloquent\EloquentPlanRepository(new \Modules\Iplan\Entities\Plan());
+
+                if (! config('app.cache')) {
+                    return $repository;
+                }
+
+                return new \Modules\Iplan\Repositories\Cache\CachePlanDecorator($repository);
+            }
+        );
+        $this->app->bind(
+            'Modules\Iplan\Repositories\LimitRepository',
+            function () {
+                $repository = new \Modules\Iplan\Repositories\Eloquent\EloquentLimitRepository(new \Modules\Iplan\Entities\Limit());
+
+                if (! config('app.cache')) {
+                    return $repository;
+                }
+
+                return new \Modules\Iplan\Repositories\Cache\CacheLimitDecorator($repository);
+            }
+        );
+        $this->app->bind(
+            'Modules\Iplan\Repositories\SubscriptionRepository',
+            function () {
+                $repository = new \Modules\Iplan\Repositories\Eloquent\EloquentSubscriptionRepository(new \Modules\Iplan\Entities\Subscription());
+
+                if (! config('app.cache')) {
+                    return $repository;
+                }
+
+                return new \Modules\Iplan\Repositories\Cache\CacheSubscriptionDecorator($repository);
+            }
+        );
+        $this->app->bind(
+            'Modules\Iplan\Repositories\SubscriptionLimitRepository',
+            function () {
+                $repository = new \Modules\Iplan\Repositories\Eloquent\EloquentSubscriptionLimitRepository(new \Modules\Iplan\Entities\SubscriptionLimit());
+
+                if (! config('app.cache')) {
+                    return $repository;
+                }
+
+                return new \Modules\Iplan\Repositories\Cache\CacheSubscriptionLimitDecorator($repository);
+            }
+        );
+// add bindings
+
+
+
+
+
+
+    }
+}
