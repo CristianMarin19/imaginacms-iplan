@@ -5,7 +5,7 @@ namespace Modules\Iplan\Transformers;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
-class LimitTransformer extends JsonResource
+class SubscriptionLimitTransformer extends JsonResource
 {
   public function toArray($request)
   {
