@@ -41,7 +41,7 @@ class CategoryController extends BaseApiController
 
       //Response
       $response = [
-        "data" => PlanTransformer::collection($dataEntity)
+        "data" => CategoryTransformer::collection($dataEntity)
       ];
 
       //If request pagination add meta-page
@@ -74,7 +74,7 @@ class CategoryController extends BaseApiController
       if (!$dataEntity) throw new \Exception('Item not found', 404);
 
       //Response
-      $response = ["data" => new PlanTransformer($dataEntity)];
+      $response = ["data" => new CategoryTransformer($dataEntity)];
 
     } catch (\Exception $e) {
       $status = $this->getStatusError($e->getCode());

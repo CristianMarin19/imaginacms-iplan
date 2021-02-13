@@ -16,7 +16,7 @@ class CreateIplanCategoriesTable extends Migration
         Schema::create('iplan__categories', function (Blueprint $table) {
             $table->id();
 
-            $table->integer('category_id')->unsigned();
+            $table->integer('parent_id')->unsigned()->nullable()->default(0);
             $table->longText('options')->nullable();
             $table->integer('status')->unsigned();
 
