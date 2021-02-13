@@ -16,7 +16,7 @@ class CreateIplanLimitsTable extends Migration
         Schema::create('iplan__limits', function (Blueprint $table) {
             $table->id();
 
-            $table->string('entity');
+            $table->string('entity')->nullable();
             $table->string('attribute')->nullable();
             $table->string('attribute_value')->nullable();
             $table->integer('quantity')->unsigned();

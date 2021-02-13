@@ -16,11 +16,11 @@ class CreateIplanSubscriptionsTable extends Migration
         Schema::create('iplan__subscriptions', function (Blueprint $table) {
             $table->id();
 
-            $table->string('entity');
-            $table->string('entity_id');
-            $table->integer('frequency');
-            $table->dateTime('date_start');
-            $table->dateTime('date_end');
+            $table->string('entity')->nullable();
+            $table->string('entity_id')->nullable();
+            $table->string('frequency');
+            $table->dateTime('start_date');
+            $table->dateTime('end_date');
 
             $table->timestamps();
         });
