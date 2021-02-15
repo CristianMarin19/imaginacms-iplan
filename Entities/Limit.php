@@ -3,17 +3,14 @@
 namespace Modules\Iplan\Entities;
 
 use Illuminate\Database\Eloquent\Model;
-use Astrotomic\Translatable\Translatable;
 
 class Limit extends Model
 {
-  Use Translatable;
 
   protected $table = 'iplan__limits';
 
-  public $translatedAttributes = ["name"];
-
   protected $fillable = [
+    "name",
     "entity",
     "quantity",
     "attribute",
@@ -21,9 +18,9 @@ class Limit extends Model
     "plan_id",
   ];
 
-  public function plan()
-  {
-    return $this->belongsTo(Plan::class,"plan_id");
-  }
+    public function plans()
+    {
+        return $this->belongsToMany(Plan::class,'iplan__plan_limits');
+    }
 
 }

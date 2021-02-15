@@ -182,5 +182,36 @@ class LimitController extends BaseApiController
     return response()->json($response, $status ?? 200);
   }
 
+    /**
+     * GET ITEMS
+     *
+     * @return mixed
+     */
+    public function entities(Request $request)
+    {
+        try {
+
+            $modulesEnabled = app('modules')->allEnabled();
+            $data = [];
+
+            foreach($modulesEnabled as $name=>$module){
+                $cfg = config('asgard.'.strtolower($name).'.config.limitEntities');
+                if(!empty($cfg))
+                    $data = array_merge($data, $cfg);
+            }
+
+            //Response
+            $response = [
+                "data" => $data,
+            ];
+        } catch (\Exception $e) {
+            $status = $this->getStatusError($e->getCode());
+            $response = ["errors" => $e->getMessage()];
+        }
+
+        //Return response
+        return response()->json($response, $status ?? 200);
+    }
+
 
 }

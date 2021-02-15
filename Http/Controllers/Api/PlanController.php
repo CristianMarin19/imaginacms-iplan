@@ -104,6 +104,10 @@ class PlanController extends BaseApiController
       //Create item
       $entity = $this->plan->create($data);
 
+      if(!empty($data['limits'])){
+          $entity->limits->sync($data['limits']);
+      }
+
       //Response
       $response = ["data" => $entity];
       \DB::commit(); //Commit to Data Base

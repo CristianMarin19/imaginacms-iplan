@@ -17,6 +17,9 @@ class CreateIplanCategoriesTable extends Migration
             $table->id();
 
             $table->integer('parent_id')->unsigned()->nullable()->default(0);
+            $table->string('title');
+            $table->longText('description');
+            $table->string('slug')->unique();
             $table->longText('options')->nullable();
             $table->integer('status')->unsigned();
 

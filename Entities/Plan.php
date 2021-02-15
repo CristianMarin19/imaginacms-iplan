@@ -2,23 +2,22 @@
 
 namespace Modules\Iplan\Entities;
 
-use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Model;
 
 class Plan extends Model
 {
-    use Translatable;
 
     protected $table = 'iplan__plans';
-    public $translatedAttributes = ["name","description"];
     protected $fillable = [
+      "name",
+      "description",
       "frequency_id",
       "category_id",
     ];
 
     public function limits()
     {
-      return $this->hasMany(Limit::class,"plan_id");
+      return $this->belongsToMany(Limit::class,'iplan__plan_limits');
     }
 
     public function category()

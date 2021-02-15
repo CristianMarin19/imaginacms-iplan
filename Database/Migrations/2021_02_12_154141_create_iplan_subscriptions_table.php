@@ -16,6 +16,9 @@ class CreateIplanSubscriptionsTable extends Migration
         Schema::create('iplan__subscriptions', function (Blueprint $table) {
             $table->id();
 
+            $table->string('name');
+            $table->longText('description');
+            $table->string('category_name');
             $table->string('entity')->nullable();
             $table->string('entity_id')->nullable();
             $table->string('frequency');

@@ -16,6 +16,8 @@ class CreateIplanPlansTable extends Migration
         Schema::create('iplan__plans', function (Blueprint $table) {
             $table->id();
 
+            $table->string('name');
+            $table->longText('description');
             $table->integer('frequency_id')->unsigned();
             $table->bigInteger('category_id')->unsigned();
 
@@ -32,6 +34,9 @@ class CreateIplanPlansTable extends Migration
      */
     public function down()
     {
+        Schema::table('iplan__plans', function (Blueprint $table) {
+            $table->dropForeign(['category_id']);
+        });
         Schema::dropIfExists('iplan__plans');
     }
 }

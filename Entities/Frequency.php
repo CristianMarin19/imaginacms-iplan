@@ -1,10 +1,10 @@
 <?php
 
-namespace Modules\Iblog\Entities;
+namespace Modules\Iplan\Entities;
 
 /**
  * Class Status
- * @package Modules\Blog\Entities
+ * @package Modules\Iplan\Entities
  */
 class Frequency
 {

@@ -2,16 +2,16 @@
 
 namespace Modules\Iplan\Entities;
 
-use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Model;
 
 class Subscription extends Model
 {
-    use Translatable;
 
     protected $table = 'iplan__subscriptions';
-    public $translatedAttributes = ["name","description","category_name"];
     protected $fillable = [
+      "name",
+      "description",
+      "category_name",
       "entity",
       "entity_id",
       "frequency",

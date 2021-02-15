@@ -8,13 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class SubscriptionLimit extends Model
 {
 
-  use Translatable;
-
   protected $table = 'iplan__subscription_limits';
-
-  public $translatedAttributes = ["name"];
-
   protected $fillable = [
+    "name",
     "subscription_id",
     "entity",
     "attribute",

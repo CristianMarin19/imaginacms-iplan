@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateIplanPlanTranslationsTable extends Migration
+class CreateIplanPlanLimitsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,12 @@ class CreateIplanPlanTranslationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('iplan__plan_translations', function (Blueprint $table) {
+        Schema::create('iplan__plan_limits', function (Blueprint $table) {
             $table->id();
-
-            $table->string('name');
-            $table->longText('description');
-
             $table->bigInteger('plan_id')->unsigned();
-            $table->string('locale')->index();
-
-            $table->unique(['plan_id', 'locale']);
+            $table->bigInteger('limit_id')->unsigned();
             $table->foreign('plan_id')->references('id')->on('iplan__plans')->onDelete('cascade');
+            $table->foreign('limit_id')->references('id')->on('iplan__limits')->onDelete('cascade');
         });
     }
 
@@ -34,6 +29,10 @@ class CreateIplanPlanTranslationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('iplan__plan_translations');
+        Schema::table('iplan__plan_limits', function (Blueprint $table) {
+            $table->dropForeign(['plan_id']);
+            $table->dropForeign(['limit_id']);
+        });
+        Schema::dropIfExists('iplan__plan_limits');
     }
 }

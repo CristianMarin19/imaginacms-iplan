@@ -16,6 +16,7 @@ class CreateIplanSubscriptionLimitsTable extends Migration
         Schema::create('iplan__subscription_limits', function (Blueprint $table) {
             $table->id();
 
+            $table->text('name');
             $table->string('entity');
             $table->string('attribute')->nullable();
             $table->string('attribute_value')->nullable();
@@ -36,6 +37,9 @@ class CreateIplanSubscriptionLimitsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('iplan_subscription_limits');
+        Schema::table('iplan__subscription_limits', function (Blueprint $table) {
+            $table->dropForeign('subs_limit_subscript');
+        });
+        Schema::dropIfExists('iplan__subscription_limits');
     }
 }

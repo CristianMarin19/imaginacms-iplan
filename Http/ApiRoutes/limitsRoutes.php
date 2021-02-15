@@ -3,7 +3,10 @@ use Illuminate\Routing\Router;
 
 $router->group(['prefix' => 'limits'], function (Router $router) {
 
-
+  $router->get('/entities', [
+    'as' => 'api.iplan.limits.entities',
+    'uses' => 'LimitController@entities',
+  ]);
   $router->post('/', [
     'as' => 'api.iplan.limits.create',
     'uses' => 'LimitController@create',

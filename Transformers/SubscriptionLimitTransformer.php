@@ -9,8 +9,9 @@ class SubscriptionLimitTransformer extends JsonResource
 {
   public function toArray($request)
   {
-    return [
+    $data = [
       'id' => $this->when($this->id,$this->id),
+      'name' => $this->when($this->name,$this->name),
       'entity' => $this->when($this->entity,$this->entity),
       'quantity' => $this->when($this->quantity,$this->quantity),
       'quantityUsed' => $this->when($this->quantity_used,$this->quantity_used),
@@ -22,16 +23,6 @@ class SubscriptionLimitTransformer extends JsonResource
       'updatedAt' => $this->when($this->updated_at, $this->updated_at),
     ];
 
-      $filter = json_decode($request->filter);
-
-      // Return data with available translations
-      if (isset($filter->allTranslations) && $filter->allTranslations) {
-          // Get langs avaliables
-          $languages = \LaravelLocalization::getSupportedLocales();
-
-          foreach ($languages as $lang => $value) {
-              $data[$lang]['name'] = $this->hasTranslation($lang) ? $this->translate("$lang")['name'] : '';
-          }
-      }//isset
+    return $data;
   }
 }

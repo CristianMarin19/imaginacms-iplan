@@ -19,19 +19,6 @@ class CategoryTransformer extends JsonResource
       'updatedAt' => $this->when($this->updated_at, $this->updated_at),
     ];
 
-    $filter = json_decode($request->filter);
-
-    // Return data with available translations
-    if (isset($filter->allTranslations) && $filter->allTranslations) {
-      // Get langs avaliables
-      $languages = \LaravelLocalization::getSupportedLocales();
-
-      foreach ($languages as $lang => $value) {
-        $data[$lang]['title'] = $this->hasTranslation($lang) ? $this->translate("$lang")['title'] : '';
-        $data[$lang]['description'] = $this->hasTranslation($lang) ? $this->translate("$lang")['description'] : '';
-        $data[$lang]['slug'] = $this->hasTranslation($lang) ? $this->translate("$lang")['slug'] : '';
-      }
-    }//isset
     return $data;
   }//toArray()
 }

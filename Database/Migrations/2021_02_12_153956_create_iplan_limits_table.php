@@ -16,13 +16,11 @@ class CreateIplanLimitsTable extends Migration
         Schema::create('iplan__limits', function (Blueprint $table) {
             $table->id();
 
+            $table->text('name');
             $table->string('entity')->nullable();
             $table->string('attribute')->nullable();
             $table->string('attribute_value')->nullable();
             $table->integer('quantity')->unsigned();
-
-            $table->bigInteger('plan_id')->unsigned();
-            $table->foreign('plan_id')->references('id')->on('iplan__plans')->onDelete('cascade');
 
             $table->timestamps();
         });
