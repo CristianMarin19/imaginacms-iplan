@@ -6,6 +6,7 @@ namespace Modules\Iplan\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use Log;
 use Mockery\CountValidator\Exception;
+use Modules\Iplan\Entities\Frequency;
 use Modules\Iplan\Entities\Plan;
 use Modules\Ihelpers\Http\Controllers\Api\BaseApiController;
 use Modules\Iplan\Http\Requests\CreatePlanRequest;
@@ -105,7 +106,7 @@ class PlanController extends BaseApiController
       $entity = $this->plan->create($data);
 
       if(!empty($data['limits'])){
-          $entity->limits->sync($data['limits']);
+          $entity->limits()->sync($data['limits']);
       }
 
       //Response
@@ -141,7 +142,10 @@ class PlanController extends BaseApiController
       $params = $this->getParamsRequest($request);
 
       //Request to Repository
-      $this->plan->updateBy($criteria, $data, $params);
+      $plan = $this->plan->updateBy($criteria, $data, $params);
+      if(!empty($data['limits'])){
+        $plan->limits()->sync($data['limits']);
+      }
 
       //Response
       $response = ["data" => 'Item Updated'];
@@ -185,6 +189,63 @@ class PlanController extends BaseApiController
     //Return response
     return response()->json($response, $status ?? 200);
   }
+
+    /**
+     * GET PLAN FREQUENCIES
+     *
+     * @return mixed
+     */
+    public function frequencies(Request $request)
+    {
+        try {
+            //Response
+            $response = [
+                "data" => app('Modules\Iplan\Entities\Frequency')->lists()
+            ];
+        } catch (\Exception $e) {
+            $status = $this->getStatusError($e->getCode());
+            $response = ["errors" => $e->getMessage()];
+        }
+
+        //Return response
+        return response()->json($response, $status ?? 200);
+    }
+
+    /**
+     * GET ITEMS
+     *
+     * @return mixed
+     */
+    public function modules(Request $request)
+    {
+        try {
+
+            $modulesEnabled = app('modules')->allEnabled();
+            $data = [];
+
+            foreach($modulesEnabled as $name=>$module){
+                $cfg = config('asgard.'.strtolower($name).'.config.limitEntities');
+                if(!empty($cfg)) {
+                    $data[] = [
+                      'label' => $name,
+                      'value' => $name,
+                      'entities' => $cfg
+                    ];
+                }
+            }
+
+            //Response
+            $response = [
+                "data" => $data,
+            ];
+        } catch (\Exception $e) {
+            $status = $this->getStatusError($e->getCode());
+            $response = ["errors" => $e->getMessage()];
+        }
+
+        //Return response
+        return response()->json($response, $status ?? 200);
+    }
 
 
 }

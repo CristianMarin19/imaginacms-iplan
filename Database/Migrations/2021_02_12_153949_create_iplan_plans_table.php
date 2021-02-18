@@ -21,8 +21,6 @@ class CreateIplanPlansTable extends Migration
             $table->integer('frequency_id')->unsigned();
             $table->bigInteger('category_id')->unsigned();
 
-            $table->foreign('category_id')->references('id')->on('iplan__categories')->onDelete('cascade');
-
             $table->timestamps();
         });
     }
@@ -34,9 +32,6 @@ class CreateIplanPlansTable extends Migration
      */
     public function down()
     {
-        Schema::table('iplan__plans', function (Blueprint $table) {
-            $table->dropForeign(['category_id']);
-        });
         Schema::dropIfExists('iplan__plans');
     }
 }

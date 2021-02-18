@@ -8,23 +8,21 @@ namespace Modules\Iplan\Entities;
  */
 class Frequency
 {
-    const DRAFT = 0;
-    const PENDING = 1;
-    const PUBLISHED = 2;
-    const UNPUBLISHED = 3;
+    const WEEKLY = 8;
+    const BIWEEKLY = 15;
+    const MONTHLY = 30;
 
     /**
      * @var array
      */
-    private $statuses = [];
+    private $frequencies = [];
 
     public function __construct()
     {
-        $this->statuses = [
-            self::DRAFT => trans('iplan::common.frequency.draft'),
-            self::PENDING => trans('iplan::common.frequency.pending'),
-            self::PUBLISHED => trans('iplan::common.frequency.published'),
-            self::UNPUBLISHED => trans('iplan::common.frequency.unpublished'),
+        $this->frequencies = [
+            ['id' => self::WEEKLY, 'title' => trans('iplan::plans.frequencies.weekly')],
+            ['id' => self::BIWEEKLY, 'title' => trans('iplan::plans.frequencies.biweekly')],
+            ['id' => self::MONTHLY, 'title' =>  trans('iplan::plans.frequencies.monthly')],
         ];
     }
 
@@ -34,7 +32,7 @@ class Frequency
      */
     public function lists()
     {
-        return $this->statuses;
+        return $this->frequencies;
     }
 
     /**
@@ -42,12 +40,12 @@ class Frequency
      * @param int $statusId
      * @return string
      */
-    public function get($statusId)
+    public function get($frequencyId)
     {
-        if (isset($this->statuses[$statusId])) {
-            return $this->statuses[$statusId];
+        if (isset($this->frequencies[$frequencyId])) {
+            return $this->frequencies[$frequencyId];
         }
 
-        return $this->statuses[self::DRAFT];
+        return $this->frequencies[self::WEEKLY];
     }
 }

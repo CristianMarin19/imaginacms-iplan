@@ -43,6 +43,7 @@ class IplanServiceProvider extends ServiceProvider
 
     public function boot()
     {
+        $this->publishConfig('iplan', 'config');
         $this->publishConfig('iplan', 'permissions');
 
         $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
@@ -118,6 +119,18 @@ class IplanServiceProvider extends ServiceProvider
                 }
 
                 return new \Modules\Iplan\Repositories\Cache\CacheSubscriptionLimitDecorator($repository);
+            }
+        );
+        $this->app->bind(
+            'Modules\Iplan\Repositories\EntityPlanRepository',
+            function () {
+                $repository = new \Modules\Iplan\Repositories\Eloquent\EloquentEntityPlanRepository(new \Modules\Iplan\Entities\EntityPlan());
+
+                if (! config('app.cache')) {
+                    return $repository;
+                }
+
+                return new \Modules\Iplan\Repositories\Cache\CacheEntityPlanDecorator($repository);
             }
         );
 // add bindings

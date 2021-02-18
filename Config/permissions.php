@@ -15,6 +15,13 @@ return [
         'edit' => 'iplan::plans.edit resource',
         'destroy' => 'iplan::plans.destroy resource',
     ],
+    'iplan.entityplans' => [
+        'manage' => 'iplan::entityplans.list resource',
+        'index' => 'iplan::entityplans.list resource',
+        'create' => 'iplan::entityplans.create resource',
+        'edit' => 'iplan::entityplans.edit resource',
+        'destroy' => 'iplan::entityplans.destroy resource',
+    ],
     'iplan.limits' => [
         'manage' => 'iplan::limits.list resource',
         'index' => 'iplan::limits.list resource',

@@ -2,12 +2,13 @@
 
 namespace Modules\Iplan\Repositories\Eloquent;
 
-use Modules\Iplan\Repositories\PlanRepository;
 use Modules\Core\Repositories\Eloquent\EloquentBaseRepository;
 use Modules\Ihelpers\Events\CreateMedia;
 use Modules\Ihelpers\Events\DeleteMedia;
 use Modules\Ihelpers\Events\UpdateMedia;
-class EloquentPlanRepository extends EloquentBaseRepository implements PlanRepository
+use Modules\Iplan\Repositories\EntityPlanRepository;
+
+class EloquentEntityPlanRepository extends EloquentBaseRepository implements EntityPlanRepository
 {
 
   public function getItemsBy($params = false)
@@ -131,10 +132,8 @@ class EloquentPlanRepository extends EloquentBaseRepository implements PlanRepos
     if($model){
       $model->update((array)$data);
       event(new UpdateMedia($model,$data));
-      return $model;
     }
 
-    return false;
 
   }//updateBy()
 

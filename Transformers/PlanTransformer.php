@@ -12,11 +12,12 @@ class PlanTransformer extends JsonResource
       'id' => $this->when($this->id,$this->id),
       'name' => $this->when($this->name,$this->name),
       'description' => $this->when($this->description,$this->description),
-      'frequencyId' => $this->when($this->frequency,$this->frequency),
+      'frequencyId' => $this->when($this->frequency_id,$this->frequency_id),
       'categoryId' => $this->when($this->category_id,$this->category_id),
-      'category' => $this->whenLoaded($this->category),
+      'category' => $this->whenLoaded('category'),
       'createdAt' => $this->when($this->created_at, $this->created_at),
       'updatedAt' => $this->when($this->updated_at, $this->updated_at),
+      'limits' => $this->whenLoaded('limits'),
     ];
     return $data;
   }//toArray()

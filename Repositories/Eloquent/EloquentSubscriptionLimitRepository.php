@@ -91,6 +91,10 @@ class EloquentSubscriptionLimitRepository extends EloquentBaseRepository impleme
 
             if (isset($filter->field))//Filter by specific field
                 $field = $filter->field;
+
+            if(isset($filer->subscription)){
+                $query->where('subscription_id',$filter->subscription);
+            }
         }
 
         /*== FIELDS ==*/
@@ -104,7 +108,6 @@ class EloquentSubscriptionLimitRepository extends EloquentBaseRepository impleme
     public function create($data)
     {
         $entity = $this->model->create($data);
-        event(new CreateMedia($entity,$data));
         return $entity;
     }//create()
 
@@ -127,7 +130,6 @@ class EloquentSubscriptionLimitRepository extends EloquentBaseRepository impleme
         $model = $query->where($field ?? 'id', $criteria)->first();
         if($model){
             $model->update((array)$data);
-            event(new UpdateMedia($model,$data));
         }
 
 
@@ -149,6 +151,5 @@ class EloquentSubscriptionLimitRepository extends EloquentBaseRepository impleme
         /*== REQUEST ==*/
         $model = $query->where($field ?? 'id', $criteria)->first();
         $model ? $model->delete() : false;
-        event(new DeleteMedia($model->id, get_class($model)));
     }//deleteBy()
 }

@@ -3,6 +3,10 @@ use Illuminate\Routing\Router;
 
 $router->group(['prefix' => 'subscriptions'], function (Router $router) {
 
+  $router->get('/entities', [
+    'as' => 'api.iplan.subscriptions.entities',
+    'uses' => 'SubscriptionController@entities',
+  ]);
 
   $router->post('/', [
     'as' => 'api.iplan.subscriptions.create',

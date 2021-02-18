@@ -23,4 +23,8 @@ class Subscription extends Model
     {
       return $this->hasMany(SubscriptionLimit::class,"subscription_id");
     }
+
+    public function entityData(){
+        return $this->belongsTo($this->entity,"entity_id");
+    }
 }

@@ -23,4 +23,5 @@ class SubscriptionLimit extends Model
   {
     return $this->belongsTo(Subscription::class,"subscription_id");
   }
+
 }

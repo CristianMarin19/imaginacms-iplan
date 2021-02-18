@@ -7,29 +7,20 @@ use Illuminate\Http\Request;
 use Log;
 use Mockery\CountValidator\Exception;
 use Modules\Ihelpers\Http\Controllers\Api\BaseApiController;
-use Modules\Iplan\Http\Requests\CreateSubscriptionRequest;
-use Modules\Iplan\Http\Requests\UpdateSubscriptionRequest;
-use Modules\Iplan\Repositories\SubscriptionLimitRepository;
-use Modules\Iplan\Repositories\SubscriptionRepository;
-use Modules\Iplan\Repositories\PlanRepository;
-use Modules\Iplan\Transformers\SubscriptionTransformer;
+use Modules\Iplan\Http\Requests\CreateEntityPlanRequest;
+use Modules\Iplan\Http\Requests\UpdateEntityPlanRequest;
+use Modules\Iplan\Repositories\EntityPlanRepository;
+use Modules\Iplan\Transformers\EntityPlanTransformer;
 use Route;
-use Carbon\Carbon;
 
-class SubscriptionController extends BaseApiController
+class EntityPlanController extends BaseApiController
 {
-  private $subscription;
-  private $plan;
-  private $subscriptionLimit;
+  private $entityPlan;
 
-  public function __construct(SubscriptionRepository $subscription,
-                              PlanRepository $plan,
-                              SubscriptionLimitRepository $subscriptionLimit)
+  public function __construct(EntityPlanRepository $entityPlan)
   {
     parent::__construct();
-    $this->subscription = $subscription;
-    $this->plan = $plan;
-    $this->subscriptionLimit = $subscriptionLimit;
+    $this->entityPlan = $entityPlan;
 
   }
 
@@ -46,11 +37,11 @@ class SubscriptionController extends BaseApiController
       $params = $this->getParamsRequest($request);
 
       //Request to Repository
-      $dataEntity = $this->subscription->getItemsBy($params);
+      $dataEntity = $this->entityPlan->getItemsBy($params);
 
       //Response
       $response = [
-        "data" => SubscriptionTransformer::collection($dataEntity)
+        "data" => EntityPlanTransformer::collection($dataEntity)
       ];
 
       //If request pagination add meta-page
@@ -77,13 +68,13 @@ class SubscriptionController extends BaseApiController
       $params = $this->getParamsRequest($request);
 
       //Request to Repository
-      $dataEntity = $this->subscription->getItem($criteria, $params);
+      $dataEntity = $this->entityPlan->getItem($criteria, $params);
 
       //Break if no found item
       if (!$dataEntity) throw new \Exception('Item not found', 404);
 
       //Response
-      $response = ["data" => new SubscriptionTransformer($dataEntity)];
+      $response = ["data" => new EntityPlanTransformer($dataEntity)];
 
     } catch (\Exception $e) {
       $status = $this->getStatusError($e->getCode());
@@ -106,41 +97,12 @@ class SubscriptionController extends BaseApiController
     try {
       //Get data
       $data = $request->input('attributes');
-      $params = $this->getParamsRequest($request);
-      $params->include = ['category','limits'];
       //Validate Request
-
-      $plan = $this->plan->getItem($data['plan_id'], $params);
-
-      unset($data['plan_id']);
-
-      $endDate = Carbon::now()->addDays($plan->frequency_id);
-
-      $subscriptionData = [
-        'name' => $plan->name,
-        'description' => $plan->description,
-        'category_name' => $plan->category->title,
-        'start_date' => Carbon::now(),
-        'end_date' => $endDate,
-      ];
-
-      $data = array_merge($subscriptionData, $data);
+      $this->validateRequestApi(new CreateEntityPlanRequest((array)$data));
 
       //Create item
-      $entity = $this->subscription->create($data);
+      $entity = $this->entityPlan->create($data);
 
-      foreach($plan->limits as $limit){
-          $limitData = [
-              'name' => $limit->name,
-              'entity' => $limit->entity,
-              'quantity' => $limit->quantity,
-              'quantity_used' => 0,
-              'attribute' => $limit->attribute,
-              'attribute_value' => $limit->attribute_value,
-              'subscription_id' => $entity->id,
-          ];
-          $this->subscriptionLimit->create($limitData);
-      }
       //Response
       $response = ["data" => $entity];
       \DB::commit(); //Commit to Data Base
@@ -168,13 +130,13 @@ class SubscriptionController extends BaseApiController
       $data = $request->input('attributes');
 
       //Validate Request
-      $this->validateRequestApi(new UpdateSubscriptionRequest((array)$data));
+      $this->validateRequestApi(new UpdateEntityPlanRequest((array)$data));
 
       //Get Parameters from URL.
       $params = $this->getParamsRequest($request);
 
       //Request to Repository
-      $this->subscription->updateBy($criteria, $data, $params);
+      $this->entityPlan->updateBy($criteria, $data, $params);
 
       //Response
       $response = ["data" => 'Item Updated'];
@@ -204,7 +166,7 @@ class SubscriptionController extends BaseApiController
       $params = $this->getParamsRequest($request);
 
       //call Method delete
-      $this->subscription->deleteBy($criteria, $params);
+      $this->entityPlan->deleteBy($criteria, $params);
 
       //Response
       $response = ["data" => ""];
@@ -218,30 +180,6 @@ class SubscriptionController extends BaseApiController
     //Return response
     return response()->json($response, $status ?? 200);
   }
-
-    /**
-     * GET ITEMS
-     *
-     * @return mixed
-     */
-    public function entities(Request $request)
-    {
-        try {
-
-            $data = config('asgard.iplan.config.subscriptionEntities');
-
-            //Response
-            $response = [
-                "data" => $data,
-            ];
-        } catch (\Exception $e) {
-            $status = $this->getStatusError($e->getCode());
-            $response = ["errors" => $e->getMessage()];
-        }
-
-        //Return response
-        return response()->json($response, $status ?? 200);
-    }
 
 
 }

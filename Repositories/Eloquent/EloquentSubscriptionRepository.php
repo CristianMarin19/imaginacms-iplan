@@ -104,7 +104,6 @@ class EloquentSubscriptionRepository extends EloquentBaseRepository implements S
     public function create($data)
     {
         $entity = $this->model->create($data);
-        event(new CreateMedia($entity,$data));
         return $entity;
     }//create()
 
@@ -127,7 +126,6 @@ class EloquentSubscriptionRepository extends EloquentBaseRepository implements S
         $model = $query->where($field ?? 'id', $criteria)->first();
         if($model){
             $model->update((array)$data);
-            event(new UpdateMedia($model,$data));
         }
 
 
@@ -149,6 +147,5 @@ class EloquentSubscriptionRepository extends EloquentBaseRepository implements S
         /*== REQUEST ==*/
         $model = $query->where($field ?? 'id', $criteria)->first();
         $model ? $model->delete() : false;
-        event(new DeleteMedia($model->id, get_class($model)));
     }//deleteBy()
 }

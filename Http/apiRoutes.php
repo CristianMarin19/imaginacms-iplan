@@ -9,6 +9,8 @@ $router->group(['prefix' => 'iplan/v1'], function (Router $router) {
     require('ApiRoutes/categoriesRoutes.php');
     //======  PLANS
     require('ApiRoutes/plansRoutes.php');
+    //======  ENTITY PLANS
+    require('ApiRoutes/entityPlansRoutes.php');
     //======  LIMITS
     require('ApiRoutes/limitsRoutes.php');
 

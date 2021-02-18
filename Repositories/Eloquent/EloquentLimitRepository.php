@@ -128,8 +128,10 @@ class EloquentLimitRepository extends EloquentBaseRepository implements LimitRep
       $model = $query->where($field ?? 'id', $criteria)->first();
       if($model){
         $model->update((array)$data);
+        return $model;
       }
 
+      return false;
 
     }//updateBy()
 

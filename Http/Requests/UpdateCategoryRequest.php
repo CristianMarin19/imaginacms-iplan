@@ -8,7 +8,12 @@ class UpdateCategoryRequest extends BaseFormRequest
 {
     public function rules()
     {
-        return [];
+        return [
+            "name"=>"required|string|max:30",
+            "description"=>"string|max:250",
+            "frequency_id"=>"required|numeric|min:1",
+            "category_id"=>"required|numeric|min:0",
+        ];
     }
 
     public function translationRules()

@@ -21,7 +21,6 @@ class CreateIplanSubscriptionsTable extends Migration
             $table->string('category_name');
             $table->string('entity')->nullable();
             $table->string('entity_id')->nullable();
-            $table->string('frequency');
             $table->dateTime('start_date');
             $table->dateTime('end_date');
 

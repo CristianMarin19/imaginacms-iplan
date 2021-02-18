@@ -21,4 +21,9 @@ return [
     ],
     'validation' => [
     ],
+    'frequencies' =>[
+        'weekly' => 'Semanal',
+        'biweekly' => 'Quincenal',
+        'monthly' => 'Mensual',
+    ]
 ];
