@@ -8,7 +8,8 @@
     "order": 1,
     "providers": [
         "Modules\\Iplan\\Providers\\IplanServiceProvider",
-        "Modules\\Iplan\\Providers\\RouteServiceProvider"
+        "Modules\\Iplan\\Providers\\RouteServiceProvider",
+        "Modules\\Iplan\\Providers\\EventServiceProvider"
     ],
     "aliases": {},
     "files": [

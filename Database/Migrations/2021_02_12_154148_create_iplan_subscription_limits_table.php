@@ -21,7 +21,7 @@ class CreateIplanSubscriptionLimitsTable extends Migration
             $table->string('attribute')->nullable();
             $table->string('attribute_value')->nullable();
             $table->integer('quantity')->unsigned();
-            $table->integer('quantity_used')->unsigned();
+            $table->integer('quantity_used')->unsigned()->nullable()->default(0);
 
             $table->bigInteger('subscription_id')->unsigned();
             $table->foreign('subscription_id','subs_limit_subscript')->references('id')->on('iplan__subscriptions')->onDelete('cascade');
