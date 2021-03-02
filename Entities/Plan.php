@@ -3,9 +3,12 @@
 namespace Modules\Iplan\Entities;
 
 use Illuminate\Database\Eloquent\Model;
+use Modules\Icommerce\Support\Traits\Productable;
 
 class Plan extends Model
 {
+
+    use Productable;
 
     protected $table = 'iplan__plans';
     protected $fillable = [

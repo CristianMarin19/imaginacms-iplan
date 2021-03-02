@@ -7,6 +7,10 @@ use Modules\Core\Repositories\Eloquent\EloquentBaseRepository;
 use Modules\Ihelpers\Events\CreateMedia;
 use Modules\Ihelpers\Events\DeleteMedia;
 use Modules\Ihelpers\Events\UpdateMedia;
+use Modules\Icommerce\Events\CreateProductable;
+use Modules\Icommerce\Events\UpdateProductable;
+use Modules\Icommerce\Events\DeleteProductable;
+
 class EloquentPlanRepository extends EloquentBaseRepository implements PlanRepository
 {
 
@@ -29,9 +33,9 @@ class EloquentPlanRepository extends EloquentBaseRepository implements PlanRepos
     if (isset($params->filter)) {
       $filter = $params->filter;//Short filter
 
-      if(isset($filter->user)){
-        $query->where('user_id',$filter->user);
-      }//user
+      if(isset($filter->category)){
+        $query->where('category_id',$filter->category);
+      }//category
 
       //Filter by date
       if (isset($filter->date)) {
@@ -107,6 +111,8 @@ class EloquentPlanRepository extends EloquentBaseRepository implements PlanRepos
   public function create($data)
   {
     $entity = $this->model->create($data);
+    $entity->products()->sync([$data['product']]);
+    event(new CreateProductable($entity, $data));
     event(new CreateMedia($entity,$data));
     return $entity;
   }//create()
@@ -130,6 +136,7 @@ class EloquentPlanRepository extends EloquentBaseRepository implements PlanRepos
     $model = $query->where($field ?? 'id', $criteria)->first();
     if($model){
       $model->update((array)$data);
+      event(new UpdateProductable($model, $data));
       event(new UpdateMedia($model,$data));
       return $model;
     }
@@ -154,6 +161,7 @@ class EloquentPlanRepository extends EloquentBaseRepository implements PlanRepos
     /*== REQUEST ==*/
     $model = $query->where($field ?? 'id', $criteria)->first();
     $model ? $model->delete() : false;
+    event(new DeleteProductable($model));
     event(new DeleteMedia($model->id, get_class($model)));
   }//deleteBy()
 
