@@ -1,7 +1,7 @@
 <?php
 return [
     'plans' => [
-        'productId' => [
+        'productable' => [
             'loadOptions' => [
                 'apiRoute' => 'apiRoutes.qcommerce.products',
                 'select' => [ 'label' => 'name', 'id' => 'id' ],

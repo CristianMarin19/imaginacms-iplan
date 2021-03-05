@@ -21,9 +21,9 @@ class EloquentPlanRepository extends EloquentBaseRepository implements PlanRepos
 
     /*== RELATIONSHIPS ==*/
     if (in_array('*', $params->include)) {//If Request all relationships
-      $query->with([]);
+      $query->with(['products','category','limits']);
     } else {//Especific relationships
-      $includeDefault = [];//Default relationships
+      $includeDefault = ['products'];//Default relationships
       if (isset($params->include))//merge relations with default relationships
       $includeDefault = array_merge($includeDefault, $params->include);
       $query->with($includeDefault);//Add Relationships to query
