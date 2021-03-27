@@ -1,6 +1,7 @@
 <?php
 return [
     'plan' => [
-        'index' => 'plans'
+        'index' => 'plans',
+        'checkout' => 'comprar',
     ]
 ];

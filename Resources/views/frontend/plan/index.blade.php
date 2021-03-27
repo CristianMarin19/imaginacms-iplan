@@ -9,7 +9,7 @@
                             <h5 class="card-title">{{ $plan->name }}</h5>
                             <p class="card-text">{!! $plan->description !!}</p>
                             <p class="card-text"><small class="text-muted">{{ localesymbol()->symbol_left }} {{ formatMoney($plan->product->price) }}</small></p>
-                            <a href="{{ route(locale().'.iplan.plan.index') }}" class="btn btn-primary">Solicitar</a>
+                            <a href="{{ route(locale().'.iplan.plan.checkout',['planId' => $plan->id]) }}" class="btn btn-primary">Solicitar</a>
                         </div>
                     </div>
                 </div>

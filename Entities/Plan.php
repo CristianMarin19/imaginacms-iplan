@@ -3,12 +3,11 @@
 namespace Modules\Iplan\Entities;
 
 use Illuminate\Database\Eloquent\Model;
+use Modules\Icommerce\Entities\Product;
 use Modules\Icommerce\Support\Traits\Productable;
 
 class Plan extends Model
 {
-
-    use Productable;
 
     protected $table = 'iplan__plans';
     protected $fillable = [
@@ -26,5 +25,10 @@ class Plan extends Model
     public function category()
     {
         return $this->belongsTo(Category::class,"category_id");
+    }
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class,"id","entity_id");
     }
 }

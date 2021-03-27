@@ -12,8 +12,4 @@ Route::group(['prefix' => LaravelLocalization::setLocale(),
         'uses' => 'PublicController@index',
     ]);
 
-    $router->get(trans('iplan::routes.plan.index'), [
-        'as' => $locale . '.iplan.plan.index',
-        'uses' => 'PublicController@index',
-    ]);
 });
