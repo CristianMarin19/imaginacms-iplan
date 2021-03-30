@@ -12,6 +12,7 @@ return [
     ],
     'button' => [
         'create plan' => 'Create a plan',
+        'buy' => 'Comprar',
     ],
     'table' => [
     ],
