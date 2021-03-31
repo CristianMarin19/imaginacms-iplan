@@ -3,7 +3,6 @@
 namespace Modules\Iplan\Transformers;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use Modules\Icommerce\Transformers\ProductTransformer;
 
 class PlanTransformer extends JsonResource
 {
@@ -16,12 +15,17 @@ class PlanTransformer extends JsonResource
       'frequencyId' => $this->when($this->frequency_id,$this->frequency_id),
       'categoryId' => $this->when($this->category_id,$this->category_id),
       'category' => new CategoryTransformer($this->whenLoaded('category')),
-      'productId' => $this->product ? $this->product->id : '',
-      'product' => $this->whenLoaded('product'),
       'createdAt' => $this->when($this->created_at, $this->created_at),
       'updatedAt' => $this->when($this->updated_at, $this->updated_at),
       'limits' => $this->whenLoaded('limits'),
     ];
+
+    if(is_module_enabled('Icommerce')){
+        $productTransformer = 'Modules\\Icommerce\\Transformers\\ProductTransformer';
+        $data['productId'] = $this->product ? $this->product->id : '';
+        $data['product'] = new $productTransformer($this->whenLoaded('product'));
+    }
+
     return $data;
   }//toArray()
 }

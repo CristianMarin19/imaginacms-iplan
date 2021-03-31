@@ -4,7 +4,6 @@ namespace Modules\Iplan\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 use Modules\Icommerce\Entities\Product;
-use Modules\Icommerce\Support\Traits\Productable;
 
 class Plan extends Model
 {
