@@ -17,12 +17,11 @@ class PlanListItem extends Component
      *
      * @return void
      */
-    public function __construct( $item, $layout = 'iplan-list-item-1', $price = true)
+    public function __construct( $item, $layout = 'iplan-list-item-1')
     {
 //    $this->item = $item;
         $this->item = $item;
         $this->view = "iplan::frontend.components.plan-list-item.layout.". ( $layout ?? 'iplan-list-item-1').".index";
-        $this->price = $price;
         $this->initCategories();
     }
 
