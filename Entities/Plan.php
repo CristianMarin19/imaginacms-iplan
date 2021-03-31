@@ -3,7 +3,6 @@
 namespace Modules\Iplan\Entities;
 
 use Illuminate\Database\Eloquent\Model;
-use Modules\Icommerce\Entities\Product;
 
 class Plan extends Model
 {
@@ -14,6 +13,10 @@ class Plan extends Model
       "description",
       "frequency_id",
       "category_id",
+      'options',
+    ];
+    protected $casts = [
+        'options' => 'array',
     ];
 
     public function limits()
@@ -28,6 +31,13 @@ class Plan extends Model
 
     public function product()
     {
-        return $this->belongsTo(Product::class,"id","entity_id");
+        return $this->belongsTo(\Modules\Icommerce\Entities\Product::class,"id","entity_id");
+    }
+
+    public function getOptionsAttribute($value)
+    {
+
+        return json_decode($value);
+
     }
 }

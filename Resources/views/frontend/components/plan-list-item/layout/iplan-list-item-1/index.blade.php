@@ -10,7 +10,7 @@
                     {!! $item->description !!}
                 </div>
                 <div class="card-footer bg-white border-0 rounded-bottom text-center py-0">
-                    <a href="#"
+                    <a href="{{ $item->options ? $item->options->url : '#' }}"
                        class="btn btn-primary rounded-pill">{{ trans('iplan::plans.button.buy') }}</a>
                 </div>
             </div>
