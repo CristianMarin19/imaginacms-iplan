@@ -31,13 +31,11 @@ class Plan extends Model
 
     public function product()
     {
-        return $this->belongsTo(\Modules\Icommerce\Entities\Product::class,"id","entity_id");
+        return $this->morphOne(\Modules\Icommerce\Entities\Product::class,'entity');
     }
 
     public function getOptionsAttribute($value)
     {
-
         return json_decode($value);
-
     }
 }

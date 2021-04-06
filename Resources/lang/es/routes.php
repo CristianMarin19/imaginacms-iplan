@@ -2,6 +2,6 @@
 return [
     'plan' => [
         'index' => 'planes',
-        'checkout' => 'comprar',
+        'buy' => 'comprar',
     ]
 ];

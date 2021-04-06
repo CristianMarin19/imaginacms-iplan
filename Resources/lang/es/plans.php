@@ -9,6 +9,7 @@ return [
         'plans' => 'Plan',
         'create plan' => 'Create a plan',
         'edit plan' => 'Edit a plan',
+        'buy-plan' => 'Comprar un Plan',
     ],
     'button' => [
         'create plan' => 'Create a plan',

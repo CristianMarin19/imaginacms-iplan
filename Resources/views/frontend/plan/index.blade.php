@@ -1,5 +1,8 @@
 @extends('layouts.master')
 @section('content')
+    <x-isite::breadcrumb>
+        <li class="breadcrumb-item active" aria-current="page"> {{trans('iplan::plans.title.buy-plan')}}</li>
+    </x-isite::breadcrumb>
     <div class="container">
         <div class="row py-3 justify-content-center">
             <x-isite::carousel.owl-carousel

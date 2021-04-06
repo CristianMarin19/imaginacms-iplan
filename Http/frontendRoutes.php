@@ -12,4 +12,9 @@ Route::group(['prefix' => LaravelLocalization::setLocale(),
         'uses' => 'PublicController@index',
     ]);
 
+    $router->get(trans('iplan::routes.plan.index').'/{planId}/'.trans('iplan::routes.plan.buy'), [
+        'as' => 'plans.buy',
+        'uses' => 'PublicController@buyPlan',
+    ]);
+
 });
