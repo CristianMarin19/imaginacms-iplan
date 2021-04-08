@@ -4,6 +4,8 @@
 namespace Modules\Iplan\Providers;
 
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
+use Modules\Iplan\Events\Handlers\ProcessPlanOrder;
+use Modules\Iplan\Events\Handlers\RegisterNewSubscription;
 use Modules\Iplan\Events\Handlers\UpdateUserLimits;
 use Modules\Iplan\Events\Handlers\ValidateLimits;
 use Illuminate\Support\Facades\Event;
@@ -54,6 +56,16 @@ class EventServiceProvider extends ServiceProvider
         Event::listen(
             "Modules\\" . $moduleName . "\\Events\\" . $entityName . "WasUpdated",
             [UpdateUserLimits::class, 'handle']
+        );
+
+        Event::listen(
+            "Modules\\Icommerce\\Events\\OrderWasProcessed",
+            [ProcessPlanOrder::class, 'handle']
+        );
+
+        Event::listen(
+            "Modules\\Iprofile\\Events\\UserCreatedEvent",
+            [RegisterNewSubscription::class, 'handle']
         );
     }
   }

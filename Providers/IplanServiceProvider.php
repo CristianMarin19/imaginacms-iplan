@@ -46,6 +46,8 @@ class IplanServiceProvider extends ServiceProvider
     {
         $this->publishConfig('iplan', 'config');
         $this->publishConfig('iplan', 'permissions');
+        $this->publishConfig('iplan', 'settings');
+        $this->publishConfig('iplan', 'settings-fields');
 
         $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
 
