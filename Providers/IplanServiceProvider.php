@@ -2,6 +2,7 @@
 
 namespace Modules\Iplan\Providers;
 
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Modules\Core\Traits\CanPublishConfiguration;
 use Modules\Core\Events\BuildingSidebar;
@@ -45,8 +46,13 @@ class IplanServiceProvider extends ServiceProvider
     {
         $this->publishConfig('iplan', 'config');
         $this->publishConfig('iplan', 'permissions');
+        $this->publishConfig('iplan', 'settings');
+        $this->publishConfig('iplan', 'settings-fields');
+        $this->publishConfig('iplan', 'crud-fields');
 
         $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
+
+        $this->registerComponents();
     }
 
     /**
@@ -141,4 +147,13 @@ class IplanServiceProvider extends ServiceProvider
 
 
     }
+
+    /**
+     * Register Blade components
+     */
+
+    private function registerComponents(){
+        Blade::componentNamespace("Modules\Iplan\View\Components", 'iplan');
+    }
+
 }

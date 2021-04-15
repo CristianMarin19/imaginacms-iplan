@@ -21,9 +21,9 @@ class EloquentPlanRepository extends EloquentBaseRepository implements PlanRepos
 
     /*== RELATIONSHIPS ==*/
     if (in_array('*', $params->include)) {//If Request all relationships
-      $query->with([]);
+      $query->with(['category','limits', 'product']);
     } else {//Especific relationships
-      $includeDefault = [];//Default relationships
+      $includeDefault = ['category', 'limits'];//Default relationships
       if (isset($params->include))//merge relations with default relationships
       $includeDefault = array_merge($includeDefault, $params->include);
       $query->with($includeDefault);//Add Relationships to query
@@ -84,9 +84,9 @@ class EloquentPlanRepository extends EloquentBaseRepository implements PlanRepos
 
     /*== RELATIONSHIPS ==*/
     if (in_array('*', $params->include)) {//If Request all relationships
-      $query->with([]);
+      $query->with(['category', 'limits', 'product']);
     } else {//Especific relationships
-      $includeDefault = [];//Default relationships
+      $includeDefault = ['category','limits'];//Default relationships
       if (isset($params->include))//merge relations with default relationships
       $includeDefault = array_merge($includeDefault, $params->include);
       $query->with($includeDefault);//Add Relationships to query
@@ -111,8 +111,7 @@ class EloquentPlanRepository extends EloquentBaseRepository implements PlanRepos
   public function create($data)
   {
     $entity = $this->model->create($data);
-    $entity->products()->sync([$data['product']]);
-    event(new CreateProductable($entity, $data));
+    event(new UpdateProductable($entity, $data));
     event(new CreateMedia($entity,$data));
     return $entity;
   }//create()
