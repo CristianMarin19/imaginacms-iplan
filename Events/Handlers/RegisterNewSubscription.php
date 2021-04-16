@@ -24,7 +24,7 @@ class RegisterNewSubscription
 
     //Create subscription
     if ($planIdToRegisteredUsers && $user) {
-      //Init subscriptio controller
+      //Init subscription controller
       $subscriptionController = app('Modules\Iplan\Http\Controllers\Api\SubscriptionController');
       //Create subscription
       $subscriptionController->create(new Request([

@@ -5,6 +5,7 @@ namespace Modules\Iplan\Repositories\Eloquent;
 use Modules\Iads\Events\AdIsCreating;
 use Modules\Iplan\Repositories\SubscriptionRepository;
 use Modules\Core\Repositories\Eloquent\EloquentBaseRepository;
+use Modules\Iplan\Entities\Plan;
 
 class EloquentSubscriptionRepository extends EloquentBaseRepository implements SubscriptionRepository
 {
