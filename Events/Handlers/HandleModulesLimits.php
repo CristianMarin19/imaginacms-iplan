@@ -10,7 +10,7 @@ use Modules\Iplan\Entities\Subscription;
 use Modules\User\Entities\Sentinel\User;
 use Carbon\Carbon;
 
-class ValidateLimits
+class HandleModulesLimits
 {
   private $logTitle;
 
@@ -22,34 +22,33 @@ class ValidateLimits
   //Handle to "IsCreating"
   public function handleIsCreating($event)
   {
-    $this->handle($event, 'isCreating');
+    $this->validateLimits($event, 'isCreating');
   }
 
   //Handle to "WasCreated"
   public function handleWasCreated($event)
   {
-    $this->handle($event, 'wasCreated');
+    $this->handleLimits($event, 'wasCreated');
   }
 
   //Handle to "IsUpdating"
   public function handleIsUpdating($event)
   {
-    $this->handle($event, 'isUpdating');
+    $this->validateLimits($event, 'isUpdating');
   }
 
   //Handle to "WasUpdated"
   public function handleWasupdated($event)
   {
-    $this->handle($event, 'wasUpdated');
+    $this->handleLimits($event, 'wasUpdated');
   }
 
   //Main Handle
-  public function handle($event, $eventType)
+  public function validateLimits($event, $eventType)
   {
     $model = $event->model;//Get model
-    $allowedLimits = true;//Defualt response
 
-    dd($eventType, $event);
+    $allowedLimits = true;//Defualt response
 
     //Get entity attributes
     $entityNamespace = get_class($model);
@@ -104,5 +103,11 @@ class ValidateLimits
 
     //Response forbidden
     if (!$allowedLimits) throw new \Exception('Entity Creating/Updating Not Allowed', 403);
+  }
+
+  //Handle limits after trigger event
+  public function handleLimits($event, $eventType)
+  {
+    dd('Handler limits');
   }
 }

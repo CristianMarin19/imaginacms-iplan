@@ -22,15 +22,16 @@ class SubscriptionController extends BaseApiController
   private $plan;
   private $subscriptionLimit;
 
-  public function __construct(SubscriptionRepository $subscription,
-                              PlanRepository $plan,
-                              SubscriptionLimitRepository $subscriptionLimit)
+  public function __construct(
+    SubscriptionRepository $subscription,
+    PlanRepository $plan,
+    SubscriptionLimitRepository $subscriptionLimit
+  )
   {
     parent::__construct();
     $this->subscription = $subscription;
     $this->plan = $plan;
     $this->subscriptionLimit = $subscriptionLimit;
-
   }
 
 
@@ -107,7 +108,7 @@ class SubscriptionController extends BaseApiController
       //Get data
       $data = $request->input('attributes');
       $params = $this->getParamsRequest($request);
-      $params->include = ['category','limits'];
+      $params->include = ['category', 'limits'];
       //Validate Request
 
       $plan = $this->plan->getItem($data['plan_id'], $params);
@@ -129,17 +130,17 @@ class SubscriptionController extends BaseApiController
       //Create item
       $entity = $this->subscription->create($data);
 
-      foreach($plan->limits as $limit){
-          $limitData = [
-              'name' => $limit->name,
-              'entity' => $limit->entity,
-              'quantity' => $limit->quantity,
-              'quantity_used' => 0,
-              'attribute' => $limit->attribute,
-              'attribute_value' => $limit->attribute_value,
-              'subscription_id' => $entity->id,
-          ];
-          $this->subscriptionLimit->create($limitData);
+      foreach ($plan->limits as $limit) {
+        $limitData = [
+          'name' => $limit->name,
+          'entity' => $limit->entity,
+          'quantity' => $limit->quantity,
+          'quantity_used' => 0,
+          'attribute' => $limit->attribute,
+          'attribute_value' => $limit->attribute_value,
+          'subscription_id' => $entity->id,
+        ];
+        $this->subscriptionLimit->create($limitData);
       }
       //Response
       $response = ["data" => $entity];
@@ -219,29 +220,27 @@ class SubscriptionController extends BaseApiController
     return response()->json($response, $status ?? 200);
   }
 
-    /**
-     * GET ITEMS
-     *
-     * @return mixed
-     */
-    public function entities(Request $request)
-    {
-        try {
+  /**
+   * GET ITEMS
+   *
+   * @return mixed
+   */
+  public function entities(Request $request)
+  {
+    try {
 
-            $data = config('asgard.iplan.config.subscriptionEntities');
+      $data = config('asgard.iplan.config.subscriptionEntities');
 
-            //Response
-            $response = [
-                "data" => $data,
-            ];
-        } catch (\Exception $e) {
-            $status = $this->getStatusError($e->getCode());
-            $response = ["errors" => $e->getMessage()];
-        }
-
-        //Return response
-        return response()->json($response, $status ?? 200);
+      //Response
+      $response = [
+        "data" => $data,
+      ];
+    } catch (\Exception $e) {
+      $status = $this->getStatusError($e->getCode());
+      $response = ["errors" => $e->getMessage()];
     }
 
-
+    //Return response
+    return response()->json($response, $status ?? 200);
+  }
 }

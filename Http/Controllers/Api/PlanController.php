@@ -247,28 +247,5 @@ class PlanController extends BaseApiController
         return response()->json($response, $status ?? 200);
     }
 
-    public function createOrder(Request $request)
-    {
-        try {
-            $params = $this->getParamsRequest($request);
-
-            $data = [];
-
-
-
-            //Response
-            $response = [
-                "data" => $data,
-            ];
-
-        } catch (\Exception $e) {
-            $status = $this->getStatusError($e->getCode());
-            $response = ["errors" => $e->getMessage()];
-        }
-
-        //Return response
-        return response()->json($response, $status ?? 200);
-    }
-
 
 }

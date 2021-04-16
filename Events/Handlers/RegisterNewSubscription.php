@@ -2,61 +2,40 @@
 
 namespace Modules\Iplan\Events\Handlers;
 
+use Modules\Iplan\Http\Controllers\Api\SubscriptionController;
+use Illuminate\Http\Request;
 
 class RegisterNewSubscription
 {
 
-    public function __construct()
-    {
+  private $logtitle;
 
+  public function __construct()
+  {
+    $this->logtitle = '[IPLAN-SUBSCRIPTION]::';
+  }
+
+  public function handle($event)
+  {
+    //Get plan Id form setting
+    $planIdToRegisteredUsers = setting('iplan::defaultPlanToNewUsers');
+    //Get user registered data
+    $user = $event->user;
+
+    //Create subscription
+    if ($planIdToRegisteredUsers && $user) {
+      //Init subscriptio controller
+      $subscriptionController = app('Modules\Iplan\Http\Controllers\Api\SubscriptionController');
+      //Create subscription
+      $subscriptionController->create(new Request([
+        'attributes' => [
+          'entity' => "Modules\\User\\Entities\\Sentinel\\User",
+          'entity_id' => $user->id,
+          'plan_id' => $planIdToRegisteredUsers
+        ]
+      ]));
+      //Log
+      \Log::info("{$this->logtitle}New User | Register subscription Id {$planIdToRegisteredUsers} to user ID {$user->id}");
     }
-
-    public function handle($event)
-    {
-
-        $planRepository = app('Modules\\Iplan\\Repositories\\PlanRepository');
-        $subscriptionRepository = app('Modules\\Iplan\\Repositories\\SubscriptionRepository');
-        $subscriptionLimitRepository = app('Modules\\Iplan\\Repositories\\SubscriptionLimitRepository');
-
-        $user = $event->user;
-
-        $defaultPlanId = setting('iplan::defaultPlanToNewUsers');
-
-        $plan = $planRepository->getItem($defaultPlanId, []);
-
-        $endDate = Carbon::now()->addDays($plan->frequency_id);
-
-        $userDriver = config('asgard.user.config.driver');
-
-        $subscriptionData = [
-            'name' => $plan->name,
-            'description' => $plan->description,
-            'category_name' => $plan->category->title,
-            'start_date' => Carbon::now(),
-            'end_date' => $endDate,
-            'entity_id' => $user->id,
-            'entity_type' => "Modules\\User\\Entities\\{$userDriver}\\User"
-        ];
-
-        //Create item
-        $entity = $subscriptionRepository->create($subscriptionData);
-
-        foreach($plan->limits as $limit){
-            $limitData = [
-                'name' => $limit->name,
-                'entity' => $limit->entity,
-                'quantity' => $limit->quantity,
-                'quantity_used' => 0,
-                'attribute' => $limit->attribute,
-                'attribute_value' => $limit->attribute_value,
-                'subscription_id' => $entity->id,
-            ];
-            $subscriptionLimitRepository->create($limitData);
-        }
-
-
-    }// If handle
-
-
-
+  }
 }

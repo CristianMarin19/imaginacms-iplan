@@ -7,7 +7,7 @@ use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvi
 use Modules\Iplan\Events\Handlers\ProcessPlanOrder;
 use Modules\Iplan\Events\Handlers\RegisterNewSubscription;
 use Modules\Iplan\Events\Handlers\UpdateUserLimits;
-use Modules\Iplan\Events\Handlers\ValidateLimits;
+use Modules\Iplan\Events\Handlers\HandleModulesLimits;
 use Illuminate\Support\Facades\Event;
 
 class EventServiceProvider extends ServiceProvider
@@ -21,52 +21,43 @@ class EventServiceProvider extends ServiceProvider
     $this->module = app('modules');//Get modules
     $entities = [];//Default entities
 
+    //Dynamic module events
+    $dynamicModuleEvents = ['IsCreating', 'WasCreated', 'IsUpdating', 'Wasupdated'];
+
     //Get config to limits entities
     foreach ($this->module->allEnabled() as $name => $module) {
-      $configLimitEntities = config('asgard.' . strtolower($name) . '.config.limitEntities');
+      $configLimitEntities = config('asgard.' . strtolower($name) . '.config.limitableEntities');
       if (!empty($configLimitEntities)) $entities = array_merge($entities, $configLimitEntities);
     }
 
-    //Add dynamic events handler
+    //Create dynamic events handler
     foreach ($entities as $entity) {
-        //Get info form entity
+      if (isset($entity['status']) && $entity['status']) {
+        //Get entity information
         $entityPath = explode('\\', $entity["entity"]);
         $entityName = end($entityPath);
         $moduleName = $entityPath[1];
 
-        //Listen Creating Event
-        Event::listen(
-            "Modules\\" . $moduleName . "\\Events\\" . $entityName . "IsCreating",
-            [ValidateLimits::class, 'handle']
-        );
-
-        //Listen Updating Event
-        Event::listen(
-            "Modules\\" . $moduleName . "\\Events\\" . $entityName . "IsUpdating",
-            [ValidateLimits::class, 'handle']
-        );
-
-        //Listen Created Event
-        Event::listen(
-            "Modules\\" . $moduleName . "\\Events\\" . $entityName . "WasCreated",
-            [UpdateUserLimits::class, 'handle']
-        );
-
-        //Listen Updating Event
-        Event::listen(
-            "Modules\\" . $moduleName . "\\Events\\" . $entityName . "WasUpdated",
-            [UpdateUserLimits::class, 'handle']
-        );
-
-        Event::listen(
-            "Modules\\Icommerce\\Events\\OrderWasProcessed",
-            [ProcessPlanOrder::class, 'handle']
-        );
-
-        Event::listen(
-            "Modules\\Iprofile\\Events\\UserCreatedEvent",
-            [RegisterNewSubscription::class, 'handle']
-        );
+        //Listen dynamic module events
+        foreach ($dynamicModuleEvents as $eventName) {
+          Event::listen(
+            "Modules\\" . $moduleName . "\\Events\\" . $entityName . $eventName,
+            [HandleModulesLimits::class, "handle{$eventName}"]
+          );
+        }
+      }
     }
+
+    //Listen user was created event
+    Event::listen(
+      "Modules\\Iprofile\\Events\\UserCreatedEvent",
+      [RegisterNewSubscription::class, 'handle']
+    );
+
+    //Listen order processed
+    Event::listen(
+      "Modules\\Icommerce\\Events\\OrderWasProcessed",
+      [ProcessPlanOrder::class, 'handle']
+    );
   }
 }

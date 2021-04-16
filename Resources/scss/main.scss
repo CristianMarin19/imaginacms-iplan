@@ -85,6 +85,9 @@
         @include font-size(26px);
         font-weight: bold;
         color: $primary;
+        del{
+          @include font-size(18px);
+        }
       }
 
       .subtitle {
