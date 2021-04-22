@@ -96,12 +96,16 @@ class EloquentCategoryRepository extends EloquentBaseRepository implements Categ
       $field = $filter->field;
     }
 
-    /*== FIELDS ==*/
-    if (isset($params->fields) && count($params->fields))
-    $query->select($params->fields);
+      // find by specific attribute or by id
+      $query->where($field ?? 'id', $criteria);
 
-    /*== REQUEST ==*/
-    return $query->where($field ?? 'id', $criteria)->first();
+      /*== FIELDS ==*/
+      if (isset($params->fields) && count($params->fields))
+        $query->select($params->fields);
+
+      /*== REQUEST ==*/
+      return $query->first();
+
   }//getItem()
 
   public function create($data)

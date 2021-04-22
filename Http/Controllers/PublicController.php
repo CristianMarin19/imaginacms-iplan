@@ -12,17 +12,20 @@ use Mockery\CountValidator\Exception;
 
 //Entities
 use Modules\Iplan\Repositories\PlanRepository;
+use Modules\Iplan\Repositories\CategoryRepository;
 
 class PublicController extends BaseApiController
 {
   private $plan;
+  private $category;
 
   public function __construct(
-    PlanRepository $plan
+    PlanRepository $plan, CategoryRepository $category
   )
   {
     parent::__construct();
     $this->plan = $plan;
+    $this->category = $category;
   }
 
   // view products by category
@@ -42,6 +45,48 @@ class PublicController extends BaseApiController
 
     return view($tpl, compact('plans'));
   }
+
+    // view products by category
+    public function indexCategory($catSlug, Request $request)
+    {
+
+        $argv = explode("/", $request->path());
+        $slug = end($argv);
+
+        $params = $this->getParamsRequest($request);
+
+        $catParams = [
+            'include' => ['*'],
+            'filter' => [
+                'field' => 'slug'
+            ]
+        ];
+
+        $catParams = json_decode(json_encode($catParams));
+
+        $category = $this->category->getItem($catSlug, $catParams);
+
+        if(!$category)
+            return abort(404);
+
+        $catFilter = [
+            'category' => $category->id
+        ];
+
+        $params->filter = json_decode(json_encode($catFilter));
+
+
+        $tpl = 'iplan::frontend.plan.index';
+        $ttpl = 'iplan.plan.index';
+
+        if (view()->exists($ttpl)) $tpl = $ttpl;
+
+        $plans = $this->plan->getItemsBy($params);
+
+        //$dataRequest = $request->all();
+
+        return view($tpl, compact('plans','category'));
+    }
 
     public function buyPlan(Request $request, $planId)
     {

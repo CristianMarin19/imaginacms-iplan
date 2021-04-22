@@ -13,10 +13,12 @@ use Carbon\Carbon;
 class HandleModulesLimits
 {
   private $logTitle;
+  private $subscriptionLimit;
 
   public function __construct()
   {
     $this->logTitle = '[Iplan-Validate-Limit-Event]::';
+    $this->subscriptionLimit = app('Modules\Iplan\Repositories\SubscriptionLimitRepository');
   }
 
   //Handle to "IsCreating"
@@ -43,6 +45,18 @@ class HandleModulesLimits
     $this->handleLimits($event, 'wasUpdated');
   }
 
+  //Handle to "IsDeleting"
+  public function handleIsDeleting($event)
+  {
+        $this->validateLimits($event, 'isDeleting');
+  }
+
+  //Handle to "WasDeleted"
+  public function handleWasDeleted($event)
+  {
+        $this->handleLimits($event, 'wasDeleted');
+  }
+
   //Main Handle
   public function validateLimits($event, $eventType)
   {
@@ -59,6 +73,8 @@ class HandleModulesLimits
     //Validate if exist plan limits to current entity (if not found, allow trigger action)
     $existEntityLimits = Limit::where('entity', $entityNamespace)->count();
 
+    \Log::info("Exist Entity Limits => ". $existEntityLimits);
+
     //Validate user limits
     if ($existEntityLimits) {
       //Get user limits
@@ -71,10 +87,9 @@ class HandleModulesLimits
             $query->where('entity_id', auth()->user()->id)->where('entity', User::class);
           });
         });
-      })->groupBy(["attribute", "attribute_value", "entity"])
+      })
         ->orderBy('id')
         ->where('entity', $entityNamespace)
-        ->selectRaw('sum(quantity) as quantity, sum(quantity_used) as quantity_used, entity, attribute, attribute_value')
         ->get();
 
       //validate limits
@@ -93,6 +108,15 @@ class HandleModulesLimits
             if ((int)$limitToValidate->quantity_used >= (int)$limitToValidate->quantity) {
               $allowedLimits = false;
               break;//end loop
+            }else{
+                $quantityToChange = $limitToValidate->quantity_used;
+                if($eventType === 'isCreating') {
+                    $quantityToChange++;
+                }
+                if($eventType === 'isDeleting'){
+                    $quantityToChange--;
+                }
+                $this->subscriptionLimit->updateBy($limitToValidate->id, ['quantity_used' => $quantityToChange]);
             }
           }
         }
@@ -102,7 +126,7 @@ class HandleModulesLimits
     }
 
     //Response forbidden
-    if (!$allowedLimits) throw new \Exception('Entity Creating/Updating Not Allowed', 403);
+    if (!$allowedLimits) throw new \Exception(trans('iplan::common.messages.entity-create-not-allowed'), 403);
   }
 
   //Handle limits after trigger event

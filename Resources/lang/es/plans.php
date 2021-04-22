@@ -9,11 +9,12 @@ return [
         'plans' => 'Plan',
         'create plan' => 'Create a plan',
         'edit plan' => 'Edit a plan',
-        'buy-plan' => 'Comprar un Plan',
+        'buy-plan' => 'Comprar Plan',
+        'breadcrumb' => 'Planes',
     ],
     'button' => [
         'create plan' => 'Create a plan',
-        'buy' => 'Comprar',
+        'buy' => 'Adquirir Plan',
     ],
     'table' => [
     ],

@@ -1,7 +1,12 @@
 @extends('layouts.master')
 @section('content')
     <x-isite::breadcrumb>
-        <li class="breadcrumb-item active" aria-current="page"> {{trans('iplan::plans.title.buy-plan')}}</li>
+        @if(isset($category))
+        <li class="breadcrumb-item">
+            <a href="{{ route(locale().'.iplan.plan.index') }}">{{ trans('iplan::plans.title.breadcrumb') }}</a>
+        </li>
+        @endif
+        <li class="breadcrumb-item active" aria-current="page"> {{ isset($category) ? $category->title : trans('iplan::plans.title.breadcrumb') }}</li>
     </x-isite::breadcrumb>
     <div class="container">
         <div class="row py-3 justify-content-center">

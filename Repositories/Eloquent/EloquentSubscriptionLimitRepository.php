@@ -30,6 +30,10 @@ class EloquentSubscriptionLimitRepository extends EloquentBaseRepository impleme
                 $query->where('user_id',$filter->user);
             }//user
 
+            if(isset($filter->subscription)){
+                $query->where('subscription_id',$filter->subscription);
+            }//user
+
             //Filter by date
             if (isset($filter->date)) {
                 $date = $filter->date;//Short filter date

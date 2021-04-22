@@ -22,7 +22,7 @@ class EventServiceProvider extends ServiceProvider
     $entities = [];//Default entities
 
     //Dynamic module events
-    $dynamicModuleEvents = ['IsCreating', 'WasCreated', 'IsUpdating', 'Wasupdated'];
+    $dynamicModuleEvents = ['IsCreating', 'WasCreated', 'IsUpdating', 'Wasupdated', 'IsDeleting', 'WasDeleted'];
 
     //Get config to limits entities
     foreach ($this->module->allEnabled() as $name => $module) {

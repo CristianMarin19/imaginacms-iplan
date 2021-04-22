@@ -122,6 +122,7 @@ class SubscriptionController extends BaseApiController
         'category_name' => $plan->category->title,
         'start_date' => Carbon::now(),
         'end_date' => $endDate,
+        'status' => 1,
       ];
 
       $data = array_merge($subscriptionData, $data);

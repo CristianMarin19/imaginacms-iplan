@@ -18,6 +18,12 @@ return [
     'form' => [
     ],
     'messages' => [
+        'subSoldOut'      => 'Tu Suscripción al plan <b>:name</b> se ha <b>vencido</b>',
+        'subForSellOut'      => 'Te queda(n) <b>:days</b> día(s) de la suscripción al plan <b>:name</b>',
+    ],
+    'alerts' => [
+        'subForSellOut' => 'Tu Suscripción está por vencer',
+        'subSoldOut' => 'Tu Suscripción está vencida',
     ],
     'validation' => [
     ],

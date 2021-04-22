@@ -14,7 +14,7 @@ class AddStatusToSubscriptionsTable extends Migration
     public function up()
     {
         Schema::table('iplan__subscriptions', function (Blueprint $table) {
-            $table->integer('status')->unsigned()->nullable()->after('end_date');
+            $table->integer('status')->unsigned()->nullable()->default(1)->after('end_date');
         });
     }
 

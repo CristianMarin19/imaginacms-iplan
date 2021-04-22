@@ -25,6 +25,7 @@ class Subscription extends Model
     }
 
     public function entityData(){
-        return $this->belongsTo($this->entity,"entity_id");
+        $driver = config('asgard.user.config.driver');
+        return $this->belongsTo($this->entity ?? "Modules\\User\\Entities\\{$driver}\\User","entity_id");
     }
 }
