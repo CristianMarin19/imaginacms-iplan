@@ -14,6 +14,7 @@ return [
     ],
     'button' => [
         'create plan' => 'Create a plan',
+        'update plan' => 'Update Plan',
         'buy' => 'Buy Plan',
     ],
     'table' => [
@@ -21,6 +22,8 @@ return [
     'form' => [
     ],
     'messages' => [
+        'plan-without-product' => 'The Plan :name does not have a Product',
+        'please-assign-product' => 'Please assign a product to the plan <b>:name</b> for its correct monetize',
     ],
     'validation' => [
     ],

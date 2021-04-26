@@ -18,6 +18,8 @@ class PublicController extends BaseApiController
 {
   private $plan;
   private $category;
+  private $user;
+  private $notification;
 
   public function __construct(
     PlanRepository $plan, CategoryRepository $category
@@ -26,6 +28,8 @@ class PublicController extends BaseApiController
     parent::__construct();
     $this->plan = $plan;
     $this->category = $category;
+    $this->notification = app("Modules\Notification\Services\Inotification");
+    $this->user = app("Modules\Iprofile\Repositories\UserApiRepository");
   }
 
   // view products by category
@@ -96,13 +100,37 @@ class PublicController extends BaseApiController
 
         $params = json_decode(json_encode(
             [
-                "include" => ["product"],
+                "include" => [],
                 "filter" => [
                     "status" => 1
                 ]
             ]
         ));
         $plan = $this->plan->getItem($planId, $params);
+
+        if(!isset($plan->product)){
+            $userParams = json_decode(json_encode([
+                "include" => [],
+                "filter" => [
+                    "roleId" => 1
+                ]
+            ]));
+            $emails = json_decode(setting('isite::emails'));
+            foreach($emails as $email){
+                $this->notification->to([
+                    "email" => $email,
+                ])->push(
+                    [
+                        "title" => trans('iplan::plans.messages.plan-without-product',['name' => $plan->name]),
+                        "message" => trans('iplan::plans.messages.please-assign-product',['name' => $plan->name]),
+                        "buttonText" => trans("iplan::plans.button.update plan"),
+                        "withButton" => true,
+                        "link" => url('iadmin/#/plans'),
+                    ]
+                );
+            }
+            return redirect()->back()->withErrors([trans('iplan::plans.messages.plan-without-product',['name' => $plan->name])]);
+        }
 
         $products =   [[
             "id" => $plan->product->id,

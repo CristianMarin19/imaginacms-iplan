@@ -13,7 +13,8 @@ return [
         'breadcrumb' => 'Planes',
     ],
     'button' => [
-        'create plan' => 'Create a plan',
+        'create plan' => 'Crear un Plan',
+        'update plan' => 'Actualizar Plan',
         'buy' => 'Adquirir Plan',
     ],
     'table' => [
@@ -21,6 +22,8 @@ return [
     'form' => [
     ],
     'messages' => [
+        'plan-without-product' => 'El plan :name no tiene un producto asignado.',
+        'please-assign-product' => 'Favor asignar un producto al plan <b>:name</b> para su correcta monetización',
     ],
     'validation' => [
     ],
