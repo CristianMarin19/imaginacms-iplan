@@ -8,8 +8,6 @@ use Modules\Icommerce\Support\Traits\Productable;
 class Plan extends Model
 {
 
-    use Productable;
-
     protected $table = 'iplan__plans';
     protected $fillable = [
       "name",
@@ -26,5 +24,9 @@ class Plan extends Model
     public function category()
     {
         return $this->belongsTo(Category::class,"category_id");
+    }
+
+    public function product(){
+        return $this->morphOne("Modules\\Icommerce\\Entities\\Product","entity");
     }
 }
