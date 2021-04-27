@@ -127,6 +127,7 @@ class EloquentSubscriptionRepository extends EloquentBaseRepository implements S
     $model = $query->where($field ?? 'id', $criteria)->first();
     if ($model) {
       $model->update((array)$data);
+      return $model;
     }
 
 

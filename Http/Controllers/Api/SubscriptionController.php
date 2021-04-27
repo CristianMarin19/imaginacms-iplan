@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Log;
 use Mockery\CountValidator\Exception;
 use Modules\Ihelpers\Http\Controllers\Api\BaseApiController;
+use Modules\Iplan\Events\SubscriptionHasStarted;
 use Modules\Iplan\Http\Requests\CreateSubscriptionRequest;
 use Modules\Iplan\Http\Requests\UpdateSubscriptionRequest;
 use Modules\Iplan\Repositories\SubscriptionLimitRepository;
@@ -142,6 +143,8 @@ class SubscriptionController extends BaseApiController
           ];
           $this->subscriptionLimit->create($limitData);
       }
+
+      event(new SubscriptionHasStarted($entity));
       //Response
       $response = ["data" => $entity];
       \DB::commit(); //Commit to Data Base
@@ -175,7 +178,7 @@ class SubscriptionController extends BaseApiController
       $params = $this->getParamsRequest($request);
 
       //Request to Repository
-      $this->subscription->updateBy($criteria, $data, $params);
+      $entity = $this->subscription->updateBy($criteria, $data, $params);
 
       //Response
       $response = ["data" => 'Item Updated'];

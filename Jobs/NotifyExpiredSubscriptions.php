@@ -8,6 +8,7 @@ use Illuminate\Queue\SerializesModels;
 
 use Illuminate\Foundation\Bus\Dispatchable;
 use Modules\Iplan\Entities\Subscription;
+use Modules\Iplan\Events\SubscriptionHasFinished;
 
 class NotifyExpiredSubscriptions implements ShouldQueue
 {
@@ -47,6 +48,13 @@ class NotifyExpiredSubscriptions implements ShouldQueue
                 $user = $users->where("id",$item->entity_id)->first();
 
                 \Log::info("Sub Id {$item->id}: {$item->name} - To User: {$user->email} - Elapsed: {$item->days_elapsed} - Remaining: {$item->days_remaining}");
+
+                if($item->days_remaining <= 0) {
+                    $model = Subscription::find($item->id);
+                    $model->status = 0;
+                    $model->save();
+                    event(new SubscriptionHasFinished($model));
+                }
 
                 //send notification by email, broadcast and push -- by default only send by email
                 $this->notification->to([
