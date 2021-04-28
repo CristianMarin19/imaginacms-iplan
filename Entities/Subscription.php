@@ -17,6 +17,7 @@ class Subscription extends Model
       "frequency",
       "start_date",
       "end_date",
+      "status",
     ];
 
     public function limits()
@@ -28,4 +29,9 @@ class Subscription extends Model
         $driver = config('asgard.user.config.driver');
         return $this->belongsTo($this->entity ?? "Modules\\User\\Entities\\{$driver}\\User","entity_id");
     }
+
+    public function related($related){
+        return $this->morphedByMany($related, "related", "iplan__subscription_related")->withTimestamps();
+    }
+
 }

@@ -14,11 +14,13 @@ class HandleModulesLimits
 {
   private $logTitle;
   private $subscriptionLimit;
+  private $subscription;
 
   public function __construct()
   {
     $this->logTitle = '[Iplan-Validate-Limit-Event]::';
     $this->subscriptionLimit = app('Modules\Iplan\Repositories\SubscriptionLimitRepository');
+    $this->subscription = app('Modules\Iplan\Repositories\SubscriptionRepository');
   }
 
   //Handle to "IsCreating"
@@ -48,13 +50,13 @@ class HandleModulesLimits
   //Handle to "IsDeleting"
   public function handleIsDeleting($event)
   {
-        $this->validateLimits($event, 'isDeleting');
+     $this->validateLimits($event, 'isDeleting');
   }
 
   //Handle to "WasDeleted"
   public function handleWasDeleted($event)
   {
-        $this->handleLimits($event, 'wasDeleted');
+     $this->handleLimits($event, 'wasDeleted');
   }
 
   //Main Handle
@@ -86,7 +88,7 @@ class HandleModulesLimits
           $query->whereNull('entity')->orWhere(function ($query) {
             $query->where('entity_id', auth()->user()->id)->where('entity', User::class);
           });
-        });
+        })->where('status',1);
       })
         ->orderBy('id')
         ->where('entity', $entityNamespace)
@@ -94,6 +96,7 @@ class HandleModulesLimits
 
       //validate limits
       if ($userSubcriptionLimits->count() > 0) {
+        $subscriptionToValidate = null;
         foreach ($userSubcriptionLimits as $limitToValidate) {
           $validateLimit = true;
           $modelValue = null;
@@ -109,9 +112,11 @@ class HandleModulesLimits
               $allowedLimits = false;
               break;//end loop
             }else{
+                if(empty($subscriptionToValidate)) $subscriptionToValidate = $limitToValidate->subscription_id;
                 $quantityToChange = $limitToValidate->quantity_used;
                 if($eventType === 'isCreating') {
                     $quantityToChange++;
+
                 }
                 if($eventType === 'isDeleting'){
                     $quantityToChange--;
@@ -132,6 +137,50 @@ class HandleModulesLimits
   //Handle limits after trigger event
   public function handleLimits($event, $eventType)
   {
-    dd('Handler limits');
+    $model = $event->model;
+    if($eventType === 'wasCreated'){
+        //Get entity attributes
+        $entityNamespace = get_class($model);
+        $entityNamespaceExploded = explode('\\', strtolower($entityNamespace));
+        $moduleName = $entityNamespaceExploded[1];//Get module name
+        $entityName = $entityNamespaceExploded[3];//Get entity name
+        //Get current full date
+        $now = Carbon::now()->format('Y-m-d h:i:s');
+        $subscription = Subscription::whereHas('limits', function ($q) use ($entityNamespace) {
+            //filter limits
+            $q->where('entity', $entityNamespace);
+        })->whereDate('end_date', '>', $now)->whereDate('start_date', '<=', $now)->where(function ($query) {
+            $query->whereNull('entity')->orWhere(function ($query) {
+                $query->where('entity_id', auth()->user()->id)->where('entity', User::class);
+            });
+        })->where('status',1)
+          ->orderBy('id')
+          ->first();
+        if(!empty($subscription)) {
+            \Log::info("Subscription id: {$subscription->id} is assigned to related id: {$model->id} from {$entityNamespace}");
+            $limitsDisabled = 0;
+            $subLimits = $subscription->limits;
+            foreach($subLimits as $limit) {
+                $validateLimit = true;
+                $modelValue = null;
+                $limitAttribute = $limit->attribute; //get limit attribute name
+                //Validate if limit has attribute
+                if (!empty($limitAttribute) && isset($model->$limitAttribute)) {
+                    $modelValue = (string)$model->$limitAttribute ?? null;
+                    if ($modelValue != $limit->attribute_value) $validateLimit = false;
+                }
+                if ($validateLimit) {
+                    if ((int)$limit->quantity_used >= (int)$limit->quantity) {
+                        $limitsDisabled++;
+                    }
+                }
+            }
+            $subscription->related($entityNamespace)->sync([$model->id], false);
+            if($limitsDisabled==count($subLimits)){
+                $this->subscription->updateBy($subscription->id, ['status' => 0]);
+                \Log::info("Subscription id: {$subscription->id} is disabled due to their subs limits are out of stock");
+            }
+        }
+    }
   }
 }
