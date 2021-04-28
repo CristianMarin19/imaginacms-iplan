@@ -54,10 +54,12 @@ class EventServiceProvider extends ServiceProvider
       [RegisterNewSubscription::class, 'handle']
     );
 
-    //Listen order processed
-    Event::listen(
-      "Modules\\Icommerce\\Events\\OrderWasProcessed",
-      [ProcessPlanOrder::class, 'handle']
-    );
+    if(is_module_enabled('Icommerce')) {
+        //Listen order processed
+        Event::listen(
+            "Modules\\Icommerce\\Events\\OrderWasProcessed",
+            [ProcessPlanOrder::class, 'handle']
+        );
+    }
   }
 }
