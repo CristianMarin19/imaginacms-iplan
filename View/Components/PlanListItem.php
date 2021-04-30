@@ -17,7 +17,7 @@ class PlanListItem extends Component
      *
      * @return void
      */
-    public function __construct( $item, $layout = 'iplan-list-item-1')
+    public function __construct($item, $layout = 'iplan-list-item-1')
     {
 //    $this->item = $item;
         $this->item = $item;

@@ -1,7 +1,7 @@
 <?php
 return [
     'plans' => [
-        'productId' => [
+        /*'productId' => [
             'loadOptions' => [
                 'apiRoute' => 'apiRoutes.qcommerce.products',
                 'select' => [ 'label' => 'name', 'id' => 'id' ],
@@ -13,6 +13,17 @@ return [
                 'multiple' => false,
                 'useChips' => true,
 
+            ],
+        ],*/
+        'url' => [
+            'name' => 'url',
+            'value' => null,
+            'type' => 'input',
+            'fakeFieldName' => 'options',
+            'isFakeField' => true,
+            'props' => [
+                'label' => 'iplan::common.crudFields.url',
+                'type' => 'url',
             ],
         ],
     ]

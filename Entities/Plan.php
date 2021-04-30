@@ -14,7 +14,23 @@ class Plan extends Model
       "description",
       "frequency_id",
       "category_id",
+      "options",
     ];
+
+    protected $casts = [
+        'options' => 'array'
+    ];
+
+    public function setOptionsAttribute($value)
+    {
+        $this->attributes['options'] = json_encode($value);
+    }
+
+
+    public function getOptionsAttribute($value)
+    {
+        return json_decode($value);
+    }
 
     public function limits()
     {

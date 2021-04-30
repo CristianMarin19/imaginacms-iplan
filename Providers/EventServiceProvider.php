@@ -16,13 +16,13 @@ class EventServiceProvider extends ServiceProvider
 
   protected $listen = [];
 
-  public function boot()
+  public function register()
   {
     $this->module = app('modules');//Get modules
     $entities = [];//Default entities
 
     //Dynamic module events
-    $dynamicModuleEvents = ['IsCreating', 'WasCreated', 'IsUpdating', 'Wasupdated', 'IsDeleting', 'WasDeleted'];
+    $dynamicModuleEvents = ['IsCreating', 'WasCreated', 'IsUpdating', 'WasUpdated', 'IsDeleting', 'WasDeleted'];
 
     //Get config to limits entities
     foreach ($this->module->allEnabled() as $name => $module) {

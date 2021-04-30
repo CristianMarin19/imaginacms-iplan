@@ -42,7 +42,7 @@ class HandleModulesLimits
   }
 
   //Handle to "WasUpdated"
-  public function handleWasupdated($event)
+  public function handleWasUpdated($event)
   {
     $this->handleLimits($event, 'wasUpdated');
   }

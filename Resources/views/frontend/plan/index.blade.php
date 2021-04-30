@@ -18,11 +18,22 @@
             </div>
         @endif
         <div class="row py-3 justify-content-center">
+            @php
+                $params = [];
+                if(isset($category)){
+                    $params = [
+                        'filter' =>[
+                            'category' => "$category->id"
+                        ]
+                    ];
+                }
+            @endphp
             <x-isite::carousel.owl-carousel
                     id="carouselPlans"
                     repository="Modules\Iplan\Repositories\PlanRepository"
                     itemComponent="iplan::plan-list-item"
                     :loop="false"
+                    :params="$params"
                     :responsive="[
                       '0' => [
                         'items' => 1,

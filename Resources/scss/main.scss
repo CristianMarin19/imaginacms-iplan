@@ -85,6 +85,9 @@
         @include font-size(26px);
         font-weight: bold;
         color: $primary;
+        del{
+          @include font-size(18px);
+        }
       }
 
       .subtitle {
@@ -97,27 +100,21 @@
       box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
       margin: 0 5px;
 
-      .list-group {
+      ul {
         @include font-size(16px);
+        list-style: none;
+        padding-left: 1rem!important;
 
-        .list-group-item {
+        li {
           border: 0;
-          padding-left: 25px;
+          padding: .5rem 1.25rem .5rem 25px;
           position: relative;
-
-          &:first-child, &:nth-child(2) {
-            font-weight: bold;
-
-            span {
-              color: $primary;
-            }
-          }
 
           &:before {
             content: "\f00c";
             font-family: FontAwesome;
             font-weight: bold;
-            top: 12px;
+            top: 7px;
             left: 0;
             position: absolute;
             color: $primary;
