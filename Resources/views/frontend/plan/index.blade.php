@@ -33,6 +33,7 @@
                     repository="Modules\Iplan\Repositories\PlanRepository"
                     itemComponent="iplan::plan-list-item"
                     :loop="false"
+                    :margin="0"
                     :params="$params"
                     :responsive="[
                       '0' => [
