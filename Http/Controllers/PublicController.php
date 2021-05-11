@@ -92,11 +92,14 @@ class PublicController extends BaseApiController
         return view($tpl, compact('plans','category'));
     }
 
-    public function buyPlan(Request $request, $planId)
+    public function buyPlan(Request $request, $planId = null)
     {
         $cartService = app("Modules\Icommerce\Services\CartService");
 
         $data = $request->all();
+
+        if(!$planId)
+            $planId = $data['planId'];
 
         $params = json_decode(json_encode(
             [
@@ -135,14 +138,14 @@ class PublicController extends BaseApiController
         $products =   [[
             "id" => $plan->product->id,
             "quantity" => 1,
-            "options" => array_merge($data,["planId" => $planId])
+            "options" => $data
         ]];
 
         if(isset($data["featured"])){
             array_push($products,[
                 "id" => config("asgard.iad.config.featuredProductId"),
                 "quantity" => 1,
-                "options" => ["planId" => $planId]
+                "options" => $data
             ]);
         }
         $cartService->create([
