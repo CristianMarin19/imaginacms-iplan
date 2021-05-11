@@ -40,6 +40,7 @@ class ProcessPlanOrder
                                   'entity' => "Modules\\User\\Entities\\Sentinel\\User",
                                   'entity_id' => $user->id,
                                   'plan_id' => $planIdInOrderItem,
+                                  'options' => $item->options,
                               ]
                           ]));
                           //Log
