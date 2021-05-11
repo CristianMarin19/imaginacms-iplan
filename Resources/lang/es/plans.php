@@ -31,5 +31,9 @@ return [
         'weekly' => 'Semanal',
         'biweekly' => 'Quincenal',
         'monthly' => 'Mensual',
+        'bimonthly' => 'Bimestral',
+        'quarterly' => 'Trimestral',
+        'biannual' => 'Semestral',
+        'annual' => 'Anual',
     ]
 ];

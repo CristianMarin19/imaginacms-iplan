@@ -28,8 +28,12 @@ return [
     'validation' => [
     ],
     'frequencies' =>[
-        'weekly' => 'Semanal',
-        'biweekly' => 'Quincenal',
-        'monthly' => 'Mensual',
+        'weekly' => 'Weekly',
+        'biweekly' => 'Biweekly',
+        'monthly' => 'Monthly',
+        'bimonthly' => 'Bimonthly',
+        'quarterly' => 'Quarterly',
+        'biannual' => 'Biannual',
+        'annual' => 'Annual',
     ]
 ];

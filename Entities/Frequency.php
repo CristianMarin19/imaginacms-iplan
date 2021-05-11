@@ -11,6 +11,10 @@ class Frequency
     const WEEKLY = 8;
     const BIWEEKLY = 15;
     const MONTHLY = 30;
+    const BIMONTHLY = 60;
+    const QUARTERLY = 90;
+    const BIANNUAL = 180;
+    const ANNUAL = 365;
 
     /**
      * @var array
@@ -23,6 +27,10 @@ class Frequency
             ['id' => self::WEEKLY, 'title' => trans('iplan::plans.frequencies.weekly')],
             ['id' => self::BIWEEKLY, 'title' => trans('iplan::plans.frequencies.biweekly')],
             ['id' => self::MONTHLY, 'title' =>  trans('iplan::plans.frequencies.monthly')],
+            ['id' => self::BIMONTHLY, 'title' =>  trans('iplan::plans.frequencies.bimonthly')],
+            ['id' => self::QUARTERLY, 'title' =>  trans('iplan::plans.frequencies.quarterly')],
+            ['id' => self::BIANNUAL, 'title' =>  trans('iplan::plans.frequencies.biannual')],
+            ['id' => self::ANNUAL, 'title' =>  trans('iplan::plans.frequencies.annual')],
         ];
     }
 
