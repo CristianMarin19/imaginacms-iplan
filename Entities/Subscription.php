@@ -18,7 +18,22 @@ class Subscription extends Model
       "start_date",
       "end_date",
       "status",
+      "options",
     ];
+
+    protected $casts = [
+        'options' => 'array'
+    ];
+
+    public function setOptionsAttribute($value)
+    {
+        $this->attributes['options'] = json_encode($value);
+    }
+
+    public function getOptionsAttribute($value)
+    {
+        return json_decode($value);
+    }
 
     public function limits()
     {
@@ -33,5 +48,7 @@ class Subscription extends Model
     public function related($related){
         return $this->morphedByMany($related, "related", "iplan__subscription_related")->withTimestamps();
     }
+
+
 
 }
