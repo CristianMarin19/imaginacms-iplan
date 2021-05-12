@@ -36,12 +36,7 @@ class SubscriptionService
             foreach($subLimits as $limit) {
                 $validateLimit = true;
                 $modelValue = null;
-                $limitAttribute = $limit->attribute; //get limit attribute name
                 //Validate if limit has attribute
-                if (!empty($limitAttribute) && isset($model->$limitAttribute)) {
-                    $modelValue = (string)$model->$limitAttribute ?? null;
-                    if ($modelValue != $limit->attribute_value) $validateLimit = false;
-                }
                 if ($validateLimit) {
                     if((int)$limit->quantity > 0) {
                         if ((int)$limit->quantity_used >= (int)$limit->quantity) {
@@ -53,7 +48,8 @@ class SubscriptionService
             if($limitsDisabled==count($subLimits)){
                 return false;
             }
+            return true;
         }
-        return true;
+        return false;
     }
 }
