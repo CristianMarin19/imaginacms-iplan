@@ -108,18 +108,20 @@ class HandleModulesLimits
           }
           //validate limit quantities
           if ($validateLimit) {
-            if ((int)$limitToValidate->quantity_used >= (int)$limitToValidate->quantity) {
+            if (((int)$limitToValidate->quantity_used >= (int)$limitToValidate->quantity) && ((int)$limitToValidate->quantity > -1)) {
               $allowedLimits = false;
               break;//end loop
             }else{
                 if(empty($subscriptionToValidate)) $subscriptionToValidate = $limitToValidate->subscription_id;
                 $quantityToChange = $limitToValidate->quantity_used;
-                if($eventType === 'isCreating') {
-                    $quantityToChange++;
+                if((int)$limitToValidate->quantity > 0) {
+                    if ($eventType === 'isCreating') {
+                        $quantityToChange++;
 
-                }
-                if($eventType === 'isDeleting'){
-                    $quantityToChange--;
+                    }
+                    if ($eventType === 'isDeleting') {
+                        $quantityToChange--;
+                    }
                 }
                 $this->subscriptionLimit->updateBy($limitToValidate->id, ['quantity_used' => $quantityToChange]);
             }
@@ -170,8 +172,10 @@ class HandleModulesLimits
                     if ($modelValue != $limit->attribute_value) $validateLimit = false;
                 }
                 if ($validateLimit) {
-                    if ((int)$limit->quantity_used >= (int)$limit->quantity) {
-                        $limitsDisabled++;
+                    if((int)$limit->quantity > 0) {
+                        if ((int)$limit->quantity_used >= (int)$limit->quantity) {
+                            $limitsDisabled++;
+                        }
                     }
                 }
             }
