@@ -7,7 +7,6 @@ namespace Modules\Iplan\Events\Handlers;
 use Modules\Iplan\Entities\Limit;
 use Modules\Iplan\Entities\SubscriptionLimit;
 use Modules\Iplan\Entities\Subscription;
-use Modules\User\Entities\Sentinel\User;
 use Carbon\Carbon;
 
 class HandleModulesLimits
@@ -66,6 +65,8 @@ class HandleModulesLimits
 
     $allowedLimits = true;//Defualt response
 
+    $userDriver = config('asgard.user.config.driver');
+
     //Get entity attributes
     $entityNamespace = get_class($model);
     $entityNamespaceExploded = explode('\\', strtolower($entityNamespace));
@@ -80,13 +81,13 @@ class HandleModulesLimits
     //Validate user limits
     if ($existEntityLimits) {
       //Get user limits
-      $userSubcriptionLimits = SubscriptionLimit::whereHas('subscription', function ($q) {
+      $userSubcriptionLimits = SubscriptionLimit::whereHas('subscription', function ($q) use($userDriver) {
         //Get current full date
         $now = Carbon::now()->format('Y-m-d h:i:s');
         //Filter subscriptions
-        $q->whereDate('end_date', '>', $now)->whereDate('start_date', '<=', $now)->where(function ($query) {
-          $query->whereNull('entity')->orWhere(function ($query) {
-            $query->where('entity_id', auth()->user()->id)->where('entity', User::class);
+        $q->whereDate('end_date', '>', $now)->whereDate('start_date', '<=', $now)->where(function ($query) use($userDriver) {
+          $query->whereNull('entity')->orWhere(function ($query) use($userDriver) {
+            $query->where('entity_id', auth()->user()->id)->where('entity', "Modules\\User\\Entities\\{$userDriver}\\User");
           });
         })->where('status',1);
       })
@@ -142,18 +143,19 @@ class HandleModulesLimits
     $model = $event->model;
     if($eventType === 'wasCreated'){
         //Get entity attributes
+        $userDriver = config('asgard.user.config.driver');
         $entityNamespace = get_class($model);
         $entityNamespaceExploded = explode('\\', strtolower($entityNamespace));
         $moduleName = $entityNamespaceExploded[1];//Get module name
         $entityName = $entityNamespaceExploded[3];//Get entity name
         //Get current full date
         $now = Carbon::now()->format('Y-m-d h:i:s');
-        $subscription = Subscription::whereHas('limits', function ($q) use ($entityNamespace) {
+        $subscription = Subscription::whereHas('limits', function ($q) use ($entityNamespace, $userDriver) {
             //filter limits
             $q->where('entity', $entityNamespace);
-        })->whereDate('end_date', '>', $now)->whereDate('start_date', '<=', $now)->where(function ($query) {
-            $query->whereNull('entity')->orWhere(function ($query) {
-                $query->where('entity_id', auth()->user()->id)->where('entity', User::class);
+        })->whereDate('end_date', '>', $now)->whereDate('start_date', '<=', $now)->where(function ($query) use($userDriver) {
+            $query->whereNull('entity')->orWhere(function ($query) use($userDriver) {
+                $query->where('entity_id', auth()->user()->id)->where('entity', "Modules\\User\\Entities\\{$userDriver}\\User");
             });
         })->where('status',1)
           ->orderBy('id')

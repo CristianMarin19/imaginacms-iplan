@@ -25,6 +25,7 @@ class ProcessPlanOrder
 
                 switch($item->entity_type){
                   case 'Modules\Iplan\Entities\Plan':
+                      $userDriver = config('asgard.user.config.driver');
                       //Get plan Id form setting
                       $planIdInOrderItem = $item->entity_id;
                       //Get user registered data
@@ -37,7 +38,7 @@ class ProcessPlanOrder
                           //Create subscription
                           $subscriptionController->create(new Request([
                               'attributes' => [
-                                  'entity' => "Modules\\User\\Entities\\Sentinel\\User",
+                                  'entity' => "Modules\\User\\Entities\\{$userDriver}\\User",
                                   'entity_id' => $user->id,
                                   'plan_id' => $planIdInOrderItem,
                                   'options' => $item->options,

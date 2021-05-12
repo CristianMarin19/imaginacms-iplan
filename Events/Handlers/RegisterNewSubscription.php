@@ -22,6 +22,8 @@ class RegisterNewSubscription
     //Get user registered data
     $user = $event->user;
 
+    $userDriver = config('asgard.user.config.driver');
+
     //Create subscription
     if ($planIdToRegisteredUsers && $user) {
       //Init subscription controller
@@ -29,7 +31,7 @@ class RegisterNewSubscription
       //Create subscription
       $subscriptionController->create(new Request([
         'attributes' => [
-          'entity' => "Modules\\User\\Entities\\Sentinel\\User",
+          'entity' => "Modules\\User\\Entities\\{$userDriver}\\User",
           'entity_id' => $user->id,
           'plan_id' => $planIdToRegisteredUsers
         ]

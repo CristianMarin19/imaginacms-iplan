@@ -3,8 +3,6 @@
 
 namespace Modules\Iplan\Events\Handlers;
 
-
-use Modules\User\Entities\Sentinel\User;
 use Modules\Iplan\Entities\EntityPlan;
 use Modules\Iplan\Entities\SubscriptionLimit;
 use Carbon\Carbon;
@@ -21,6 +19,8 @@ class UpdateUserLimits
   {
     $model = $event->model;//Get Model
 
+    $userDriver = config('asgard.user.config.driver');
+
     //Get entity attributes
     $entityNamespace = get_class($model);
     $entityNamespaceExploded = explode('\\', strtolower($entityNamespace));
@@ -32,13 +32,13 @@ class UpdateUserLimits
     $requirePlan = EntityPlan::where('entity', $entityNamespace)->where('module', $moduleName)->where('status', 1)
       ->count() > 0 ? true : false;
     if ($requirePlan) {
-      $userSubcriptionLimits = SubscriptionLimit::whereHas('subscription', function ($q) {
+      $userSubcriptionLimits = SubscriptionLimit::whereHas('subscription', function ($q) use ($userDriver) {
         //Get current full date
         $now = Carbon::now()->format('Y-m-d h:i:s');
         //Filter subscriptions
-        $q->whereDate('end_date', '>', $now)->whereDate('start_date', '<=', $now)->where(function ($query) {
-          $query->whereNull('entity')->orWhere(function ($query) {
-            $query->where('entity_id', auth()->user()->id)->where('entity', User::class);
+        $q->whereDate('end_date', '>', $now)->whereDate('start_date', '<=', $now)->where(function ($query) use ($userDriver) {
+          $query->whereNull('entity')->orWhere(function ($query) use($userDriver) {
+            $query->where('entity_id', auth()->user()->id)->where('entity', "Modules\\User\\Entities\\{$userDriver}\\User");
           });
         });
       })->where('entity', $entityNamespace)
