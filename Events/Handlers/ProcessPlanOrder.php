@@ -36,6 +36,7 @@ class ProcessPlanOrder
                           //Init subscription controller
                           $subscriptionController = app('Modules\Iplan\Http\Controllers\Api\SubscriptionController');
                           //Create subscription
+                          request()->session()->put('subscriptedUser.id',$user->id);
                           $subscriptionController->create(new Request([
                               'attributes' => [
                                   'entity' => "Modules\\User\\Entities\\{$userDriver}\\User",

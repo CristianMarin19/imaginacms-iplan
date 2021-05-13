@@ -87,7 +87,7 @@ class HandleModulesLimits
         //Filter subscriptions
         $q->whereDate('end_date', '>', $now)->whereDate('start_date', '<=', $now)->where(function ($query) use($userDriver) {
           $query->whereNull('entity')->orWhere(function ($query) use($userDriver) {
-            $query->where('entity_id', auth()->user()->id)->where('entity', "Modules\\User\\Entities\\{$userDriver}\\User");
+            $query->where('entity_id', $model->customer_id ?? $model->user_id ?? auth()->user()->id)->where('entity', "Modules\\User\\Entities\\{$userDriver}\\User");
           });
         })->where('status',1);
       })
