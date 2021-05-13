@@ -85,8 +85,8 @@ class HandleModulesLimits
         //Get current full date
         $now = Carbon::now()->format('Y-m-d h:i:s');
         //Filter subscriptions
-        $q->whereDate('end_date', '>', $now)->whereDate('start_date', '<=', $now)->where(function ($query) use($userDriver,$model) {
-          $query->whereNull('entity')->orWhere(function ($query) use($userDriver) {
+        $q->whereDate('end_date', '>', $now)->whereDate('start_date', '<=', $now)->where(function ($query) use($userDriver, $model) {
+          $query->whereNull('entity')->orWhere(function ($query) use($userDriver, $model) {
             $query->where('entity_id', $model->customer_id ?? $model->user_id ?? auth()->user()->id)->where('entity', "Modules\\User\\Entities\\{$userDriver}\\User");
           });
         })->where('status',1);
