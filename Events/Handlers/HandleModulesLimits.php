@@ -81,11 +81,11 @@ class HandleModulesLimits
     //Validate user limits
     if ($existEntityLimits) {
       //Get user limits
-      $userSubcriptionLimits = SubscriptionLimit::whereHas('subscription', function ($q) use($userDriver) {
+      $userSubcriptionLimits = SubscriptionLimit::whereHas('subscription', function ($q) use($userDriver,$model) {
         //Get current full date
         $now = Carbon::now()->format('Y-m-d h:i:s');
         //Filter subscriptions
-        $q->whereDate('end_date', '>', $now)->whereDate('start_date', '<=', $now)->where(function ($query) use($userDriver) {
+        $q->whereDate('end_date', '>', $now)->whereDate('start_date', '<=', $now)->where(function ($query) use($userDriver,$model) {
           $query->whereNull('entity')->orWhere(function ($query) use($userDriver) {
             $query->where('entity_id', $model->customer_id ?? $model->user_id ?? auth()->user()->id)->where('entity', "Modules\\User\\Entities\\{$userDriver}\\User");
           });
@@ -150,12 +150,12 @@ class HandleModulesLimits
         $entityName = $entityNamespaceExploded[3];//Get entity name
         //Get current full date
         $now = Carbon::now()->format('Y-m-d h:i:s');
-        $subscription = Subscription::whereHas('limits', function ($q) use ($entityNamespace, $userDriver) {
+        $subscription = Subscription::whereHas('limits', function ($q) use ($entityNamespace, $userDriver, $model) {
             //filter limits
             $q->where('entity', $entityNamespace);
-        })->whereDate('end_date', '>', $now)->whereDate('start_date', '<=', $now)->where(function ($query) use($userDriver) {
-            $query->whereNull('entity')->orWhere(function ($query) use($userDriver) {
-                $query->where('entity_id', auth()->user()->id)->where('entity', "Modules\\User\\Entities\\{$userDriver}\\User");
+        })->whereDate('end_date', '>', $now)->whereDate('start_date', '<=', $now)->where(function ($query) use($userDriver, $model) {
+            $query->whereNull('entity')->orWhere(function ($query) use($userDriver, $model) {
+                $query->where('entity_id', $model->customer_id ?? $model->user_id ?? auth()->user()->id)->where('entity', "Modules\\User\\Entities\\{$userDriver}\\User");
             });
         })->where('status',1)
           ->orderBy('id')
