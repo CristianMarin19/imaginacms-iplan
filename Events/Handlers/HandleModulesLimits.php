@@ -14,12 +14,14 @@ class HandleModulesLimits
   private $logTitle;
   private $subscriptionLimit;
   private $subscription;
+  private $permissionsApiController;
 
   public function __construct()
   {
     $this->logTitle = '[Iplan-Validate-Limit-Event]::';
     $this->subscriptionLimit = app('Modules\Iplan\Repositories\SubscriptionLimitRepository');
     $this->subscription = app('Modules\Iplan\Repositories\SubscriptionRepository');
+    $this->permissionsApiController = app("Modules\Ihelpers\Http\Controllers\Api\PermissionsApiController");
   }
 
   //Handle to "IsCreating"
@@ -109,7 +111,7 @@ class HandleModulesLimits
           }
           //validate limit quantities
           if ($validateLimit) {
-            if (((int)$limitToValidate->quantity_used >= (int)$limitToValidate->quantity) && ((int)$limitToValidate->quantity > -1)) {
+            if ($eventType === 'isCreating' && ((int)$limitToValidate->quantity_used >= (int)$limitToValidate->quantity) && ((int)$limitToValidate->quantity > -1)) {
               $allowedLimits = false;
               break;//end loop
             }else{
@@ -125,14 +127,20 @@ class HandleModulesLimits
                     }
                 }
                 $this->subscriptionLimit->updateBy($limitToValidate->id, ['quantity_used' => $quantityToChange]);
+                $allowedLimits = true;
             }
           }
         }
       } else {
-        $allowedLimits = false;
+        $userPermissions = $this->permissionsApiController->getAll(['userId' => auth()->user()->id]);
+        $modPermissions = ['isDeleting' => 'destroy', 'isCreating' => 'create'];
+        $permissionType = strtolower($moduleName).'.'.strtolower($entityName).'.'.$modPermissions[$eventType];
+        $adminPermission = 'profile.access.iadmin';
+        if((!in_array($permissionType, $userPermissions) && !$userPermissions[$permissionType]) && !in_array($adminPermission, $userPermissions) && !$userPermissions[$adminPermission])
+            $allowedLimits = false;
       }
     }
-
+    \Log::info('Allowed Limits > '.$allowedLimits);
     //Response forbidden
     if (!$allowedLimits) throw new \Exception(trans('iplan::common.messages.entity-create-not-allowed'), 403);
   }
