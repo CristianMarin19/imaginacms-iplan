@@ -99,7 +99,10 @@ class PublicController extends BaseApiController
         $data = $request->all();
 
         if(!$planId)
-            $planId = $data['planId'];
+            $planId = $data['planId'] ?? null;
+
+        if(empty($planId))
+            return redirect()->back()->withErrors([trans('iplan::plans.messages.selectPlan')]);
 
         $params = json_decode(json_encode(
             [

@@ -24,6 +24,7 @@ return [
     'messages' => [
         'plan-without-product' => 'The Plan :name does not have a Product',
         'please-assign-product' => 'Please assign a product to the plan <b>:name</b> for its correct monetize',
+        'selectPlan' => 'Please select a plan.',
     ],
     'validation' => [
     ],

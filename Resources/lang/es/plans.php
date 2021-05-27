@@ -24,6 +24,7 @@ return [
     'messages' => [
         'plan-without-product' => 'El plan :name no tiene un producto asignado.',
         'please-assign-product' => 'Favor asignar un producto al plan <b>:name</b> para su correcta monetización',
+        'selectPlan' => 'Favor Selecciona un plan.',
     ],
     'validation' => [
     ],
