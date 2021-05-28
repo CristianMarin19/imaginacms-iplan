@@ -34,9 +34,23 @@ class EloquentPlanRepository extends EloquentBaseRepository implements PlanRepos
     if (isset($params->filter)) {
       $filter = $params->filter;//Short filter
 
-      if(isset($filter->category)){
-        $query->where('category_id',$filter->category);
-      }//category
+      //Filter by catgeory ID
+      if (isset($filter->category) && !empty($filter->category)) {
+          $query->where(function ($query) use ($filter) {
+                  $query->whereHas('categories', function ($query) use ($filter) {
+                      $query->whereIn('iplan__plan_category.category_id', [$filter->caregory]);
+                  })->orWhereIn('iplan__plans.category_id', [$filter->category]);
+          });
+      }
+
+      if (isset($filter->categories) && !empty($filter->categories)) {
+        is_array($filter->categories) ? true : $filter->categories = [$filter->categories];
+        $query->where(function ($query) use ($filter) {
+            $query->whereHas('categories', function ($query) use ($filter) {
+                $query->whereIn('iplan__plan_category.category_id', $filter->categories);
+            })->orWhereIn('category_id', $filter->categories);
+        });
+      }
 
       //Filter by date
       if (isset($filter->date)) {
