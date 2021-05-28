@@ -1,7 +1,7 @@
 <?php
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
-class CreateIblogPostCategoryTable extends Migration
+class CreateIplanPlanCategoryTable extends Migration
 {
     /**
      * Run the migrations.
