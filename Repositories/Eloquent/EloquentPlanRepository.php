@@ -38,7 +38,7 @@ class EloquentPlanRepository extends EloquentBaseRepository implements PlanRepos
       if (isset($filter->category) && !empty($filter->category)) {
           $query->where(function ($query) use ($filter) {
                   $query->whereHas('categories', function ($query) use ($filter) {
-                      $query->whereIn('iplan__plan_category.category_id', [$filter->caregory]);
+                      $query->whereIn('iplan__plan_category.category_id', [$filter->category]);
                   })->orWhereIn('iplan__plans.category_id', [$filter->category]);
           });
       }
