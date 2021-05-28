@@ -15,6 +15,7 @@ class PlanTransformer extends JsonResource
       'frequencyId' => $this->when($this->frequency_id, (string)$this->frequency_id),
       'categoryId' => $this->when($this->category_id,$this->category_id),
       'category' => new CategoryTransformer($this->whenLoaded('category')),
+      'categories' => CategoryTransformer::collection($this->whenLoaded('categories')),
       'createdAt' => $this->when($this->created_at, $this->created_at),
       'updatedAt' => $this->when($this->updated_at, $this->updated_at),
       'limits' => $this->whenLoaded('limits'),

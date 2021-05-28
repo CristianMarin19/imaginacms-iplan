@@ -2,6 +2,7 @@
 
 namespace Modules\Iplan\Repositories\Eloquent;
 
+use Illuminate\Support\Arr;
 use Modules\Iplan\Repositories\PlanRepository;
 use Modules\Core\Repositories\Eloquent\EloquentBaseRepository;
 use Modules\Ihelpers\Events\CreateMedia;
@@ -111,6 +112,9 @@ class EloquentPlanRepository extends EloquentBaseRepository implements PlanRepos
   public function create($data)
   {
     $entity = $this->model->create($data);
+
+    $entity->categories()->sync(array_merge(Arr::get($data, 'categories', []), [$entity->category_id])); //add multiple categories
+
     event(new UpdateProductable($entity, $data));
     event(new CreateMedia($entity,$data));
     return $entity;
@@ -135,6 +139,9 @@ class EloquentPlanRepository extends EloquentBaseRepository implements PlanRepos
     $model = $query->where($field ?? 'id', $criteria)->first();
     if($model){
       $model->update((array)$data);
+
+      $model->categories()->sync(array_merge(Arr::get($data, 'categories', []), [$model->category_id])); //add multiple categories
+
       event(new UpdateProductable($model, $data));
       event(new UpdateMedia($model,$data));
       return $model;

@@ -19,7 +19,7 @@ class Category extends Model
 
     public function plans()
     {
-      return $this->hasMany(Plans::class,"category_id");
+        return $this->belongsToMany('Modules\Iplan\Entities\Plan', 'iplan__plan_category')->as('plans')->with('category');
     }
 
     public function children()
