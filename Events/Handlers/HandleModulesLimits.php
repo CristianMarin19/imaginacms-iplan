@@ -100,7 +100,7 @@ class HandleModulesLimits
       //validate limits
       if ($userSubcriptionLimits->count() > 0) {
         $subscriptionToValidate = null;
-        foreach ($userSubcriptionLimits as $limitToValidate) {
+        foreach ($userSubcriptionLimits as $k=>$limitToValidate) {
           $validateLimit = true;
           $modelValue = null;
           $limitAttribute = $limitToValidate->attribute; //get limit attribute name
@@ -113,7 +113,7 @@ class HandleModulesLimits
           if ($validateLimit) {
             if ($eventType === 'isCreating' && ((int)$limitToValidate->quantity_used >= (int)$limitToValidate->quantity) && ((int)$limitToValidate->quantity > -1)) {
               $allowedLimits = false;
-              break;//end loop
+              continue;//end loop
             }else{
                 if(empty($subscriptionToValidate)) $subscriptionToValidate = $limitToValidate->subscription_id;
                 $quantityToChange = $limitToValidate->quantity_used;
