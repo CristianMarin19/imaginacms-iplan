@@ -128,6 +128,7 @@ class HandleModulesLimits
                 }
                 $this->subscriptionLimit->updateBy($limitToValidate->id, ['quantity_used' => $quantityToChange]);
                 $allowedLimits = true;
+                break;
             }
           }
         }
