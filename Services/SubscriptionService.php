@@ -48,7 +48,7 @@ class SubscriptionService
             if($limitsDisabled==count($subLimits)){
                 return false;
             }
-            return true;
+            return $subscription;
         }
         return false;
     }
