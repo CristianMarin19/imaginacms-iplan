@@ -15,5 +15,5 @@ return [
             'apiRoute' => 'apiRoutes.quser.departments',
             'options' => ['label' => 'title', 'id' => 'id']
         ]
-    ]
+    ],
 ];

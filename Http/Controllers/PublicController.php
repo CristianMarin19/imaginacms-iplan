@@ -5,6 +5,7 @@ namespace Modules\Iplan\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Log;
+use Modules\Iad\Entities\Ad;
 use Route;
 use Modules\Ihelpers\Http\Controllers\Api\BaseApiController;
 use Modules\Core\Http\Controllers\BasePublicController;
@@ -20,6 +21,7 @@ class PublicController extends BaseApiController
   private $category;
   private $user;
   private $notification;
+  private $subscriptionService;
 
   public function __construct(
     PlanRepository $plan, CategoryRepository $category
@@ -30,6 +32,7 @@ class PublicController extends BaseApiController
     $this->category = $category;
     $this->notification = app("Modules\Notification\Services\Inotification");
     $this->user = app("Modules\Iprofile\Repositories\UserApiRepository");
+    $this->subscriptionService = app("Modules\Iplan\Services\SubscriptionService");
   }
 
   // view products by category
@@ -159,4 +162,39 @@ class PublicController extends BaseApiController
         return redirect()->route($locale . '.icommerce.store.checkout');
     }
 
+    public function validateUserSubscription($criteria){
+        $user = $this->user->getItem($criteria);
+
+        if(!$user)
+            return abort(404);
+
+        $userValidSubscription = $this->subscriptionService->validate(new Ad(), $user);
+
+        $tpl = 'iplan::frontend.validate-user-subscription';
+        $ttpl = 'iplan.validate-user-subscription';
+
+        if (view()->exists($ttpl)) $tpl = $ttpl;
+
+        return view($tpl, compact('user','userValidSubscription'));
+    }
+
+    function myQrs(){
+        $user = $this->user->getItem(auth()->user()->id, (object)[
+            'take' => false,
+            'include' => ['fields', 'roles']
+        ]);
+
+        // Fix fields to frontend
+        $fields = [];
+        if (isset($user->fields) && !empty($user->fields)) {
+            foreach ($user->fields as $f) {
+                $fields[$f->name] = $f->value;
+            }
+        }
+
+        $tpl = 'iplan::frontend.my-qrs';
+        $ttpl = 'iplan.my-qrs';
+
+        return view($tpl, compact('user','fields'));
+    }
 }

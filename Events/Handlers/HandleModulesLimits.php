@@ -117,14 +117,11 @@ class HandleModulesLimits
             }else{
                 if(empty($subscriptionToValidate)) $subscriptionToValidate = $limitToValidate->subscription_id;
                 $quantityToChange = $limitToValidate->quantity_used;
-                if((int)$limitToValidate->quantity > 0) {
-                    if ($eventType === 'isCreating') {
-                        $quantityToChange++;
-
-                    }
-                    if ($eventType === 'isDeleting') {
-                        $quantityToChange--;
-                    }
+                if ($eventType === 'isCreating') {
+                    $quantityToChange++;
+                }
+                if ($eventType === 'isDeleting') {
+                    $quantityToChange--;
                 }
                 $this->subscriptionLimit->updateBy($limitToValidate->id, ['quantity_used' => $quantityToChange]);
                 $allowedLimits = true;

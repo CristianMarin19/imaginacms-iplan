@@ -8,7 +8,7 @@ use Carbon\Carbon;
 class SubscriptionService
 {
 
-    public function validate($model)
+    public function validate($model, $user = null)
     {
         //Get entity attributes
 
@@ -23,9 +23,9 @@ class SubscriptionService
         $subscription = Subscription::whereHas('limits', function ($q) use ($entityNamespace) {
             //filter limits
             $q->where('entity', $entityNamespace);
-        })->whereDate('end_date', '>', $now)->whereDate('start_date', '<=', $now)->where(function ($query) use ($userDriver){
-            $query->whereNull('entity')->orWhere(function ($query) use ($userDriver){
-                $query->where('entity_id', auth()->user()->id)->where('entity', "Modules\\User\\Entities\\{$userDriver}\\User");
+        })->whereDate('end_date', '>', $now)->whereDate('start_date', '<=', $now)->where(function ($query) use ($userDriver, $user){
+            $query->whereNull('entity')->orWhere(function ($query) use ($userDriver, $user){
+                $query->where('entity_id', ($user ? $user->id : auth()->user()->id))->where('entity', "Modules\\User\\Entities\\{$userDriver}\\User");
             });
         })->where('status',1)
             ->orderBy('id')
