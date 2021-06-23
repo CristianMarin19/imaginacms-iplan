@@ -163,19 +163,30 @@ class PublicController extends BaseApiController
     }
 
     public function validateUserSubscription($criteria){
-        $user = $this->user->getItem($criteria);
+        $user = $this->user->getItem($criteria,(object)[
+            'take' => false,
+            'include' => ['fields', 'roles']
+        ]);
 
         if(!$user)
             return abort(404);
 
         $userValidSubscription = $this->subscriptionService->validate(new Ad(), $user);
 
+        $fields = [];
+
+        if (isset($user->fields) && !empty($user->fields)) {
+            foreach ($user->fields as $f) {
+                $fields[$f->name] = $f->value;
+            }
+        }
+
         $tpl = 'iplan::frontend.validate-user-subscription';
         $ttpl = 'iplan.validate-user-subscription';
 
         if (view()->exists($ttpl)) $tpl = $ttpl;
 
-        return view($tpl, compact('user','userValidSubscription'));
+        return view($tpl, compact('user', 'fields','userValidSubscription'));
     }
 
     function myQrs(){
