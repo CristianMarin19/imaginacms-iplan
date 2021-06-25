@@ -10,9 +10,11 @@
 @endsection
 @section('profileContent')
     <div class="container">
-        <div class="col-12">
-            <div class="my-2 text-right">
-                <x-isite::print-button containerId="qrPrint" icon="fa fa-file-pdf-o" text="{{ trans('iplan::common.title.print') }}" />
+        <div class="row">
+            <div class="col-12">
+                <div class="my-2 text-right">
+                    <x-isite::print-button containerId="qrPrint" icon="fa fa-file-pdf-o" text="{{ trans('iplan::common.title.print') }}" />
+                </div>
             </div>
         </div>
         <div class="row">
@@ -24,7 +26,7 @@
                             @if(isset($fields['mainImage']) &&  !empty($fields['mainImage']) && $fields['mainImage']!=null )
                                 <img id="mainImage" class="mx-auto img-fluid rounded-circle bg-white" src="{{ url($fields['mainImage']).'?'.strtotime(now()) }}" alt="Logo" >
                             @else
-                                <img id="mainImage" class="mx-auto img-fluid rounded-circle bg-white" src="{{$default}}" alt="Logo">
+                                <img id="mainImage" class="mx-auto img-fluid rounded-circle bg-white" src="{{$defaultImage}}" alt="Logo">
                             @endif
                         </div>
                 </div>

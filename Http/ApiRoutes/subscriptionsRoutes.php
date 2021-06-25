@@ -17,6 +17,11 @@ $router->group(['prefix' => 'subscriptions'], function (Router $router) {
     'as' => 'api.iplan.subscriptions.index',
     'uses' => 'SubscriptionController@index',
   ]);
+  $router->get('/me', [
+      'as' => 'api.iplan.subscriptions.me',
+      'uses' => 'SubscriptionController@me',
+      'middleware' => ['auth:api']
+  ]);
   $router->put('/{criteria}', [
     'as' => 'api.iplan.subscriptions.update',
     'uses' => 'SubscriptionController@update',

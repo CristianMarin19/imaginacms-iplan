@@ -17,6 +17,7 @@ return [
     ],
     'title' => [
         'my-qrs' => 'Mi Código QR',
+        'my-subscriptions' => 'Mis Suscripciones',
         'print' => 'Imprimir',
     ]
 ];

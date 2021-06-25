@@ -22,7 +22,9 @@ class Subscription extends Model
     ];
 
     protected $casts = [
-        'options' => 'array'
+        'options' => 'array',
+        'start_date' => 'datetime',
+        'end_date' => 'datetime',
     ];
 
     public function setOptionsAttribute($value)

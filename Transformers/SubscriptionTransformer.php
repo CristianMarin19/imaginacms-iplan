@@ -16,6 +16,7 @@ class SubscriptionTransformer extends JsonResource
       'entityId' => $this->when($this->entity_id,$this->entity_id),
       'entity' => $this->when($this->entity, $this->entity),
       'entityName' => $this->entityData ? ($this->entityData->title ?? $this->entityData->name ?? $this->entityData->present()->fullName) : '',
+      'status' => $this->status ?? '0',
       'startDate' => $this->when($this->start_date, $this->start_date),
       'endDate' => $this->when($this->end_date, $this->end_date),
       'limits' => SubscriptionLimitTransformer::collection($this->whenLoaded('limits')),

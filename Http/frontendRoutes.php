@@ -35,4 +35,9 @@ Route::group(['prefix' => LaravelLocalization::setLocale(),
         'uses' => 'PublicController@myQrs',
         'middleware' => 'logged.in'
     ]);
+    $router->get(trans('iplan::routes.plan.my-subscriptions'), [
+        'as' => 'plans.mySubscriptions',
+        'uses' => 'PublicController@mySubscriptions',
+        'middleware' => 'logged.in'
+    ]);
 });

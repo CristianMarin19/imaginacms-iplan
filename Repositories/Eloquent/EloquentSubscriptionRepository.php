@@ -29,7 +29,9 @@ class EloquentSubscriptionRepository extends EloquentBaseRepository implements S
       $filter = $params->filter;//Short filter
 
       if (isset($filter->user)) {
-        $query->where('user_id', $filter->user);
+        $userDriver = config('asgard.user.config.driver', 'Sentinel');
+        $query->where('entity_id', $filter->user)
+            ->where('entity',"Modules\\User\\Entities\\{$userDriver}\\User");
       }//user
 
       //Filter by date

@@ -5,5 +5,6 @@ return [
         'indexCategory' => 'plans/{catSlug}',
         'buy' => 'buy',
         'my-qrs' => 'my-qrs',
+        'my-subscriptions' => 'my-subscriptions',
     ]
 ];

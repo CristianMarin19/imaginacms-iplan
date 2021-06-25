@@ -22,6 +22,7 @@ class PublicController extends BaseApiController
   private $user;
   private $notification;
   private $subscriptionService;
+  private $subscriptionRepository;
 
   public function __construct(
     PlanRepository $plan, CategoryRepository $category
@@ -33,6 +34,7 @@ class PublicController extends BaseApiController
     $this->notification = app("Modules\Notification\Services\Inotification");
     $this->user = app("Modules\Iprofile\Repositories\UserApiRepository");
     $this->subscriptionService = app("Modules\Iplan\Services\SubscriptionService");
+    $this->subscriptionRepository = app("Modules\Iplan\Repositories\SubscriptionRepository");
   }
 
   // view products by category
@@ -208,4 +210,25 @@ class PublicController extends BaseApiController
 
         return view($tpl, compact('user','fields'));
     }
+
+    function mySubscriptions(){
+        $user = $this->user->getItem(auth()->user()->id, (object)[
+            'take' => false,
+            'include' => ['fields', 'roles']
+        ]);
+
+        // Fix fields to frontend
+        $fields = [];
+        if (isset($user->fields) && !empty($user->fields)) {
+            foreach ($user->fields as $f) {
+                $fields[$f->name] = $f->value;
+            }
+        }
+
+        $tpl = 'iplan::frontend.my-subscriptions';
+        $ttpl = 'iplan.my-subscriptions';
+
+        return view($tpl, compact('user','fields'));
+    }
+
 }
