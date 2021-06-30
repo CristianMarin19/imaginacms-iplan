@@ -10,6 +10,7 @@ use Route;
 use Modules\Ihelpers\Http\Controllers\Api\BaseApiController;
 use Modules\Core\Http\Controllers\BasePublicController;
 use Mockery\CountValidator\Exception;
+use Carbon\Carbon;
 
 //Entities
 use Modules\Iplan\Repositories\PlanRepository;
@@ -191,27 +192,8 @@ class PublicController extends BaseApiController
         return view($tpl, compact('user', 'fields','userValidSubscription'));
     }
 
-    function myQrs(){
-        $user = $this->user->getItem(auth()->user()->id, (object)[
-            'take' => false,
-            'include' => ['fields', 'roles']
-        ]);
-
-        // Fix fields to frontend
-        $fields = [];
-        if (isset($user->fields) && !empty($user->fields)) {
-            foreach ($user->fields as $f) {
-                $fields[$f->name] = $f->value;
-            }
-        }
-
-        $tpl = 'iplan::frontend.my-qrs';
-        $ttpl = 'iplan.my-qrs';
-
-        return view($tpl, compact('user','fields'));
-    }
-
     function mySubscriptions(){
+
         $user = $this->user->getItem(auth()->user()->id, (object)[
             'take' => false,
             'include' => ['fields', 'roles']

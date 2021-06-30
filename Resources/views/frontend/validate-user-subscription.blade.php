@@ -1,14 +1,11 @@
-@extends('layouts.master')
-@section('content')
+@extends('iprofile::frontend.layouts.master')
+@section('profileContent')
     <div class="container">
         <div class="row">
             <div class="col-12">
                 <div class="row justify-content-between">
                     <div class="order-1 order-lg-0 col-12 col-md-6 col-lg-9">
-
-
                         <h6 id="extraFieldsTitle" class="profile-section-title font-weight-bold">{{trans('iprofile::frontend.form.Basic')}}</h6>
-
                         <hr class="border-top-dotted">
                         <div class="px-3 row">
                             <div class="col-12">
@@ -29,22 +26,31 @@
                             <hr class="border-top-dotted">
                             @php
                                 $registerExtraFields = json_decode(setting('iprofile::registerExtraFields', null, "[]"));
-                                $extFields = isset($fields) ? collect($fields)->keyBy('name') : [];
                             @endphp
                             @foreach($registerExtraFields as $extraField)
                                 @php
-                                    $oldValue = isset($extFields[$extraField->field]) ? $extFields[$extraField->field]->value : null;
+                                    $oldValue = $fields[$extraField->field] ?? '--';
                                 @endphp
                                 {{-- if is active--}}
                                 @if(isset($extraField->active) && $extraField->active)
                                     {{-- form group--}}
                                     <div class="col-sm-12 col-md-6 py-2 has-feedback">
                                         {{-- label --}}
-                                        <label for="extraField{{$extraField->field}}">{{trans("iprofile::frontend.form.$extraField->field")}}</label>
+                                        <label for="extraField{{$extraField->field}}" class="font-weight-bold">{{trans("iprofile::frontend.form.$extraField->field")}}</label>
                                         <div>
                                             {{ $oldValue }}
                                         </div>
                                     </div>
+                                    @if($extraField->field == 'documentType')
+                                        {{-- form group--}}
+                                        <div class="col-sm-12 col-md-6 py-2 has-feedback">
+                                            {{-- label --}}
+                                            <label for="extraFielddocumentNumber" class="font-weight-bold">{{trans("iprofile::frontend.form.documentNumber")}}</label>
+                                            <div>
+                                                {{ $fields['documentNumber'] }}
+                                            </div>
+                                        </div>
+                                    @endif
                                 @endif {{-- end if is active --}}
                             @endforeach
                         @endif
@@ -66,4 +72,19 @@
             </div>
         </div>
     </div>
+@endsection
+@section('scripts-owl')
+    @parent
+    <script>
+        $(document).ready(function(){
+          Swal.fire(
+            '{{ $user->present()->fullName }}',
+            '{!! trans('iplan::common.messages.user-'.($userValidSubscription ?'valid':'not-valid').'-subscription', ['name' => $user->present()->fullName]) !!}',
+            '{{ $userValidSubscription ?'success':'error' }}'
+          )
+        });
+    </script>
+    @if($userValidSubscription)
+
+    @endif
 @endsection

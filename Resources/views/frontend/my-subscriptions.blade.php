@@ -23,7 +23,7 @@
                         :responsiveTopContent="['mobile'=>false,'desktop'=>false]"
                         :itemComponentAttributes="[
                             'margin' => 0,
-                            'formatCreatedDate' => 'd \d\e M \d\e Y',
+                            'formatCreatedDate' => 'd \d\e F \d\e Y',
                         ]"
                 />
             </div>
