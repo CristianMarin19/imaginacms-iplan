@@ -6,7 +6,7 @@ return [
     'settings' => [
         'default-plan-to-new-users' => 'Default plan for new users',
         'enableQr' => 'Enable QR code for users',
-        'defaultPageDescription' => 'Default description in plans page',
+        'defaultPageDescription' => 'Default description in plan home page',
     ],
     'settingHints' => [
         'default-plan-to-new-users' => 'Select a default plan for new users',
