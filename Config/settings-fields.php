@@ -27,7 +27,7 @@ return [
     ],
     'defaultPageDescription' => [
         'name' => 'iplan::defaultPageDescription',
-        'value' => '0',
+        'value' => null,
         'type' => 'html',
         'props' => [
             'label' => 'iplan::common.settings.defaultPageDescription',
