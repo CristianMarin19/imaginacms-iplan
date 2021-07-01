@@ -20,9 +20,17 @@ return [
         'value' => '0',
         'type' => 'checkbox',
         'props' => [
-            'label' => 'iplan::settings.enableQr',
+            'label' => 'iplan::common.settings.enableQr',
             'trueValue' => '1',
             'falseValue' => '0'
         ],
     ],
+    'defaultPageDescription' => [
+        'name' => 'iplan::defaultPageDescription',
+        'value' => '0',
+        'type' => 'html',
+        'props' => [
+            'label' => 'iplan::common.settings.defaultPageDescription',
+        ]
+    ]
 ];

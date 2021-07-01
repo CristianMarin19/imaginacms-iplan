@@ -6,6 +6,7 @@ return [
     'settings' => [
         'default-plan-to-new-users' => 'Plan por defecto para nuevos usuarios',
         'enableQr' => 'Habilitar Código QR para los usuarios suscritos',
+        'defaultPageDescription' => 'Descripción por defecto en la página de planes',
     ],
     'settingHints' => [
         'default-plan-to-new-users' => 'Selecciona un plan por defecto para nuevos usuarios',
