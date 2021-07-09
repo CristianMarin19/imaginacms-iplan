@@ -247,5 +247,36 @@ class SubscriptionController extends BaseApiController
         return response()->json($response, $status ?? 200);
     }
 
+    /**
+     * GET ITEMS
+     *
+     * @return mixed
+     */
+    public function me(Request $request)
+    {
+        try {
+            //Get Parameters from URL.
+            $params = $this->getParamsRequest($request);
+
+            $params->filter->user = auth()->user()->id;
+
+            //Request to Repository
+            $dataEntity = $this->subscription->getItemsBy($params);
+
+            //Response
+            $response = [
+                "data" => SubscriptionTransformer::collection($dataEntity)
+            ];
+
+            //If request pagination add meta-page
+            $params->page ? $response["meta"] = ["page" => $this->pageTransformer($dataEntity)] : false;
+        } catch (\Exception $e) {
+            $status = $this->getStatusError($e->getCode());
+            $response = ["errors" => $e->getMessage()];
+        }
+
+        //Return response
+        return response()->json($response, $status ?? 200);
+    }
 
 }

@@ -26,5 +26,13 @@ Route::group(['prefix' => LaravelLocalization::setLocale(),
         'as' => 'plans.buyPlan',
         'uses' => 'PublicController@buyPlan',
     ]);
-
+    $router->get('iplan/validate-subscription/{criteria}', [
+        'as' => 'plans.validateUserSubscriptions',
+        'uses' => 'PublicController@validateUserSubscription',
+    ]);
+    $router->get(trans('iplan::routes.plan.my-subscriptions'), [
+        'as' => 'plans.mySubscriptions',
+        'uses' => 'PublicController@mySubscriptions',
+        'middleware' => 'logged.in'
+    ]);
 });

@@ -4,5 +4,6 @@ return [
         'index' => 'plans',
         'indexCategory' => 'plans/{catSlug}',
         'buy' => 'buy',
+        'my-subscriptions' => 'my-subscriptions',
     ]
 ];

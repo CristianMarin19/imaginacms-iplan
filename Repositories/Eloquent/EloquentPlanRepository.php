@@ -2,6 +2,7 @@
 
 namespace Modules\Iplan\Repositories\Eloquent;
 
+use Illuminate\Support\Arr;
 use Modules\Iplan\Repositories\PlanRepository;
 use Modules\Core\Repositories\Eloquent\EloquentBaseRepository;
 use Modules\Ihelpers\Events\CreateMedia;
@@ -33,9 +34,23 @@ class EloquentPlanRepository extends EloquentBaseRepository implements PlanRepos
     if (isset($params->filter)) {
       $filter = $params->filter;//Short filter
 
-      if(isset($filter->category)){
-        $query->where('category_id',$filter->category);
-      }//category
+      //Filter by catgeory ID
+      if (isset($filter->category) && !empty($filter->category)) {
+          $query->where(function ($query) use ($filter) {
+                  $query->whereHas('categories', function ($query) use ($filter) {
+                      $query->whereIn('iplan__plan_category.category_id', [$filter->category]);
+                  })->orWhereIn('iplan__plans.category_id', [$filter->category]);
+          });
+      }
+
+      if (isset($filter->categories) && !empty($filter->categories)) {
+        is_array($filter->categories) ? true : $filter->categories = [$filter->categories];
+        $query->where(function ($query) use ($filter) {
+            $query->whereHas('categories', function ($query) use ($filter) {
+                $query->whereIn('iplan__plan_category.category_id', $filter->categories);
+            })->orWhereIn('iplan__plans.category_id', $filter->categories);
+        });
+      }
 
       //Filter by date
       if (isset($filter->date)) {
@@ -111,6 +126,9 @@ class EloquentPlanRepository extends EloquentBaseRepository implements PlanRepos
   public function create($data)
   {
     $entity = $this->model->create($data);
+
+    $entity->categories()->sync(array_merge(Arr::get($data, 'categories', []), [$entity->category_id])); //add multiple categories
+
     event(new UpdateProductable($entity, $data));
     event(new CreateMedia($entity,$data));
     return $entity;
@@ -135,6 +153,9 @@ class EloquentPlanRepository extends EloquentBaseRepository implements PlanRepos
     $model = $query->where($field ?? 'id', $criteria)->first();
     if($model){
       $model->update((array)$data);
+
+      $model->categories()->sync(array_merge(Arr::get($data, 'categories', []), [$model->category_id])); //add multiple categories
+
       event(new UpdateProductable($model, $data));
       event(new UpdateMedia($model,$data));
       return $model;

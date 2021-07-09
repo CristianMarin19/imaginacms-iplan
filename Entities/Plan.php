@@ -42,6 +42,11 @@ class Plan extends Model
         return $this->belongsTo(Category::class,"category_id");
     }
 
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class, 'iplan__plan_category');
+    }
+
     public function product(){
         return $this->morphOne("Modules\\Icommerce\\Entities\\Product","entity");
     }

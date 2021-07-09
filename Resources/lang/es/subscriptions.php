@@ -9,6 +9,7 @@ return [
         'subscriptions' => 'Subscription',
         'create subscription' => 'Create a subscription',
         'edit subscription' => 'Edit a subscription',
+        'validating_subscription' => 'Validando Suscripción - :name',
     ],
     'button' => [
         'create subscription' => 'Create a subscription',

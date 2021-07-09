@@ -15,6 +15,8 @@ class CategoryTransformer extends JsonResource
       'description' => $this->when($this->description, $this->description),
       'slug' => $this->when($this->slug, $this->slug),
       'status' => $this->status ? '1' : '0',
+      'plans' => PlanTransformer::collection($this->whenLoaded('plans')),
+      'parent' => new CategoryTransformer($this->whenLoaded('parent')),
       'parentId' => $this->when($this->parent_id,$this->parent_id),
       'createdAt' => $this->when($this->created_at, $this->created_at),
       'updatedAt' => $this->when($this->updated_at, $this->updated_at),

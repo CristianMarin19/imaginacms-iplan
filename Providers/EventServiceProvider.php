@@ -6,6 +6,7 @@ namespace Modules\Iplan\Providers;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Modules\Iplan\Events\Handlers\ProcessPlanOrder;
 use Modules\Iplan\Events\Handlers\RegisterNewSubscription;
+use Modules\Iplan\Events\Handlers\RegisterUserQr;
 use Modules\Iplan\Events\Handlers\UpdateUserLimits;
 use Modules\Iplan\Events\Handlers\HandleModulesLimits;
 use Illuminate\Support\Facades\Event;
@@ -52,6 +53,18 @@ class EventServiceProvider extends ServiceProvider
     Event::listen(
       "Modules\\Iprofile\\Events\\UserCreatedEvent",
       [RegisterNewSubscription::class, 'handle']
+    );
+
+    //Listen user was created event
+    Event::listen(
+        "Modules\\Iprofile\\Events\\UserCreatedEvent",
+        [RegisterUserQr::class, 'handle']
+    );
+
+      //Listen user was created event
+    Event::listen(
+      "Modules\\Iprofile\\Events\\UserUpdatedEvent",
+      [RegisterUserQr::class, 'handle']
     );
 
     if(is_module_enabled('Icommerce')) {

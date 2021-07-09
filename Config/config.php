@@ -15,5 +15,13 @@ return [
             'apiRoute' => 'apiRoutes.quser.departments',
             'options' => ['label' => 'title', 'id' => 'id']
         ]
-    ]
+    ],
+    "userMenuLinks" => [
+        [
+            "title" => "iplan::common.title.my-subscriptions",
+            "routeName" => "plans.mySubscriptions",
+            "icon" => "fa fa-id-card-o mr-2",
+
+        ],
+    ],
 ];
