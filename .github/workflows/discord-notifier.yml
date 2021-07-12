@@ -9,8 +9,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Print webhok
-        run: echo ${{ secrets.DISCORD_WEBHOOK }}
       - uses: fateyan/action-discord-notifier@v1
         with:
           message-title: New Commits to [Module-Iplan]
