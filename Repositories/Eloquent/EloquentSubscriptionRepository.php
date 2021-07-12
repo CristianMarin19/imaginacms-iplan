@@ -50,6 +50,11 @@ class EloquentSubscriptionRepository extends EloquentBaseRepository implements S
         $orderWay = $filter->order->way ?? 'desc';//Default way
         $query->orderBy($orderByField, $orderWay);//Add order to query
       }
+      
+      //Status
+      if (isset($filter->status)) {
+        $query->where("status", $filter->status);
+      }
 
       //add filter by search
       if (isset($filter->search)) {
