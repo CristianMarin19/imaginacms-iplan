@@ -63,7 +63,7 @@ class EventServiceProvider extends ServiceProvider
     );*/
 
     //Listen user was created event
-    Event::listen("Modules\\User\\Events\\UserWasUpdated", [RegisterUserQr::class, 'handle']);
+    //Event::listen("Modules\\User\\Events\\UserWasUpdated", [RegisterUserQr::class, 'handle']);
     /*Event::listen(
       "Modules\\Iprofile\\Events\\UserUpdatedEvent",
       [RegisterUserQr::class, 'handle']
