@@ -56,23 +56,25 @@ class EventServiceProvider extends ServiceProvider
     );
 
     //Listen user was created event
-    Event::listen(
-        "Modules\\Iprofile\\Events\\UserCreatedEvent",
-        [RegisterUserQr::class, 'handle']
-    );
+    Event::listen("Modules\\User\\Events\\UserWasCreated", [RegisterUserQr::class, 'handle']);
+    /*Event::listen(
+      "Modules\\Iprofile\\Events\\UserCreatedEvent",
+      [RegisterUserQr::class, 'handle']
+    );*/
 
-      //Listen user was created event
-    Event::listen(
+    //Listen user was created event
+    //Event::listen("Modules\\User\\Events\\UserWasUpdated", [RegisterUserQr::class, 'handle']);
+    /*Event::listen(
       "Modules\\Iprofile\\Events\\UserUpdatedEvent",
       [RegisterUserQr::class, 'handle']
-    );
+    );*/
 
-    if(is_module_enabled('Icommerce')) {
-        //Listen order processed
-        Event::listen(
-            "Modules\\Icommerce\\Events\\OrderWasProcessed",
-            [ProcessPlanOrder::class, 'handle']
-        );
+    if (is_module_enabled('Icommerce')) {
+      //Listen order processed
+      Event::listen(
+        "Modules\\Icommerce\\Events\\OrderWasProcessed",
+        [ProcessPlanOrder::class, 'handle']
+      );
     }
   }
 }

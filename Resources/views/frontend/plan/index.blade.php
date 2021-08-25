@@ -17,7 +17,7 @@
                 </button>
             </div>
         @endif
-        <div class="row py-3 justify-content-center">
+        <div class="py-3">
             @php
                 $params = [];
                 if(isset($category)){
