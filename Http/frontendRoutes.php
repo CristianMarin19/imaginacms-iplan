@@ -20,6 +20,7 @@ Route::group(['prefix' => LaravelLocalization::setLocale(),
     $router->get(trans('iplan::routes.plan.index').'/{planId}/'.trans('iplan::routes.plan.buy'), [
         'as' => 'plans.buy',
         'uses' => 'PublicController@buyPlan',
+        'middleware' => 'doNotCacheResponse'
     ]);
 
     $router->post(trans('iplan::routes.plan.index').'/'.trans('iplan::routes.plan.buy'), [
