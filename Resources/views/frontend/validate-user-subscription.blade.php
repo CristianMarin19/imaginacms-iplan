@@ -54,7 +54,7 @@
                                             {{-- label --}}
                                             <label for="extraFielddocumentNumber" class="font-weight-bold">{{trans("iprofile::frontend.form.documentNumber")}}</label>
                                             <div>
-                                                {{ $fields['documentNumber'] }}
+                                                {{ $fields['documentNumber'] ?? '' }}
                                             </div>
                                         </div>
                                     @endif
