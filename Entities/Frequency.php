@@ -8,6 +8,7 @@ namespace Modules\Iplan\Entities;
  */
 class Frequency
 {
+    const DIARY = 1;
     const WEEKLY = 8;
     const BIWEEKLY = 15;
     const MONTHLY = 30;
@@ -24,7 +25,7 @@ class Frequency
     public function __construct()
     {
         $this->frequencies = [
-            ['id' => self::WEEKLY, 'title' => trans('iplan::plans.frequencies.weekly')],
+            ['id' => self::DIARY, 'title' => trans('iplan::plans.frequencies.diary')],
             ['id' => self::BIWEEKLY, 'title' => trans('iplan::plans.frequencies.biweekly')],
             ['id' => self::MONTHLY, 'title' =>  trans('iplan::plans.frequencies.monthly')],
             ['id' => self::BIMONTHLY, 'title' =>  trans('iplan::plans.frequencies.bimonthly')],

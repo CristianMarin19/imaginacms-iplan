@@ -2,188 +2,95 @@
 
 namespace Modules\Iplan\Repositories\Eloquent;
 
-use Illuminate\Support\Arr;
 use Modules\Iplan\Repositories\PlanRepository;
-use Modules\Core\Repositories\Eloquent\EloquentBaseRepository;
-use Modules\Ihelpers\Events\CreateMedia;
-use Modules\Ihelpers\Events\DeleteMedia;
-use Modules\Ihelpers\Events\UpdateMedia;
-use Modules\Icommerce\Events\CreateProductable;
-use Modules\Icommerce\Events\UpdateProductable;
-use Modules\Icommerce\Events\DeleteProductable;
+use Modules\Core\Icrud\Repositories\Eloquent\EloquentCrudRepository;
 
-class EloquentPlanRepository extends EloquentBaseRepository implements PlanRepository
+class EloquentPlanRepository extends EloquentCrudRepository implements PlanRepository
 {
+  /**
+   * Filter names to replace
+   * @var array
+   */
+  protected $replaceFilters = [];
 
-  public function getItemsBy($params = false)
+  /**
+   * Relation names to replace
+   * @var array
+   */
+  protected $replaceSyncModelRelations = [];
+
+  /**
+   * Filter query
+   *
+   * @param $query
+   * @param $filter
+   * @return mixed
+   */
+  public function filterQuery($query, $filter)
   {
-    /*== initialize query ==*/
-    $query = $this->model->query();
-
-    /*== RELATIONSHIPS ==*/
-    if (in_array('*', $params->include)) {//If Request all relationships
-      $query->with(['category','limits', 'product']);
-    } else {//Especific relationships
-      $includeDefault = ['category', 'limits'];//Default relationships
-      if (isset($params->include))//merge relations with default relationships
-      $includeDefault = array_merge($includeDefault, $params->include);
-      $query->with($includeDefault);//Add Relationships to query
+  
+    if (isset($filter->category) && !empty($filter->category)) {
+      $query->where(function ($query) use ($filter) {
+        $query->whereHas('categories', function ($query) use ($filter) {
+          $query->whereIn('iplan__plan_category.category_id', [$filter->category]);
+        })->orWhereIn('iplan__plans.category_id', [$filter->category]);
+      });
     }
-
-    /*== FILTERS ==*/
-    if (isset($params->filter)) {
-      $filter = $params->filter;//Short filter
-
-      //Filter by catgeory ID
-      if (isset($filter->category) && !empty($filter->category)) {
-          $query->where(function ($query) use ($filter) {
-                  $query->whereHas('categories', function ($query) use ($filter) {
-                      $query->whereIn('iplan__plan_category.category_id', [$filter->category]);
-                  })->orWhereIn('iplan__plans.category_id', [$filter->category]);
-          });
-      }
-
-      if (isset($filter->categories) && !empty($filter->categories)) {
-        is_array($filter->categories) ? true : $filter->categories = [$filter->categories];
-        $query->where(function ($query) use ($filter) {
-            $query->whereHas('categories', function ($query) use ($filter) {
-                $query->whereIn('iplan__plan_category.category_id', $filter->categories);
-            })->orWhereIn('iplan__plans.category_id', $filter->categories);
-        });
-      }
-
-      //Filter by date
-      if (isset($filter->date)) {
-        $date = $filter->date;//Short filter date
-        $date->field = $date->field ?? 'created_at';
-        if (isset($date->from))//From a date
+  
+    if (isset($filter->categories) && !empty($filter->categories)) {
+      is_array($filter->categories) ? true : $filter->categories = [$filter->categories];
+      $query->where(function ($query) use ($filter) {
+        $query->whereHas('categories', function ($query) use ($filter) {
+          $query->whereIn('iplan__plan_category.category_id', $filter->categories);
+        })->orWhereIn('iplan__plans.category_id', $filter->categories);
+      });
+    }
+  
+    //Filter by date
+    if (isset($filter->date)) {
+      $date = $filter->date;//Short filter date
+      $date->field = $date->field ?? 'created_at';
+      if (isset($date->from))//From a date
         $query->whereDate($date->field, '>=', $date->from);
-        if (isset($date->to))//to a date
+      if (isset($date->to))//to a date
         $query->whereDate($date->field, '<=', $date->to);
-      }
-
-      //Order by
-      if (isset($filter->order)) {
-        $orderByField = $filter->order->field ?? 'created_at';//Default field
-        $orderWay = $filter->order->way ?? 'desc';//Default way
-        $query->orderBy($orderByField, $orderWay);//Add order to query
-      }
-
-      //add filter by search
-      if (isset($filter->search)) {
-        //find search in columns
-        $query->where('id', 'like', '%' . $filter->search . '%')
-        ->orWhere('updated_at', 'like', '%' . $filter->search . '%')
-        ->orWhere('created_at', 'like', '%' . $filter->search . '%');
-      }
+    }
+  
+  
+    //Order by "Sort order"
+    if (!isset($params->filter->noSortOrder) || !$params->filter->noSortOrder) {
+      $query->orderBy('sort_order', 'desc');//Add order to query
     }
 
-    /*== FIELDS ==*/
-    if (isset($params->fields) && count($params->fields))
-    $query->select($params->fields);
+    //Response
+    return $query;
+  }
 
-    /*== REQUEST ==*/
-    if (isset($params->page) && $params->page) {
-      return $query->paginate($params->take);
-    } else {
-      $params->take ? $query->take($params->take) : false;//Take
-      return $query->get();
-    }
-  }//getItemsBy()
-
-
-  public function getItem($criteria, $params = false)
+  /**
+   * Method to sync Model Relations
+   *
+   * @param $model ,$data
+   * @return $model
+   */
+  public function syncModelRelations($model, $data)
   {
-    //Initialize query
-    $query = $this->model->query();
-
-    /*== RELATIONSHIPS ==*/
-    if (in_array('*', $params->include)) {//If Request all relationships
-      $query->with(['category', 'limits', 'product']);
-    } else {//Especific relationships
-      $includeDefault = ['category','limits'];//Default relationships
-      if (isset($params->include))//merge relations with default relationships
-      $includeDefault = array_merge($includeDefault, $params->include);
-      $query->with($includeDefault);//Add Relationships to query
+    //Get model relations data from attribute of model
+    $modelRelationsData = ($model->modelRelations ?? []);
+  
+    if(isset($data['limits']) && !empty($data['limits'])){
+      $entity->limits()->sync($data['limits']);
     }
+    /**
+     * Note: Add relation name to replaceSyncModelRelations attribute before replace it
+     *
+     * Example to sync relations
+     * if (array_key_exists(<relationName>, $data)){
+     *    $model->setRelation(<relationName>, $model-><relationName>()->sync($data[<relationName>]));
+     * }
+     *
+     */
 
-    /*== FILTER ==*/
-    if (isset($params->filter)) {
-      $filter = $params->filter;
-
-      if (isset($filter->field))//Filter by specific field
-      $field = $filter->field;
-    }
-
-    /*== FIELDS ==*/
-    if (isset($params->fields) && count($params->fields))
-    $query->select($params->fields);
-
-    /*== REQUEST ==*/
-    return $query->where($field ?? 'id', $criteria)->first();
-  }//getItem()
-
-  public function create($data)
-  {
-    $entity = $this->model->create($data);
-
-    $entity->categories()->sync(array_merge(Arr::get($data, 'categories', []), [$entity->category_id])); //add multiple categories
-
-    event(new UpdateProductable($entity, $data));
-    event(new CreateMedia($entity,$data));
-    return $entity;
-  }//create()
-
-
-  public function updateBy($criteria, $data, $params = false)
-  {
-    /*== initialize query ==*/
-    $query = $this->model->query();
-
-    /*== FILTER ==*/
-    if (isset($params->filter)) {
-      $filter = $params->filter;
-
-      //Update by field
-      if (isset($filter->field))
-      $field = $filter->field;
-    }
-
-    /*== REQUEST ==*/
-    $model = $query->where($field ?? 'id', $criteria)->first();
-    if($model){
-      $model->update((array)$data);
-
-      $model->categories()->sync(array_merge(Arr::get($data, 'categories', []), [$model->category_id])); //add multiple categories
-
-      event(new UpdateProductable($model, $data));
-      event(new UpdateMedia($model,$data));
-      return $model;
-    }
-
-    return false;
-
-  }//updateBy()
-
-  public function deleteBy($criteria, $params = false)
-  {
-    /*== initialize query ==*/
-    $query = $this->model->query();
-
-    /*== FILTER ==*/
-    if (isset($params->filter)) {
-      $filter = $params->filter;
-
-      if (isset($filter->field))//Where field
-      $field = $filter->field;
-    }
-
-    /*== REQUEST ==*/
-    $model = $query->where($field ?? 'id', $criteria)->first();
-    $model ? $model->delete() : false;
-    event(new DeleteProductable($model));
-    event(new DeleteMedia($model->id, get_class($model)));
-  }//deleteBy()
-
-
+    //Response
+    return $model;
+  }
 }

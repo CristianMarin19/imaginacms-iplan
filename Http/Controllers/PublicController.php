@@ -46,8 +46,10 @@ class PublicController extends BaseApiController
 
     $tpl = 'iplan::frontend.plan.index';
     $ttpl = 'iplan.plan.index';
-
+    
     if (view()->exists($ttpl)) $tpl = $ttpl;
+
+    $params->filter->internal = 0;
 
     $plans = $this->plan->getItemsBy($params);
 
@@ -120,28 +122,30 @@ class PublicController extends BaseApiController
         ));
         $plan = $this->plan->getItem($planId, $params);
 
-        if(!isset($plan->product)){
-            $userParams = json_decode(json_encode([
-                "include" => [],
-                "filter" => [
-                    "roleId" => 1
-                ]
+        if(!isset($plan->product) || $plan->product->price == 0){
+          $user = \Auth::user();
+          if(!isset($user->id)){
+            return redirect()->route('account.register');
+          }else{
+   
+            $userDriver = config('asgard.user.config.driver');
+            
+            $subscriptionController = app('Modules\Iplan\Http\Controllers\Api\SubscriptionController');
+            //Create subscription
+            request()->session()->put('subscriptedUser.id',$user->id);
+            $subscriptionController->create(new Request([
+              'attributes' => [
+                'entity' => "Modules\\User\\Entities\\{$userDriver}\\User",
+                'entity_id' => $user->id,
+                'plan_id' => $plan->id,
+                'options' => $data,
+              ]
             ]));
-            $emails = json_decode(setting('isite::emails'));
-            foreach($emails as $email){
-                $this->notification->to([
-                    "email" => $email,
-                ])->push(
-                    [
-                        "title" => trans('iplan::plans.messages.plan-without-product',['name' => $plan->name]),
-                        "message" => trans('iplan::plans.messages.please-assign-product',['name' => $plan->name]),
-                        "buttonText" => trans("iplan::plans.button.update plan"),
-                        "withButton" => true,
-                        "link" => url('iadmin/#/plans'),
-                    ]
-                );
-            }
-            return redirect()->back()->withErrors([trans('iplan::plans.messages.plan-without-product',['name' => $plan->name])]);
+            //Log
+            \Log::info("Register subscription Id {$plan->id} to user ID {$user->id}");
+  
+            return redirect()->route('/ipanel');
+          }
         }
 
         $products =   [[

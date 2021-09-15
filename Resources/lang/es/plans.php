@@ -16,6 +16,7 @@ return [
         'create plan' => 'Crear un Plan',
         'update plan' => 'Actualizar Plan',
         'buy' => 'Adquirir Plan',
+        'defaultPlanToNewUsers' => 'Probar plan!',
     ],
     'table' => [
     ],
@@ -29,6 +30,7 @@ return [
     'validation' => [
     ],
     'frequencies' =>[
+        'diary' => 'Diario',
         'weekly' => 'Semanal',
         'biweekly' => 'Quincenal',
         'monthly' => 'Mensual',

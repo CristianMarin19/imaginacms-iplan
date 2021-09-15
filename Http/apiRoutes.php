@@ -18,5 +18,11 @@ $router->group(['prefix' => 'iplan/v1'], function (Router $router) {
     require('ApiRoutes/subscriptionsRoutes.php');
     //======  SUBSCRIPTION LIMITS
     require('ApiRoutes/subscriptionLimitsRoutes.php');
-
+  
+  $router->apiCrud([
+    'module' => 'iplan',
+    'prefix' => 'plans',
+    'controller' => 'PlanApiController',
+    'middleware' => ['create' => ['auth:api'],'update' => ['auth:api'], ' delete' => ['auth:api']] // Just Testing
+  ]);
 });

@@ -16,8 +16,7 @@ class CreateIplanPlansTable extends Migration
         Schema::create('iplan__plans', function (Blueprint $table) {
             $table->id();
 
-            $table->string('name');
-            $table->longText('description');
+            
             $table->integer('frequency_id')->unsigned();
             $table->bigInteger('category_id')->unsigned();
 
