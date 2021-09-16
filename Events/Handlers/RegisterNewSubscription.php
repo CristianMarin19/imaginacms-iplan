@@ -45,26 +45,6 @@ class RegisterNewSubscription
       //Log
       \Log::info("{$this->logtitle}New User | Register subscription, Plan: {$plan->id} - {$plan->name} to user ID {$user->id}");
       
-      //send notification by email, broadcast and push -- by default only send by email
-      $this->notification->to([
-        "email" => $user->email,
-        "broadcast" => $user->id,
-        "push" => $user->id,
-      ])->push(
-        [
-          "title" => trans("iplan::subscriptions.title.defaultPlanToNewUsers",["planName" => $plan->name]),
-          "message" =>  trans("iplan::subscriptions.messages.defaultPlanToNewUsers",["planName" => $plan->name]),
-          "buttonText" => trans("iplan::plans.button.buy"),
-          "withButton" => true,
-          "link" => route(locale() . '.iplan.plan.index'),
-          "setting" => [
-            "saveInDatabase" => 1 // now, the notifications with type broadcast need to be save in database to really send the notification
-          ],
-          "options" => [
-            "isImportant" => true,
-          ]
-        ]
-      );
     }
   }
 }
