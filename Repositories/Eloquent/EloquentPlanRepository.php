@@ -78,7 +78,7 @@ class EloquentPlanRepository extends EloquentCrudRepository implements PlanRepos
     $modelRelationsData = ($model->modelRelations ?? []);
   
     if(isset($data['limits']) && !empty($data['limits'])){
-      $entity->limits()->sync($data['limits']);
+      $model->limits()->sync($data['limits']);
     }
     /**
      * Note: Add relation name to replaceSyncModelRelations attribute before replace it
