@@ -45,9 +45,11 @@ class IplanServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->publishConfig('iplan', 'config');
-        $this->publishConfig('iplan', 'permissions');
-        $this->publishConfig('iplan', 'settings');
-        $this->publishConfig('iplan', 'settings-fields');
+  
+      $this->mergeConfigFrom($this->getModuleConfigFilePath('icommerce', 'settings'), "asgard.icommerce.settings");
+      $this->mergeConfigFrom($this->getModuleConfigFilePath('icommerce', 'settings-fields'), "asgard.icommerce.settings-fields");
+      $this->mergeConfigFrom($this->getModuleConfigFilePath('icommerce', 'permissions'), "asgard.icommerce.permissions");
+        
         $this->publishConfig('iplan', 'crud-fields');
 
         $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');

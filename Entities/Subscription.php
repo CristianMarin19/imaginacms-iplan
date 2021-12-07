@@ -14,6 +14,7 @@ class Subscription extends Model
       "category_name",
       "entity",
       "entity_id",
+      "plan_id",
       "frequency",
       "start_date",
       "end_date",
@@ -30,6 +31,11 @@ class Subscription extends Model
     public function setOptionsAttribute($value)
     {
         $this->attributes['options'] = json_encode($value);
+    }
+
+    public function plan()
+    {
+        return $this->belongsTo(Plan::class);
     }
 
     public function getOptionsAttribute($value)

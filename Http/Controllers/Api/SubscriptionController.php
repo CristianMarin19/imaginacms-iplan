@@ -113,8 +113,6 @@ class SubscriptionController extends BaseApiController
 
       $plan = $this->plan->getItem($data['plan_id'], $params);
 
-      unset($data['plan_id']);
-
       $endDate = Carbon::now()->addDays($plan->frequency_id);
 
       $subscriptionData = [

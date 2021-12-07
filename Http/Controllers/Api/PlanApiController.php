@@ -54,7 +54,7 @@ class PlanApiController extends BaseCrudController
       $data = [];
       
       foreach($modulesEnabled as $name=>$module){
-        $cfg = config('asgard.'.strtolower($name).'.config.limitEntities');
+        $cfg = config('asgard.'.strtolower($name).'.config.limitableEntities');
         if(!empty($cfg)) {
           $data[] = [
             'label' => $name,
