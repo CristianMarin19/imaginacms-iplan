@@ -46,9 +46,9 @@ class IplanServiceProvider extends ServiceProvider
     {
         $this->publishConfig('iplan', 'config');
   
-      $this->mergeConfigFrom($this->getModuleConfigFilePath('icommerce', 'settings'), "asgard.icommerce.settings");
-      $this->mergeConfigFrom($this->getModuleConfigFilePath('icommerce', 'settings-fields'), "asgard.icommerce.settings-fields");
-      $this->mergeConfigFrom($this->getModuleConfigFilePath('icommerce', 'permissions'), "asgard.icommerce.permissions");
+      $this->mergeConfigFrom($this->getModuleConfigFilePath('iplan', 'settings'), "asgard.iplan.settings");
+      $this->mergeConfigFrom($this->getModuleConfigFilePath('iplan', 'settings-fields'), "asgard.iplan.settings-fields");
+      $this->mergeConfigFrom($this->getModuleConfigFilePath('iplan', 'permissions'), "asgard.iplan.permissions");
         
         $this->publishConfig('iplan', 'crud-fields');
 
