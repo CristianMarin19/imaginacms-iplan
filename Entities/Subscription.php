@@ -14,7 +14,7 @@ class Subscription extends Model
       "category_name",
       "entity",
       "entity_id",
-      "plan_id",
+      //"plan_id",
       "frequency",
       "start_date",
       "end_date",
