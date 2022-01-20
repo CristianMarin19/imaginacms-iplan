@@ -130,12 +130,15 @@ class HandleModulesLimits
           }
         }
       } else {
+        $allowedLimits = false;
+        /*
         $userPermissions = $this->permissionsApiController->getAll(['userId' => auth()->user()->id]);
         $modPermissions = ['isDeleting' => 'destroy', 'isCreating' => 'create'];
         $permissionType = strtolower($moduleName).'.'.strtolower($entityName).'.'.$modPermissions[$eventType];
         $adminPermission = 'profile.access.iadmin';
         if((!in_array($permissionType, $userPermissions) && !$userPermissions[$permissionType]) && !in_array($adminPermission, $userPermissions) && !$userPermissions[$adminPermission])
             $allowedLimits = false;
+        */
       }
     }
     \Log::info('Allowed Limits > '.$allowedLimits);
