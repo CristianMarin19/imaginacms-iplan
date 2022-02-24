@@ -7,7 +7,7 @@ return [
       "activated" => true,
       "path" => "/plans",
       "name" => "qplan.admin.plans.index",
-      "crud" => "../_crud/plans",
+      "crud" => "@imagina/qplan/_crud/plans",
       "page" => "qcrud/_pages/admin/crudPage",
       "layout" => "qsite/_layouts/master.vue",
       "title" => "iplan.cms.sidebar.adminPlans",
@@ -22,7 +22,7 @@ return [
       "activated" => true,
       "path" => "/limits",
       "name" => "qplan.admin.limits.index",
-      "crud" => "../_crud/limits",
+      "crud" => "@imagina/qplan/_crud/limits",
       "page" => "qcrud/_pages/admin/crudPage",
       "layout" => "qsite/_layouts/master.vue",
       "title" => "iplan.cms.sidebar.adminLimits",
@@ -40,7 +40,7 @@ return [
       "activated" => true,
       "path" => "/categories",
       "name" => "qplan.admin.categories.index",
-      "crud" => "../_crud/planCategories",
+      "crud" => "@imagina/qplan/_crud/planCategories",
       "page" => "qcrud/_pages/admin/crudPage",
       "layout" => "qsite/_layouts/master.vue",
       "title" => "iplan.cms.sidebar.adminCategories",
@@ -58,7 +58,7 @@ return [
       "activated" => true,
       "path" => "/entityPlans",
       "name" => "qplan.admin.entityPlans.index",
-      "crud" => "../_crud/entityPlans",
+      "crud" => "@imagina/qplan/_crud/entityPlans",
       "page" => "qcrud/_pages/admin/crudPage",
       "layout" => "qsite/_layouts/master.vue",
       "title" => "iplan.cms.sidebar.adminEntityPlans",
@@ -70,13 +70,16 @@ return [
           "qplan.plans"
         ]
       ]
-    ],
+    ]
+  ],
+  'panel' => [],
+  'main' => [
     "subscriptions" => [
       "permission" => "iplan.subscriptions.manage",
       "activated" => true,
       "path" => "/subscriptions",
       "name" => "qplan.admin.subscriptions.index",
-      "crud" => "../_crud/subscriptions",
+      "crud" => "@imagina/qplan/_crud/subscriptions",
       "page" => "qcrud/_pages/admin/crudPage",
       "layout" => "qsite/_layouts/master.vue",
       "title" => "iplan.cms.sidebar.adminSubscriptions",
@@ -94,7 +97,7 @@ return [
       "activated" => true,
       "path" => "/subscriptions/:id",
       "name" => "qplan.admin.subscriptions.edit",
-      "page" => "../_pages/admin/subscriptions/form",
+      "page" => "@imagina/qplan/_pages/admin/subscriptions/form",
       "layout" => "qsite/_layouts/master.vue",
       "title" => "iplan.cms.sidebar.editSubscriptions",
       "icon" => "fas fa-file-signature",
@@ -107,26 +110,5 @@ return [
         ]
       ]
     ]
-  ],
-  'panel' => [
-    "subscriptions" => [
-      "permission" => "iplan.subscriptions.manage",
-      "activated" => true,
-      "path" => "/subscriptions",
-      "name" => "qplan.admin.subscriptions.index",
-      "crud" => "../_crud/subscriptions",
-      "page" => "qcrud/_pages/admin/crudPage",
-      "layout" => "qsite/_layouts/master.vue",
-      "title" => "iplan.cms.sidebar.panelSubscriptions",
-      "icon" => "fas fa-file-contract",
-      "authenticated" => true,
-      "subHeader" => [
-        "refresh" => true,
-        "breadcrumb" => [
-          "qplan.plans"
-        ]
-      ]
-    ]
-  ],
-  'main' => []
+  ]
 ];
