@@ -130,15 +130,14 @@ class HandleModulesLimits
           }
         }
       } else {
-        $allowedLimits = false;
         /*
-        $userPermissions = $this->permissionsApiController->getAll(['userId' => auth()->user()->id]);
-        $modPermissions = ['isDeleting' => 'destroy', 'isCreating' => 'create'];
-        $permissionType = strtolower($moduleName).'.'.strtolower($entityName).'.'.$modPermissions[$eventType];
-        $adminPermission = 'profile.access.iadmin';
-        if((!in_array($permissionType, $userPermissions) && !$userPermissions[$permissionType]) && !in_array($adminPermission, $userPermissions) && !$userPermissions[$adminPermission])
-            $allowedLimits = false;
+         * TODO: mejorar esta lógica mas adelante, aquí se dejó el permiso de acceso al iadmin para permitir que un
+         *  administrador pueda crear las entidades que necesite sin limitaciones, por ahora para lo que se necesita
+         *  funciona pero podría hacerse mejor
         */
+        $userPermissions = $this->permissionsApiController->getAll(['userId' => auth()->user()->id]);
+        if(!in_array("profile.access.iadmin", $userPermissions))
+            $allowedLimits = false;
       }
     }
     \Log::info('Allowed Limits > '.$allowedLimits);
