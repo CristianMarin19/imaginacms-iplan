@@ -50,6 +50,7 @@ class IplanServiceProvider extends ServiceProvider
       $this->mergeConfigFrom($this->getModuleConfigFilePath('iplan', 'settings-fields'), "asgard.iplan.settings-fields");
       $this->mergeConfigFrom($this->getModuleConfigFilePath('iplan', 'permissions'), "asgard.iplan.permissions");
       $this->mergeConfigFrom($this->getModuleConfigFilePath('iplan', 'cmsPages'), "asgard.iplan.cmsPages");
+      $this->mergeConfigFrom($this->getModuleConfigFilePath('iplan', 'cmsSidebar'), "asgard.iplan.cmsSidebar");
 
         $this->publishConfig('iplan', 'crud-fields');
 
