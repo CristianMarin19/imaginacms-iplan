@@ -31,7 +31,7 @@ class EloquentSubscriptionRepository extends EloquentBaseRepository implements S
       if (isset($filter->user)) {
         $userDriver = config('asgard.user.config.driver', 'Sentinel');
         $query->where('entity_id', $filter->user)
-            ->where('entity',"Modules\\User\\Entities\\{$userDriver}\\User");
+          ->where('entity', "Modules\\User\\Entities\\{$userDriver}\\User");
       }//user
 
       //Filter by date
@@ -50,7 +50,7 @@ class EloquentSubscriptionRepository extends EloquentBaseRepository implements S
         $orderWay = $filter->order->way ?? 'desc';//Default way
         $query->orderBy($orderByField, $orderWay);//Add order to query
       }
-      
+
       //Status
       if (isset($filter->status)) {
         $query->where("status", $filter->status);
@@ -107,7 +107,7 @@ class EloquentSubscriptionRepository extends EloquentBaseRepository implements S
       $query->select($params->fields);
 
     /*== REQUEST ==*/
-    return $query->where($field ?? 'id', $criteria)->first();
+    return $query->where($field ?? 'id', $criteria)->orderBy("created_at", "desc")->first();
   }//getItem()
 
   public function create($data)
