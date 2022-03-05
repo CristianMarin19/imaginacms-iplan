@@ -3,6 +3,7 @@
 namespace Modules\Iplan\Transformers;
 
 use Modules\Core\Icrud\Transformers\CrudResource;
+use Modules\Iplan\Entities\Frequency;
 
 class PlanTransformer extends CrudResource
 {
@@ -20,6 +21,13 @@ class PlanTransformer extends CrudResource
       $data['product'] = new $productTransformer($this->whenLoaded('product'));
     }
     return $data;*/
-    return [];
+
+    //dd($this->frequency_id);
+
+    $frequencyClass = new Frequency();
+
+    return [
+      "frequency" => $frequencyClass->get($this->frequency_id)
+    ];
   }
 }

@@ -4,6 +4,7 @@ return [
   "sidebar" => [
     "adminGroup" => "Planes",
     "adminCategories" => "Categorías",
+    "adminUserSubscriptions" => 'Planes disponibles',
     "createCategories" => "Crear Categoría",
     "editCategories" => "Editar Categoría",
     "adminPlans" => "Planes",
