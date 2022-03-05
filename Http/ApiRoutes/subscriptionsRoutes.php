@@ -36,5 +36,9 @@ $router->group(['prefix' => 'subscriptions'], function (Router $router) {
     'as' => 'api.iplan.subscriptions.show',
     'uses' => 'SubscriptionController@show',
   ]);
-
+  $router->post('/buy', [
+    'as' => 'api.iplan.subscriptions.buy',
+    'uses' => 'SubscriptionController@buy',
+    'middleware' => ['auth:api']
+  ]);
 });

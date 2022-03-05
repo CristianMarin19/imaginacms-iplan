@@ -20,5 +20,6 @@ return [
         'my-qrs' => 'My QR Code',
         'my-subscriptions' => 'My Subscriptions',
         'print' => 'Print',
-    ]
+    ],
+  "planNotFound" => "Plan not valid"
 ];

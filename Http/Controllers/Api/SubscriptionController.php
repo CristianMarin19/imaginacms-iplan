@@ -23,8 +23,8 @@ class SubscriptionController extends BaseApiController
   private $plan;
   private $subscriptionLimit;
 
-  public function __construct(SubscriptionRepository $subscription,
-                              PlanRepository $plan,
+  public function __construct(SubscriptionRepository      $subscription,
+                              PlanRepository              $plan,
                               SubscriptionLimitRepository $subscriptionLimit)
   {
     parent::__construct();
@@ -108,7 +108,7 @@ class SubscriptionController extends BaseApiController
       //Get data
       $data = $request->input('attributes');
       $params = $this->getParamsRequest($request);
-      $params->include = ['category','limits'];
+      $params->include = ['category', 'limits'];
       //Validate Request
 
       $plan = $this->plan->getItem($data['plan_id'], $params);
@@ -129,17 +129,17 @@ class SubscriptionController extends BaseApiController
       //Create item
       $entity = $this->subscription->create($data);
 
-      foreach($plan->limits as $limit){
-          $limitData = [
-              'name' => $limit->name,
-              'entity' => $limit->entity,
-              'quantity' => $limit->quantity,
-              'quantity_used' => 0,
-              'attribute' => $limit->attribute,
-              'attribute_value' => $limit->attribute_value,
-              'subscription_id' => $entity->id,
-          ];
-          $this->subscriptionLimit->create($limitData);
+      foreach ($plan->limits as $limit) {
+        $limitData = [
+          'name' => $limit->name,
+          'entity' => $limit->entity,
+          'quantity' => $limit->quantity,
+          'quantity_used' => 0,
+          'attribute' => $limit->attribute,
+          'attribute_value' => $limit->attribute_value,
+          'subscription_id' => $entity->id,
+        ];
+        $this->subscriptionLimit->create($limitData);
       }
 
       event(new SubscriptionHasStarted($entity));
@@ -221,60 +221,121 @@ class SubscriptionController extends BaseApiController
     return response()->json($response, $status ?? 200);
   }
 
-    /**
-     * GET ITEMS
-     *
-     * @return mixed
-     */
-    public function entities(Request $request)
-    {
-        try {
+  /**
+   * GET ITEMS
+   *
+   * @return mixed
+   */
+  public function entities(Request $request)
+  {
+    try {
 
-            $data = config('asgard.iplan.config.subscriptionEntities');
+      $data = config('asgard.iplan.config.subscriptionEntities');
 
-            //Response
-            $response = [
-                "data" => $data,
-            ];
-        } catch (\Exception $e) {
-            $status = $this->getStatusError($e->getCode());
-            $response = ["errors" => $e->getMessage()];
-        }
-
-        //Return response
-        return response()->json($response, $status ?? 200);
+      //Response
+      $response = [
+        "data" => $data,
+      ];
+    } catch (\Exception $e) {
+      $status = $this->getStatusError($e->getCode());
+      $response = ["errors" => $e->getMessage()];
     }
 
-    /**
-     * GET ITEMS
-     *
-     * @return mixed
-     */
-    public function me(Request $request)
-    {
-        try {
-            //Get Parameters from URL.
-            $params = $this->getParamsRequest($request);
+    //Return response
+    return response()->json($response, $status ?? 200);
+  }
 
-            $params->filter->user = auth()->user()->id;
+  /**
+   * GET ITEMS
+   *
+   * @return mixed
+   */
+  public function me(Request $request)
+  {
+    try {
+      //Get Parameters from URL.
+      $params = $this->getParamsRequest($request);
 
-            //Request to Repository
-            $dataEntity = $this->subscription->getItemsBy($params);
+      $params->filter->user = auth()->user()->id;
 
-            //Response
-            $response = [
-                "data" => SubscriptionTransformer::collection($dataEntity)
-            ];
+      //Request to Repository
+      $dataEntity = $this->subscription->getItemsBy($params);
 
-            //If request pagination add meta-page
-            $params->page ? $response["meta"] = ["page" => $this->pageTransformer($dataEntity)] : false;
-        } catch (\Exception $e) {
-            $status = $this->getStatusError($e->getCode());
-            $response = ["errors" => $e->getMessage()];
-        }
+      //Response
+      $response = [
+        "data" => SubscriptionTransformer::collection($dataEntity)
+      ];
 
-        //Return response
-        return response()->json($response, $status ?? 200);
+      //If request pagination add meta-page
+      $params->page ? $response["meta"] = ["page" => $this->pageTransformer($dataEntity)] : false;
+    } catch (\Exception $e) {
+      $status = $this->getStatusError($e->getCode());
+      $response = ["errors" => $e->getMessage()];
     }
 
+    //Return response
+    return response()->json($response, $status ?? 200);
+  }
+
+  /**
+   * Buy subscription
+   *
+   * @param Request $request
+   * @return void
+   */
+  public function buy(Request $request)
+  {
+    \DB::beginTransaction();
+    try {
+      $params = $this->getParamsRequest($request);//Get params
+      $data = $request->input('attributes');//Get data
+
+      //Get Plan
+      $plan = $this->plan->getItem($data['plan_id'], json_decode(json_encode([
+        "include" => ["product"],
+        "filter" => ["status" => 1]
+      ])));
+
+      //Validate if exist plan
+      if (!$plan) {
+        $status = 500;
+        $response = ["messages" => [["message" => trans('iplan::common.planNotFound'), "type" => "error"]]];
+      } else {
+        //Get user
+        $user = \Auth::user();
+        //Create subscription
+        if (!isset($plan->product) || !$plan->product->price) {
+          $this->create(new Request([
+            'attributes' => [
+              'entity' => "Modules\\User\\Entities\\" . config('asgard.user.config.driver') . "\\User",
+              'entity_id' => $user->id,
+              'plan_id' => $plan->id,
+              'options' => $data,
+            ]
+          ]));
+        } //Create cart to pay
+        else {
+          //Instance cart service
+          $cartService = app("Modules\Icommerce\Services\CartService");
+          //Create cart
+          $cartService->create([
+            "products" => [["id" => $plan->product->id, "quantity" => 1, "options" => $data]]
+          ]);
+          //Set redirect to cart
+          $locale = \LaravelLocalization::setLocale() ?: \App::getLocale();
+          $redirectTo = route($locale . '.icommerce.store.checkout');
+        }
+
+        \DB::commit(); //Commit to Data Base
+        $response = ["data" => ["redirectTo" => $redirectTo ?? null]];
+      }
+    } catch (\Exception $e) {
+      \DB::rollback();//Rollback to Data Base
+      $status = $this->getStatusError($e->getCode());
+      $response = ["errors" => $e->getMessage()];
+      dd($response, $e->getLine(), $e->getFile());
+    }
+    //Return response
+    return response()->json($response, $status ?? 200);
+  }
 }
