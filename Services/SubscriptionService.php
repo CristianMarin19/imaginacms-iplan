@@ -52,4 +52,28 @@ class SubscriptionService
         }
         return false;
     }
+
+    /*
+    * Get if user has active subscriptions
+    */
+    public function checkHasUserSuscription($data){
+
+        \Log::info("Iplan: Services|SubscriptionService|checkHasUserSuscription");
+
+        //Get only active subscription
+        $subscription = app("Modules\Iplan\Repositories\SubscriptionRepository")
+            ->where('entity_id','=',$data['entity_id'])
+            ->where('entity',"=",$data['entity'])
+            ->where('status',"=",1)
+            ->first();  
+        
+        if(!is_null($subscription)){
+            \Log::info("Iplan: Services|SubscriptionService|checkHasUserSuscription|Change status old subscription");
+            $subscription->status = 0; // Change to inactive
+            $subscription->save();
+        }
+            
+
+    }
+
 }

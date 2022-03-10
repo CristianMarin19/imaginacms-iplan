@@ -23,6 +23,8 @@ class SubscriptionController extends BaseApiController
   private $plan;
   private $subscriptionLimit;
 
+  private $subscriptionService;
+
   public function __construct(SubscriptionRepository      $subscription,
                               PlanRepository              $plan,
                               SubscriptionLimitRepository $subscriptionLimit)
@@ -32,6 +34,7 @@ class SubscriptionController extends BaseApiController
     $this->plan = $plan;
     $this->subscriptionLimit = $subscriptionLimit;
 
+    $this->subscriptionService = app('Modules\Iplan\Services\SubscriptionService');
   }
 
 
@@ -110,6 +113,9 @@ class SubscriptionController extends BaseApiController
       $params = $this->getParamsRequest($request);
       $params->include = ['category', 'limits'];
       //Validate Request
+
+      // Check if user has another subscription and if exist change the status to 0 (inactive)
+      $this->subscriptionService->checkHasUserSuscription($data);
 
       $plan = $this->plan->getItem($data['plan_id'], $params);
 
