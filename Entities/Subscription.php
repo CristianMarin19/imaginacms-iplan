@@ -4,6 +4,8 @@ namespace Modules\Iplan\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 
+use Modules\Iplan\Entities\Status;
+
 class Subscription extends Model
 {
 
@@ -57,6 +59,10 @@ class Subscription extends Model
         return $this->morphedByMany($related, "related", "iplan__subscription_related")->withTimestamps();
     }
 
-
+    public function getStatusNameAttribute()
+    {
+        $status = new Status();
+        return $status->get($this->status);
+    }
 
 }

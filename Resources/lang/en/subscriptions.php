@@ -30,4 +30,8 @@ return [
   ],
   'validation' => [
   ],
+  'status' => [
+    'inactive' => 'Inactive',
+    'active' => 'Active'
+  ],
 ];

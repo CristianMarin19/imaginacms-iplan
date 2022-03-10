@@ -25,4 +25,13 @@ $router->group(['prefix' => 'iplan/v1'], function (Router $router) {
     'controller' => 'PlanApiController',
     'middleware' => ['create' => ['auth:api'],'update' => ['auth:api'], ' delete' => ['auth:api']] // Just Testing
   ]);
+
+  $router->apiCrud([
+    'module' => 'iplan',
+    'prefix' => 'statuses',
+    'staticEntity' => 'Modules\Iplan\Entities\Status',
+    //'middleware' => ['create' => [], 'index' => [], 'show' => [], 'update' => [], 'delete' => [], 'restore' => []]
+  ]);
+
+
 });
