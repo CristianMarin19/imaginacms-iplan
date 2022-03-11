@@ -115,7 +115,7 @@ class SubscriptionController extends BaseApiController
       //Validate Request
 
       // Check if user has another subscription and if exist change the status to 0 (inactive)
-      $this->subscriptionService->checkHasUserSuscription($data);
+      //$this->subscriptionService->checkHasUserSuscription($data);
 
       $plan = $this->plan->getItem($data['plan_id'], $params);
 
