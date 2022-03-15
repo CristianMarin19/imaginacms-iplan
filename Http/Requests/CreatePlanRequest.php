@@ -10,7 +10,7 @@ class CreatePlanRequest extends BaseFormRequest
   {
     return [
       
-      "frequency_id" => "required|numeric|min:1",
+      "frequency_id" => "required|numeric|min:0",
       "category_id" => "required|numeric|min:0",
     ];
   }
