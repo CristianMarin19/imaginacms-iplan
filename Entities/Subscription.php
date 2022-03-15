@@ -22,6 +22,7 @@ class Subscription extends Model
       "end_date",
       "status",
       "options",
+      "next_plan_id"
     ];
 
     protected $casts = [
