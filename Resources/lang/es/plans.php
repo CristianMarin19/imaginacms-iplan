@@ -30,6 +30,7 @@ return [
     'validation' => [
     ],
     'frequencies' =>[
+        'unique' => 'Unica',
         'diary' => 'Diario',
         'weekly' => 'Semanal',
         'biweekly' => 'Quincenal',

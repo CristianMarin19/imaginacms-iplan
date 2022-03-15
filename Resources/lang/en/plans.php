@@ -30,6 +30,7 @@ return [
     'selectPlan' => 'Please select a plan.',
   ],
   'frequencies' =>[
+    'unique' => 'Unique',
     'diary' => 'Diary',
     'weekly' => 'Weekly',
     'biweekly' => 'Biweekly',
