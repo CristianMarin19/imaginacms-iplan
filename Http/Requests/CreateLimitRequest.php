@@ -8,7 +8,9 @@ class CreateLimitRequest extends BaseFormRequest
 {
     public function rules()
     {
-        return [];
+        return [
+            'entity' => 'required',
+        ];
     }
 
     public function translationRules()
