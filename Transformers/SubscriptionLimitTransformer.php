@@ -2,27 +2,17 @@
 
 namespace Modules\Iplan\Transformers;
 
-use Illuminate\Http\Resources\Json\JsonResource;
-use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
+use Modules\Core\Icrud\Transformers\CrudResource;
 
-class SubscriptionLimitTransformer extends JsonResource
+class SubscriptionLimitTransformer extends CrudResource
 {
-  public function toArray($request)
+  /**
+  * Method to merge values with response
+  *
+  * @return array
+  */
+  public function modelAttributes($request)
   {
-    $data = [
-      'id' => $this->when($this->id,$this->id),
-      'name' => $this->when($this->name,$this->name),
-      'entity' => $this->when($this->entity,$this->entity),
-      'quantity' => $this->when($this->quantity,$this->quantity),
-      'quantityUsed' => (int)$this->quantity_used,
-      'attribute' => $this->when($this->attribute,$this->attribute),
-      'attributeValue' => $this->attribute_value,
-      'subscriptionId' => $this->when($this->subscription_id,$this->subscription_id),
-      'subscription' => new SubscriptionTransformer($this->whenLoaded('subscription')),
-      'createdAt' => $this->when($this->created_at, $this->created_at),
-      'updatedAt' => $this->when($this->updated_at, $this->updated_at),
-    ];
-
-    return $data;
+    return [];
   }
 }
