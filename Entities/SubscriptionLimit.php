@@ -17,11 +17,21 @@ class SubscriptionLimit extends Model
     "attribute_value",
     "quantity",
     "quantity_used",
+    "start_date",
+    "end_date",
+    "changed_subscription_date"
   ];
 
   public function subscription()
   {
     return $this->belongsTo(Subscription::class,"subscription_id");
+  }
+
+  public function getQuantityAvailableAttribute(){
+
+    $result = $this->quantity - $this->quantity_used;
+
+    return abs($result);
   }
 
 }
