@@ -34,6 +34,17 @@ return [
       'label' => 'iplan::common.settings.defaultPageDescription',
     ]
   ],
+  'cumulativePlans' => [
+    'name' => 'iplan::cumulativePlans',
+    'value' => '1',
+    'type' => 'checkbox',
+    'props' => [
+      'label' => 'iplan::common.settings.cumulativePlans',
+      'hint' => 'iplan::common.settingHints.cumulativePlans',
+      'trueValue' => '1',
+      'falseValue' => '0'
+    ],
+  ],
   
  
 ];

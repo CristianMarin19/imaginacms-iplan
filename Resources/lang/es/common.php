@@ -7,9 +7,11 @@ return [
         'default-plan-to-new-users' => 'Plan por defecto para nuevos usuarios',
         'enableQr' => 'Habilitar Código QR para los usuarios suscritos',
         'defaultPageDescription' => 'Descripción por defecto en la página de planes',
+        'cumulativePlans' => 'Planes acumulativos',
     ],
     'settingHints' => [
         'default-plan-to-new-users' => 'Selecciona un plan por defecto para nuevos usuarios',
+        'cumulativePlans' => 'Los limites de los planes anteriores (Si el usuario ya posee) no se desactivaran',
     ],
     'messages' => [
         'entity-create-not-allowed' => 'Creación/Actualización no Permitida',
