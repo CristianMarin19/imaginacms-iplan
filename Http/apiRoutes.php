@@ -33,5 +33,12 @@ $router->group(['prefix' => 'iplan/v1'], function (Router $router) {
     //'middleware' => ['create' => [], 'index' => [], 'show' => [], 'update' => [], 'delete' => [], 'restore' => []]
   ]);
 
+  $router->apiCrud([
+    'module' => 'iplan',
+    'prefix' => 'types',
+    'staticEntity' => 'Modules\Iplan\Entities\PlanType',
+    //'middleware' => ['create' => [], 'index' => [], 'show' => [], 'update' => [], 'delete' => [], 'restore' => []]
+  ]);
+
 
 });

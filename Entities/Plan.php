@@ -5,6 +5,7 @@ namespace Modules\Iplan\Entities;
 use Astrotomic\Translatable\Translatable;
 use Modules\Core\Icrud\Entities\CrudModel;
 use Modules\Isite\Traits\WithProduct;
+use Modules\Iplan\Entities\PlanType;
 
 class Plan extends CrudModel
 {
@@ -25,7 +26,8 @@ class Plan extends CrudModel
       "frequency_id",
       "category_id",
       "options",
-      "price"
+      "price",
+      "type"
     ];
 
   protected $casts = [
@@ -62,4 +64,11 @@ class Plan extends CrudModel
   {
     return $this->morphOne("Modules\\Icommerce\\Entities\\Product", "entity");
   }
+
+  public function getTypeNameAttribute()
+  {
+    $type = new PlanType();
+    return $type->get($this->type);
+  }
+
 }

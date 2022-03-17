@@ -39,5 +39,9 @@ return [
     'quarterly' => 'Quarterly',
     'biannual' => 'Biannual',
     'annual' => 'Annual',
-  ]
+  ],
+  'types' => [
+    'principal' => 'Principal',
+    'extra' => 'Extra'
+  ],
 ];

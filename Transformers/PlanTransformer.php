@@ -14,11 +14,14 @@ class PlanTransformer extends CrudResource
   public function modelAttributes($request)
   {
   
+    $data['typeName'] = $this->typeName;
+
     if(is_module_enabled('Icommerce')){
       $productTransformer = 'Modules\\Icommerce\\Transformers\\ProductTransformer';
       $data['productId'] = $this->product ? (string)$this->product->id : '';
       $data['product'] = new $productTransformer($this->whenLoaded('product'));
     }
+
     return $data;
 
   }
