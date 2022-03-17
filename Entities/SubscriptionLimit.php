@@ -19,12 +19,30 @@ class SubscriptionLimit extends Model
     "quantity_used",
     "start_date",
     "end_date",
-    "changed_subscription_date"
+    "changed_subscription_date",
+    "type",
+    "options"
+  ];
+
+  protected $casts = [
+    'options' => 'array'
   ];
 
   public function subscription()
   {
     return $this->belongsTo(Subscription::class,"subscription_id");
+  }
+
+  //============== MUTATORS / ACCESORS ==============//
+
+  public function setOptionsAttribute($value)
+  {
+    $this->attributes['options'] = json_encode($value);
+  }
+
+  public function getOptionsAttribute($value)
+  {
+    return json_decode($value);
   }
 
   public function getQuantityAvailableAttribute(){
