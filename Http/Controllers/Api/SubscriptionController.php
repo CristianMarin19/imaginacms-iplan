@@ -135,6 +135,16 @@ class SubscriptionController extends BaseApiController
       //Create item
       $entity = $this->subscription->create($data);
 
+      // Subscription data to save in case it is updated at any time, the limit does not lose that information
+      $options['subscription'] = [
+        'name' => $entity->name,
+        'description' => $entity->description,
+        'category' => $entity->category_name,
+        'start_date' => $entity->start_date,
+        'end_date' => $entity->end_date
+      ];
+
+      // Create Subscription Limits
       foreach ($plan->limits as $limit) {
         $limitData = [
           'name' => $limit->name,
@@ -143,12 +153,18 @@ class SubscriptionController extends BaseApiController
           'quantity_used' => 0,
           'attribute' => $limit->attribute,
           'attribute_value' => $limit->attribute_value,
-          'subscription_id' => $entity->id,
+          'start_date' => $entity->start_date,
+          'end_date' => $entity->end_date,
+          'type' => $plan->type,
+          'options' => $options,
+          'subscription_id' => $entity->id
         ];
         $this->subscriptionLimit->create($limitData);
       }
 
       event(new SubscriptionHasStarted($entity));
+
+
       //Response
       $response = ["data" => $entity];
       \DB::commit(); //Commit to Data Base
