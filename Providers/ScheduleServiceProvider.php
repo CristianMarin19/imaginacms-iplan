@@ -17,6 +17,10 @@ class ScheduleServiceProvider extends ServiceProvider
             $schedule->call(function () {
                 \Modules\Iplan\Jobs\NotifyExpiredSubscriptions::dispatch();
             })->dailyAt('20:00');
+
+            $schedule->call(function () {
+                \Modules\Iplan\Jobs\FinishedSubscriptions::dispatch();
+            })->everyMinute();
             
         });
 
