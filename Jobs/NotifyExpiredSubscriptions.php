@@ -29,7 +29,7 @@ class NotifyExpiredSubscriptions implements ShouldQueue
         $driver = config('asgard.user.config.driver');
         $userNamespace = "Modules\\User\\Entities\\{$driver}\\User";
 
-        \Log::info("Iplan: Jobs|Checking Subscriptions|Now Date: $nowDate");
+        \Log::info("Iplan: Jobs|NotifyExpiredSubscriptions|Now Date: $nowDate");
 
         $result = Subscription::select(
             \DB::raw("DATEDIFF(end_date, '{$nowDate}') as days_remaining"),
@@ -40,12 +40,12 @@ class NotifyExpiredSubscriptions implements ShouldQueue
             ->whereRaw(\DB::raw("DATEDIFF(end_date, '{$nowDate}') <= 3"))
             ->get();
 
-        //\Log::info("Iplan|Jobs|Checking Subscriptions|result: ".json_encode($result));
-
         if(count($result) > 0) {
             $params = ["filter" => ["userId" => $result->pluck("entity_id")->toArray()]];
             $users = $this->user->getItemsBy(json_decode(json_encode($params)));
 
+            \Log::info("Iplan: Jobs|NotifyExpiredSubscriptions|Count Results: ".count($result) );
+            
             foreach ($result as $item) {
                 $user = $users->where("id",$item->entity_id)->first();
 
@@ -67,8 +67,8 @@ class NotifyExpiredSubscriptions implements ShouldQueue
                 );
 
             }
-        }else{
-            \Log::info("Iplan: Jobs|Checking Subscriptions|Nothing to Expire");
+            
         }
+
     }
 }
