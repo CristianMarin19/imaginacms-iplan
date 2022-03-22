@@ -112,15 +112,12 @@ class SubscriptionController extends BaseApiController
       $data = $request->input('attributes');
       $params = $this->getParamsRequest($request);
       $params->include = ['category', 'limits'];
-      //Validate Request
-
-      // Check if user has another subscription and if exist change the status to 0 (inactive)
-      //$this->subscriptionService->checkHasUserSuscription($data);
-
+      
+      // Get Plan
       $plan = $this->plan->getItem($data['plan_id'], $params);
 
+      // Data to save in Subscription
       $endDate = Carbon::now()->addDays($plan->frequency_id);
-
       $subscriptionData = [
         'name' => $plan->name,
         'description' => $plan->description,
@@ -129,11 +126,47 @@ class SubscriptionController extends BaseApiController
         'end_date' => $endDate,
         'status' => 1,
       ];
-
       $data = array_merge($subscriptionData, $data);
 
-      //Create item
-      $entity = $this->subscription->create($data);
+      // Check if user has another subscription
+      $oldSubscription = $this->subscriptionService->checkHasUserSuscription($data);
+
+      // Only if plan type is Principal
+      if($plan->type==0){
+
+        // User has another subscription
+        if(!is_null($oldSubscription)){
+          
+          //Update old subscription
+          $entity = $this->subscription->updateBy($oldSubscription->id,$data);
+
+          // Cumulative Plans
+          $cumulative = setting('iplan::cumulativePlans',null, true);
+          
+          //Plans are not cumulative
+          if($cumulative==false){
+            
+            foreach ($oldSubscription->limits as $key => $limit) {
+              
+              //The old limit should be inactive only if type is Principal (Like the plan)
+              // the limits type 1 (Extra) should be actives
+              if($limit->type==0){
+                $limit->changed_subscription_date = $entity->start_date;
+                $limit->save();
+              }
+
+            }
+          }
+
+        }else{
+          $entity = $this->subscription->create($data);
+        }
+      }
+
+      // Only if plan type is Extra (Like a package) - Is the same subscription
+      if($plan->type==1){
+        $entity = $oldSubscription;
+      }
 
       // Subscription data to save in case it is updated at any time, the limit does not lose that information
       $options['subscription'] = [
@@ -163,12 +196,14 @@ class SubscriptionController extends BaseApiController
       }
 
       event(new SubscriptionHasStarted($entity));
-
+      
 
       //Response
       $response = ["data" => $entity];
       \DB::commit(); //Commit to Data Base
     } catch (\Exception $e) {
+
+      dd($e);
       \DB::rollback();//Rollback to Data Base
       $status = $this->getStatusError($e->getCode());
       $response = ["errors" => $e->getMessage()];
