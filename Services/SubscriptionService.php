@@ -54,26 +54,74 @@ class SubscriptionService
     }
 
     /*
-    * Get if user has active subscriptions
+    * Get if user has active subscription
     */
     public function checkHasUserSuscription($data){
 
         \Log::info("Iplan: Services|SubscriptionService|checkHasUserSuscription");
 
-        //Get only active subscription
-        $subscription = app("Modules\Iplan\Repositories\SubscriptionRepository")
+        //Get Last Active Subscription
+        $oldSubscription = app("Modules\Iplan\Repositories\SubscriptionRepository")
             ->where('entity_id','=',$data['entity_id'])
             ->where('entity',"=",$data['entity'])
             ->where('status',"=",1)
+            ->orderBy('created_at','desc')
             ->first();  
-        
-        if(!is_null($subscription)){
-            \Log::info("Iplan: Services|SubscriptionService|checkHasUserSuscription|Change status old subscription");
-            $subscription->status = 0; // Change to inactive
-            $subscription->save();
+
+        if(!is_null($oldSubscription) && $oldSubscription->isAvailable){
+            return $oldSubscription;
         }
+        
+        return null;
+            
+    }
+
+    /*
+    * Add limits to old subscription when plan frenquency is Unique
+    */
+    public function addLimitsWhenIsUniqueFrequency($plan,$oldSubscription){
+        
+        // All limits from new plan
+        foreach ($plan->limits as $key => $planLimit) {
+
+            // Get limit in old subscription
+            $limitSubscription = $oldSubscription->limits->where('entity',"=",$planLimit->entity)->where('attribute',"=",$planLimit->attribute)->first();
+
+            //Exist the plan limit in old subscription
+            if(!is_null($limitSubscription)){
             
 
+                //Get new quantity
+                //$newQuantity = $limitSubscription->quantityAvailable + $planLimit->quantity;
+                $newQuantity = $limitSubscription->quantity + $planLimit->quantity;
+            
+                // Save new limit in old subscription
+                $limitSubscription->quantity = $newQuantity;
+                $limitSubscription->save();
+
+            }else{
+
+                //Not exist so create the new limit in old Subscription
+                $limitData = [
+                  'name' => $planLimit->name,
+                  'entity' => $planLimit->entity,
+                  'quantity' => $planLimit->quantity,
+                  'quantity_used' => 0,
+                  'attribute' => $planLimit->attribute,
+                  'attribute_value' => $planLimit->attribute_value,
+                  'subscription_id' => $oldSubscription->id,
+                ];
+
+                $oldSubscription->limits()->create($limitData);
+            
+            }   
+        }
+
+        return $oldSubscription;
+
     }
+
+
+   
 
 }
