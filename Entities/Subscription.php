@@ -66,4 +66,17 @@ class Subscription extends Model
         return $status->get($this->status);
     }
 
+    public function getIsAvailableAttribute()
+    {
+
+        $isAvailable = false;
+        $today = date("Y-m-d H:i:s");
+
+        if($this->start_date<=$today && $this->end_date>=$today)
+            $isAvailable = true;
+
+        return $isAvailable;
+
+    }
+
 }
