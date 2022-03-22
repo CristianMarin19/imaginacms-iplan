@@ -10,9 +10,9 @@ return [
         "iplan_cms_admin_limits",
         "iplan_cms_admin_categories",
         "iplan_cms_admin_entityPlans",
-        "iplan_cms_main_subscriptions",
+        "iplan_cms_admin_subscriptions",
       ]
     ]
   ],
-  "panel" => ["iplan_cms_main_subscriptions"],
+  "panel" => ["iplan_cms_main_userSubscriptions"],
 ];

@@ -70,10 +70,7 @@ return [
           "iplan_cms_admin_plans"
         ]
       ]
-    ]
-  ],
-  'panel' => [],
-  'main' => [
+    ],
     "subscriptions" => [
       "permission" => "iplan.subscriptions.manage",
       "activated" => true,
@@ -108,6 +105,23 @@ return [
           "iplan_cms_admin_plans",
           "iplan_cms_main_subscriptions"
         ]
+      ]
+    ]
+  ],
+  'panel' => [],
+  'main' => [
+    "userSubscriptions" => [
+      "permission" => "iplan.plans.manage",
+      "activated" => true,
+      "path" => "/plans/me",
+      "name" => "qplan.admin.my.plans",
+      "page" => "qplan/_pages/main/myPlan",
+      "layout" => "qsite/_layouts/master.vue",
+      "title" => "iplan.cms.sidebar.adminUserSubscriptions",
+      "icon" => "fas fa-window-restore",
+      "authenticated" => true,
+      "subHeader" => [
+        "refresh" => true
       ]
     ]
   ]
