@@ -62,4 +62,9 @@ class Plan extends CrudModel
   {
     return $this->morphOne("Modules\\Icommerce\\Entities\\Product", "entity");
   }
+  
+  public function getFrequencyLabelAttribute()
+  {
+    return (new Frequency())->get($this->frequency_id);
+  }
 }
