@@ -51,6 +51,14 @@ class NotifyExpiredSubscriptions implements ShouldQueue
 
                 \Log::info("Subs Id {$item->id}: {$item->name} - To User: {$user->email} - Remaining: {$item->days_remaining}");
 
+                // TODO - NOTIFICATION EMAIL LINK URL
+                // Possible solutions:
+                /*
+                * William: Obtener "espacio de trabajo" si es ipanel colocar la ruta:  /ipanel/#/plans/me/ sino dejar la vieja
+                * Juan: también pasa que dependiendo del rol el usuario debe ver una categoría de planes distinta
+                * Michael: puedo poner la misma pagina en el iadmin tambien... pero las tiendas solo deberian tener acceso a esa pagina para qeu no se auto activen subscripciones ellos mismos
+                */
+
                 //send notification by email, broadcast and push -- by default only send by email
                 $this->notification->to([
                     "email" => $user->email,
@@ -62,7 +70,7 @@ class NotifyExpiredSubscriptions implements ShouldQueue
                         "message" => $item->days_remaining > 0 ? trans("iplan::subscriptions.messages.subForSellOut", ["days" => $item->days_remaining, "name" => $item->name]) : trans("iplan::subscriptions.messages.subSoldOut", ["days" => $item->days_remaining, "name" => $item->name]),
                         "buttonText" => trans("iplan::plans.button.buy"),
                         "withButton" => true,
-                        "link" => route(locale().'.iplan.plan.index'),
+                        "link" => route(locale().'.iplan.plan.index'),//TODO
                     ]
                 );
 
