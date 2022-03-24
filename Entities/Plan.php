@@ -71,4 +71,9 @@ class Plan extends CrudModel
     return $type->get($this->type);
   }
 
+  public function getFrequencyLabelAttribute()
+  {
+    return (new Frequency())->get($this->frequency_id);
+  }
+  
 }
