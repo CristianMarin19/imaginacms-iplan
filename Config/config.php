@@ -2,6 +2,14 @@
 
 return [
     'name' => 'Iplan',
+  
+  //Media Fillables
+  'mediaFillable' => [
+    'plan' => [
+      'mainimage' => 'single'
+    ],
+  ],
+  
     'subscriptionEntities' =>[
         [
             'label' => 'Users',

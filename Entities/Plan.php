@@ -5,11 +5,15 @@ namespace Modules\Iplan\Entities;
 use Astrotomic\Translatable\Translatable;
 use Modules\Core\Icrud\Entities\CrudModel;
 use Modules\Isite\Traits\WithProduct;
+<<<<<<< HEAD
 use Modules\Iplan\Entities\PlanType;
 
+=======
+use Modules\Media\Support\Traits\MediaRelation;
+>>>>>>> 78aed0bebfa5b6e82cbeaa38543c09fdd96118b6
 class Plan extends CrudModel
 {
-    use Translatable, WithProduct;
+    use Translatable, WithProduct, MediaRelation;
 
     protected $table = 'iplan__plans';
     public $transformer = 'Modules\Iplan\Transformers\PlanTransformer';
