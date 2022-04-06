@@ -61,6 +61,19 @@ class EloquentPlanuserRepository extends EloquentBaseRepository implements Planu
         }
       }
 
+      $entitiesWithCentralData = json_decode(setting("iplan::tenantWithCentralData",null,"[]"));
+      $tenantWithCentralData = in_array("plans",$entitiesWithCentralData);
+
+      if ($tenantWithCentralData && isset(tenant()->id)) {
+        $model = $this->model;
+
+        $query->withoutTenancy();
+        $query->where(function ($query) use ($model) {
+          $query->where($model->qualifyColumn(BelongsToTenant::$tenantIdColumn), tenant()->getTenantKey())
+            ->orWhereNull($model->qualifyColumn(BelongsToTenant::$tenantIdColumn));
+        });
+      }
+
       /*== FIELDS ==*/
       if (isset($params->fields) && count($params->fields))
       $query->select($params->fields);
@@ -96,6 +109,19 @@ class EloquentPlanuserRepository extends EloquentBaseRepository implements Planu
 
         if (isset($filter->field))//Filter by specific field
         $field = $filter->field;
+      }
+
+      $entitiesWithCentralData = json_decode(setting("iplan::tenantWithCentralData",null,"[]"));
+      $tenantWithCentralData = in_array("plans",$entitiesWithCentralData);
+
+      if ($tenantWithCentralData && isset(tenant()->id)) {
+        $model = $this->model;
+
+        $query->withoutTenancy();
+        $query->where(function ($query) use ($model) {
+          $query->where($model->qualifyColumn(BelongsToTenant::$tenantIdColumn), tenant()->getTenantKey())
+            ->orWhereNull($model->qualifyColumn(BelongsToTenant::$tenantIdColumn));
+        });
       }
 
       /*== FIELDS ==*/
