@@ -34,23 +34,4 @@ return [
       'label' => 'iplan::common.settings.defaultPageDescription',
     ]
   ],
-  'tenantWithCentralData' => [
-    'value' => [],
-    'name' => 'iplan::tenantWithCentralData',
-    'groupName' => 'tenantConfiguration',
-    'groupTitle' => 'iplan::common.settings.tenant.group',
-    'type' => 'select',
-    'columns' => 'col-6',
-    'props' => [
-      'label' => 'iplan::common.settings.tenant.tenantWithCentralData',
-      'useInput' => false,
-      'useChips' => true,
-      'multiple' => true,
-      'hideDropdownIcon' => true,
-      'newValueMode' => 'add-unique',
-      'options' => [
-        ['label' => 'iplan::common.settings.tenant.entities.plans', 'value' => 'plans'],
-      ]
-    ]
-  ],
 ];
