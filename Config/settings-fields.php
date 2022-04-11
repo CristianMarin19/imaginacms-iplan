@@ -34,6 +34,4 @@ return [
       'label' => 'iplan::common.settings.defaultPageDescription',
     ]
   ],
-  
- 
 ];
