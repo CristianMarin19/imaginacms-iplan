@@ -10,6 +10,7 @@ return [
   ],
   'iplan.plans' => [
     'manage' => 'iplan::plans.manage resource',
+    'ownPlans' => 'iplan::plans.ownPlans resource',
     'index' => 'iplan::plans.list resource',
     'create' => 'iplan::plans.create resource',
     'edit' => 'iplan::plans.edit resource',
