@@ -111,7 +111,7 @@ return [
   'panel' => [],
   'main' => [
     "userSubscriptions" => [
-      "permission" => "iplan.plans.manage",
+      "permission" => "iplan.plans.ownPlans",
       "activated" => true,
       "path" => "/plans/me",
       "name" => "qplan.admin.my.plans",

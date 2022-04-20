@@ -67,4 +67,13 @@ class Plan extends CrudModel
   {
     return (new Frequency())->get($this->frequency_id);
   }
+
+  /*
+  * Product - Required shipping
+  * Is used in trait WithProduct
+  */
+  public function getRequiredShippingAttribute(){
+    return false;
+  }
+  
 }
