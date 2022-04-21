@@ -136,8 +136,8 @@ class HandleModulesLimits
          *  funciona pero podría hacerse mejor
         */
         $userPermissions = $this->permissionsApiController->getAll(['userId' => auth()->user()->id]);
-        if(!in_array("profile.access.iadmin", $userPermissions))
-            $allowedLimits = false;
+        if (!isset($userPermissions["profile.access.iadmin"]) || !$userPermissions["profile.access.iadmin"])
+          $allowedLimits = false;
       }
     }
     \Log::info('Allowed Limits > '.$allowedLimits);
