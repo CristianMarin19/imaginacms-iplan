@@ -144,7 +144,7 @@ class PublicController extends BaseApiController
             //Log
             \Log::info("Register subscription Id {$plan->id} to user ID {$user->id}");
   
-            return redirect()->route('/ipanel');
+            return redirect('/ipanel');
           }
         }
 

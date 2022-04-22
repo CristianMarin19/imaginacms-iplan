@@ -5,12 +5,9 @@ namespace Modules\Iplan\Entities;
 use Astrotomic\Translatable\Translatable;
 use Modules\Core\Icrud\Entities\CrudModel;
 use Modules\Isite\Traits\WithProduct;
-<<<<<<< HEAD
 use Modules\Iplan\Entities\PlanType;
-
-=======
 use Modules\Media\Support\Traits\MediaRelation;
->>>>>>> 78aed0bebfa5b6e82cbeaa38543c09fdd96118b6
+
 class Plan extends CrudModel
 {
     use Translatable, WithProduct, MediaRelation;
@@ -78,6 +75,14 @@ class Plan extends CrudModel
   public function getFrequencyLabelAttribute()
   {
     return (new Frequency())->get($this->frequency_id);
+  }
+
+  /*
+  * Product - Required shipping
+  * Is used in trait WithProduct
+  */
+  public function getRequiredShippingAttribute(){
+    return false;
   }
   
 }

@@ -8,6 +8,13 @@ return [
         'enableQr' => 'Habilitar Código QR para los usuarios suscritos',
         'defaultPageDescription' => 'Descripción por defecto en la página de planes',
         'cumulativePlans' => 'Planes acumulativos',
+        'tenant' => [
+          'group' => 'Inquilinos',
+          'tenantWithCentralData' => 'Entidades con data central',
+          'entities' => [
+            'plans' => 'Planes',
+          ],
+        ],
     ],
     'settingHints' => [
         'default-plan-to-new-users' => 'Selecciona un plan por defecto para nuevos usuarios',
@@ -23,5 +30,5 @@ return [
         'my-subscriptions' => 'Mis Suscripciones',
         'print' => 'Imprimir',
     ],
-  "planNotFound" => "El plan no es valido"
+    "planNotFound" => "El plan no es valido"
 ];

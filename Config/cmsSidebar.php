@@ -11,6 +11,7 @@ return [
         "iplan_cms_admin_categories",
         "iplan_cms_admin_entityPlans",
         "iplan_cms_admin_subscriptions",
+        "iplan_cms_main_userSubscriptions"
       ]
     ]
   ],
