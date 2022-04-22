@@ -22,6 +22,8 @@ class PlanTransformer extends CrudResource
       $data['product'] = new $productTransformer($this->whenLoaded('product'));
     }
 
+    $data['priceFormat'] = formatMoney($this->price,true);
+
     return $data;
 
   }
