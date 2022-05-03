@@ -116,6 +116,12 @@ class SubscriptionController extends BaseApiController
       // Get Plan
       $plan = $this->plan->getItem($data['plan_id'], $params);
 
+      // Validate plan exist
+      if(empty($plan) || is_null($plan)){
+        \Log::info(trans('iplan::plans.messages.plan not found'));
+        throw new \Exception(trans('iplan::plans.messages.plan not found'), 400); 
+      }
+
       // Data to save in Subscription
       $endDate = Carbon::now()->addDays($plan->frequency_id);
       $subscriptionData = [
@@ -203,7 +209,7 @@ class SubscriptionController extends BaseApiController
       \DB::commit(); //Commit to Data Base
     } catch (\Exception $e) {
 
-      dd($e);
+      //dd($e);
       \DB::rollback();//Rollback to Data Base
       $status = $this->getStatusError($e->getCode());
       $response = ["errors" => $e->getMessage()];

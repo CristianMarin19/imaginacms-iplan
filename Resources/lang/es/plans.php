@@ -26,6 +26,7 @@ return [
         'plan-without-product' => 'El plan :name no tiene un producto asignado.',
         'please-assign-product' => 'Debe asignar un producto al plan <b>:name</b> para su correcta monetización',
         'selectPlan' => 'Debe seleccionar un plan',
+        'plan not found' => 'Plan no encontrado',
     ],
     'validation' => [
     ],
