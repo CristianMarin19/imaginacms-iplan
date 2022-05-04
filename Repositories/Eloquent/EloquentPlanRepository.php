@@ -55,6 +55,11 @@ class EloquentPlanRepository extends EloquentCrudRepository implements PlanRepos
       if (isset($date->to))//to a date
         $query->whereDate($date->field, '<=', $date->to);
     }
+
+    if (isset($filter->exclude) && !empty($filter->exclude)) {
+      $exclude = is_array($filter->exclude) ? $filter->exclude : [$filter->exclude];
+      $query->whereNotIn('id', $exclude);
+    }
   
   
     //Order by "Sort order"

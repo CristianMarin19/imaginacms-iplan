@@ -8,6 +8,7 @@ return [
         'enableQr' => 'Enable QR code for users',
         'defaultPageDescription' => 'Default description in plan home page',
         'cumulativePlans' => 'Cumulative Plans',
+        'hideDefaultPlanInView' => 'Hide the default plan in the plans view',
         'tenant' => [
           'group' => 'Tenants',
           'tenantWithCentralData' => 'Entities with central data',

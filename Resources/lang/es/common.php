@@ -8,6 +8,7 @@ return [
         'enableQr' => 'Habilitar Código QR para los usuarios suscritos',
         'defaultPageDescription' => 'Descripción por defecto en la página de planes',
         'cumulativePlans' => 'Planes acumulativos',
+        'hideDefaultPlanInView' => 'Ocultar plan por defecto en la vista de planes',
         'tenant' => [
           'group' => 'Inquilinos',
           'tenantWithCentralData' => 'Entidades con data central',

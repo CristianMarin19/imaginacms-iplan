@@ -28,6 +28,21 @@
                 ]
             ];
         }
+
+        // Hide plan default
+        if(setting('iplan::hideDefaultPlanInView',null,false)){
+          $defaultPlanId = (int)setting('iplan::defaultPlanToNewUsers',null,0);
+          if(!is_null($defaultPlanId) && $defaultPlanId!=0){
+
+            $filter['exclude'] = $defaultPlanId;
+
+            if(isset($params['filter']))
+              array_merge($params['filter'],$filter);
+            else
+              $params['filter'] = $filter;
+            
+          }
+        }
       @endphp
       <x-isite::carousel.owl-carousel
               id="carouselPlans"

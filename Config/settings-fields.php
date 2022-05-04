@@ -45,6 +45,16 @@ return [
       'falseValue' => '0'
     ],
   ],
+  'hideDefaultPlanInView' => [
+    'name' => 'iplan::hideDefaultPlanInView',
+    'value' => '0',
+    'type' => 'checkbox',
+    'props' => [
+      'label' => 'iplan::common.settings.hideDefaultPlanInView',
+      'trueValue' => '1',
+      'falseValue' => '0'
+    ],
+  ],
   
  
 ];
