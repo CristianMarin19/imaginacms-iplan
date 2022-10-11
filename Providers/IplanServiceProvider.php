@@ -54,7 +54,7 @@ class IplanServiceProvider extends ServiceProvider
 
         $this->publishConfig('iplan', 'crud-fields');
 
-        $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
+        //$this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
 
         $this->registerComponents();
     }
