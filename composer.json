@@ -27,14 +27,6 @@
         }
     ],
     "extra": {
-        "laravel": {
-            "providers": [
-                "Modules\\Iplan\\Providers\\IplanServiceProvider"
-            ],
-            "aliases": {
-
-            }
-        }
     },
     "autoload": {
         "psr-4": {
