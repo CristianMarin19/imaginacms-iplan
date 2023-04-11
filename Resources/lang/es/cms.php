@@ -17,6 +17,7 @@ return [
     "createLimits" => "Crear Límite del Plan",
     "editLimits" => "Editar Límite del Plan",
     "adminSubscriptions" => "Suscripciones",
+    "adminMySubscriptions" => "Mis Suscripciones",
     "createSubscriptions" => "Crear Suscripción",
     "editSubscriptions" => "Editar Suscripción",
     "adminSubscriptionLimits" => "Límites de Suscripción",
@@ -56,6 +57,19 @@ return [
   "options" => [
     "yes" => "Sí",
     "no" => "No"
+  ],
+  "documentation" => [
+    'plans' => "Con los planes puedes diseñar características y capacidades que ofrece un módulo a tus usuarios. 
+    Estos planes son diseñados para que el usuario pueda elegir de entre las opciones cual se acomoda mejor 
+    según el uso que necesite darle a tu aplicación.",
+    'limits' => "Puedes limitar o restringir la características y capacidades de cada plan, según cada modulo. Estos
+    limites pueden incluir desde cantidades hasta fechas limites",
+    "categories" => "Es posible crear categories en tu Plan, con un nombre, descripción y organizarlas en modo de árbol
+    (categorías padres y categorías hijas) con el fin de categorizar todos tus planes.",
+    'entityplans' => "Es necesario que se especifique que módulos deben de estar limitados por los planes, de está manera
+    la aplicación sabra como y cuando limitar las características que se definan en un plan.",
+    'subscriptions' => "Cada plan que un usuario adquiera, se llamará subscripción, de está manera tu aplicación es
+    capaz de identificar que características y capacidades le estas permitiendo a tus usuarios.",
   ]
 ];
 
