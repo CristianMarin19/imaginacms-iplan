@@ -3,9 +3,12 @@
 namespace Modules\Iplan\Entities;
 
 use Illuminate\Database\Eloquent\Model;
+use Modules\Core\Support\Traits\AuditTrait;
 
 class Category extends Model
 {
+
+    use AuditTrait;
 
     protected $table = 'iplan__categories';
     protected $fillable = [
