@@ -123,12 +123,18 @@ class SubscriptionController extends BaseApiController
       }
 
       // Data to save in Subscription
-      $endDate = Carbon::now()->addDays($plan->frequency_id);
+      $startDate = ($plan->trial>0) ? Carbon::now()->addDays($plan->trial) : Carbon::now();
+      
+      $totalDays = $plan->trial+$plan->frequency_id;
+      $endDate =  Carbon::now()->addDays($totalDays);
+      
+      //$endDate = Carbon::now()->addDays($plan->frequency_id);
+     
       $subscriptionData = [
         'name' => $plan->name,
         'description' => $plan->description,
         'category_name' => $plan->category->title,
-        'start_date' => Carbon::now(),
+        'start_date' => $startDate,
         'end_date' => $endDate,
         'status' => 1,
       ];
@@ -367,7 +373,7 @@ class SubscriptionController extends BaseApiController
         //Get user
         $user = \Auth::user();
         //Create subscription
-        if (!isset($plan->product) || !$plan->product->price) {
+        if (!isset($plan->product) || !$plan->product->price || $plan->trial>0) {
           $this->create(new Request([
             'attributes' => [
               'entity' => "Modules\\User\\Entities\\" . config('asgard.user.config.driver') . "\\User",
@@ -376,6 +382,10 @@ class SubscriptionController extends BaseApiController
               'options' => $data,
             ]
           ]));
+
+          if($plan->trial>0) 
+            $redirectTo = url('/');
+
         } //Create cart to pay
         else {
           //Instance cart service
