@@ -29,7 +29,8 @@ class Plan extends CrudModel
     "category_id",
     "options",
     "price",
-    "type"
+    "type",
+    "trial"
   ];
 
   protected $casts = [
