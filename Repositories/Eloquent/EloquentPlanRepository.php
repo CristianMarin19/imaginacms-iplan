@@ -24,9 +24,10 @@ class EloquentPlanRepository extends EloquentCrudRepository implements PlanRepos
    *
    * @param $query
    * @param $filter
+   * @param $params
    * @return mixed
    */
-  public function filterQuery($query, $filter)
+  public function filterQuery($query, $filter, $params)
   {
   
     if (isset($filter->category) && !empty($filter->category)) {
