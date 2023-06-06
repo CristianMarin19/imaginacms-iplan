@@ -10,26 +10,28 @@ use Modules\Media\Support\Traits\MediaRelation;
 
 class Plan extends CrudModel
 {
-    use Translatable, WithProduct, MediaRelation;
+  use Translatable, WithProduct, MediaRelation;
 
-    protected $table = 'iplan__plans';
-    public $transformer = 'Modules\Iplan\Transformers\PlanTransformer';
-    public $requestValidation = [
-        'create' => 'Modules\Iplan\Http\Requests\CreatePlanRequest',
-        'update' => 'Modules\Iplan\Http\Requests\UpdatePlanRequest',
-      ];
-    public $translatedAttributes = [
-      "name",
-      "description",
-    ];
-    protected $fillable = [
-      "internal",
-      "frequency_id",
-      "category_id",
-      "options",
-      "price",
-      "type"
-    ];
+  protected $table = 'iplan__plans';
+  public $transformer = 'Modules\Iplan\Transformers\PlanTransformer';
+  public $repository = 'Modules\Iplan\Repositories\PlanRepository';
+  public $requestValidation = [
+    'create' => 'Modules\Iplan\Http\Requests\CreatePlanRequest',
+    'update' => 'Modules\Iplan\Http\Requests\UpdatePlanRequest',
+  ];
+  public $translatedAttributes = [
+    "name",
+    "description",
+  ];
+  protected $fillable = [
+    "internal",
+    "frequency_id",
+    "category_id",
+    "options",
+    "price",
+    "type",
+    "trial"
+  ];
 
   protected $casts = [
     'options' => 'array'
@@ -81,8 +83,9 @@ class Plan extends CrudModel
   * Product - Required shipping
   * Is used in trait WithProduct
   */
-  public function getRequiredShippingAttribute(){
+  public function getRequiredShippingAttribute()
+  {
     return false;
   }
-  
+
 }

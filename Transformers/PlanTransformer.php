@@ -13,7 +13,7 @@ class PlanTransformer extends CrudResource
   */
   public function modelAttributes($request)
   {
-  
+
     $data['typeName'] = $this->typeName;
 
     if(is_module_enabled('Icommerce')){
@@ -23,6 +23,7 @@ class PlanTransformer extends CrudResource
     }
 
     $data['priceFormat'] = formatMoney($this->price,true);
+    $data['frequency'] = $this->frequency_label;
 
     return $data;
 
