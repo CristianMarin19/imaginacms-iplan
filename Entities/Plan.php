@@ -29,6 +29,7 @@ class Plan extends CrudModel
     "category_id",
     "options",
     "price",
+    "status",
     "type",
     "trial"
   ];
