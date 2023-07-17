@@ -70,6 +70,7 @@ return [
      the application will know how and when to limit the features that are defined in a plan.",
     'subscriptions' => "Each plan that a user purchases will be called a subscription, this way your application is
      able to identify what features and capabilities you are allowing your users.",
-  ]
+  ],
+  "helpFieldTrial" => "To enable a trial version, enter the number of days for the plan"
 ];
 

@@ -70,6 +70,7 @@ return [
     la aplicación sabra como y cuando limitar las características que se definan en un plan.",
     'subscriptions' => "Cada plan que un usuario adquiera, se llamará subscripción, de está manera tu aplicación es
     capaz de identificar que características y capacidades le estas permitiendo a tus usuarios.",
-  ]
+  ],
+  "helpFieldTrial" => "Para habilitar una versión de prueba, ingresa el numero de días para el plan"
 ];
 
