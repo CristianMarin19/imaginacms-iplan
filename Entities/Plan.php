@@ -89,4 +89,20 @@ class Plan extends CrudModel
     return false;
   }
 
+  public function getBuyUrlAttribute()
+  {
+    //Get url from options
+    $planUrl = $this->options->url ?? null;
+    //Get the setting customUrlBuyPlan
+    $customUrlBuyPlan = setting('iplan::customUrlBuyPlan');
+    $customUrlBuyPlan = $customUrlBuyPlan && !empty($customUrlBuyPlan) ? $customUrlBuyPlan : null;
+    //Instance default URL
+    $defaultUrl = route('plans.buy', ['planId' => $this->id]);
+    //Response url to buy plan
+    return addQueryParamToUrl(
+      $planUrl ?? $customUrlBuyPlan ?? $defaultUrl,
+      "planId",
+      $this->id
+    );
+  }
 }

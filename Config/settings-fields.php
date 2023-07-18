@@ -55,6 +55,13 @@ return [
       'falseValue' => '0'
     ],
   ],
-  
- 
+  'customUrlBuyPlan' => [
+    'name' => 'iplan::customUrlBuyPlan',
+    'value' => '',
+    'type' => 'input',
+    'help' => ['description' => 'iplan::common.settings.helpCustomUrlBuyPlan'],
+    'props' => [
+      'label' => 'iplan::common.settings.customUrlBuyPlan'
+    ],
+  ],
 ];
