@@ -384,7 +384,7 @@ class SubscriptionController extends BaseApiController
           ]));
 
           if($plan->trial>0) 
-            $redirectTo = url('/');
+            $redirectTo = url('/iadmin');
 
         } //Create cart to pay
         else {
