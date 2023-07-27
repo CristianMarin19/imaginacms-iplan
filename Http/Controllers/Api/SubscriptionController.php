@@ -207,15 +207,16 @@ class SubscriptionController extends BaseApiController
         $this->subscriptionLimit->create($limitData);
       }
 
-      event(new SubscriptionHasStarted($entity));
+      //Important to get reedirect url
+      $resultEvent = event(new SubscriptionHasStarted($entity));
       
-
       //Response
-      $response = ["data" => $entity];
+      $response = ["data" => $entity, "resultEvent" => $resultEvent];
       \DB::commit(); //Commit to Data Base
     } catch (\Exception $e) {
 
       //dd($e);
+      \Log::error($e);
       \DB::rollback();//Rollback to Data Base
       $status = $this->getStatusError($e->getCode());
       $response = ["errors" => $e->getMessage()];
@@ -374,7 +375,8 @@ class SubscriptionController extends BaseApiController
         $user = \Auth::user();
         //Create subscription
         if (!isset($plan->product) || !$plan->product->price || $plan->trial>0) {
-          $this->create(new Request([
+          
+          $suscriptionCreated = $this->create(new Request([
             'attributes' => [
               'entity' => "Modules\\User\\Entities\\" . config('asgard.user.config.driver') . "\\User",
               'entity_id' => $user->id,
@@ -383,8 +385,22 @@ class SubscriptionController extends BaseApiController
             ]
           ]));
 
-          if($plan->trial>0) 
+          if($plan->trial>0){
+
+            \Log::info("Iplan:: Buy|ValidationTrial");
+
             $redirectTo = url('/iadmin');
+
+            $responseData = $suscriptionCreated->getData();
+            if(isset($responseData->resultEvent)){
+              if(isset($responseData->resultEvent[0]->redirectUrl) && !is_null($responseData->resultEvent[0]->redirectUrl)){
+                \Log::info("Iplan:: Buy|ValidationTrial|ReedirectUrl from data event");
+                $redirectTo = $responseData->resultEvent[0]->redirectUrl;
+              }
+            }
+
+          }
+            
 
         } //Create cart to pay
         else {
