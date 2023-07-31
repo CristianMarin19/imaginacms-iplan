@@ -4,17 +4,13 @@
 namespace Modules\Iplan\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
-use Log;
-use Mockery\CountValidator\Exception;
 use Modules\Ihelpers\Http\Controllers\Api\BaseApiController;
 use Modules\Iplan\Events\SubscriptionHasStarted;
-use Modules\Iplan\Http\Requests\CreateSubscriptionRequest;
 use Modules\Iplan\Http\Requests\UpdateSubscriptionRequest;
 use Modules\Iplan\Repositories\SubscriptionLimitRepository;
 use Modules\Iplan\Repositories\SubscriptionRepository;
 use Modules\Iplan\Repositories\PlanRepository;
 use Modules\Iplan\Transformers\SubscriptionTransformer;
-use Route;
 use Carbon\Carbon;
 
 class SubscriptionController extends BaseApiController
@@ -376,6 +372,8 @@ class SubscriptionController extends BaseApiController
         //Create subscription
         if (!isset($plan->product) || !$plan->product->price || $plan->trial>0) {
           
+          \Log::info("Iplan:: Buy|Create Subscription");
+
           $suscriptionCreated = $this->create(new Request([
             'attributes' => [
               'entity' => "Modules\\User\\Entities\\" . config('asgard.user.config.driver') . "\\User",
@@ -399,6 +397,8 @@ class SubscriptionController extends BaseApiController
               }
             }
 
+          }else{
+            \Log::info("Iplan:: Buy|ValidationTrial|Trial is 0");
           }
             
 
