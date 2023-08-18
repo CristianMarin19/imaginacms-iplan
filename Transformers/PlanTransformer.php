@@ -16,10 +16,8 @@ class PlanTransformer extends CrudResource
 
     $data['typeName'] = $this->typeName;
 
-    if(is_module_enabled('Icommerce')){
-      $productTransformer = 'Modules\\Icommerce\\Transformers\\ProductTransformer';
+    if(is_module_enabled('Icommerce')) {
       $data['productId'] = $this->product ? (string)$this->product->id : '';
-      $data['product'] = new $productTransformer($this->whenLoaded('product'));
     }
 
     $data['priceFormat'] = formatMoney($this->price,true);
