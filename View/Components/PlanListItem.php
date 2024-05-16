@@ -50,7 +50,7 @@ class PlanListItem extends Component
         $this->categories = $this->categoryRepository()->getItemsBy(json_decode(json_encode(['include' => ['*'], 'take' => false])));
     }
 
-    private function categoryRepository(): PlanRepository
+    private function categoryRepository()
     {
         return app('Modules\Iplan\Repositories\CategoryRepository');
     }
