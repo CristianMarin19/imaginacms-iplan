@@ -201,10 +201,14 @@ class HandleModulesLimits
                     }
                 }
                 $subscription->related($entityNamespace)->sync([$model->id], false);
+                //Se comenta, xq cuando se creaba un anuncio, desactivaba la sub, y quien se encarga de esto es el Job "FinishedSubscription"
+                //entonces dejaba la sub inactiva pero el anuncio siempre activo
+                /*
                 if ($limitsDisabled == count($subLimits)) {
                     $this->subscription->updateBy($subscription->id, ['status' => 0]);
                     \Log::info("Subscription id: {$subscription->id} is disabled due to their subs limits are out of stock");
                 }
+                */
             }
         }
     }
