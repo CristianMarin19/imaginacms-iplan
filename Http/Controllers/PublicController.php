@@ -153,6 +153,7 @@ class PublicController extends BaseApiController
               'id' => $plan->product->id,
               'quantity' => 1,
               'options' => $data,
+              'ValidationInternal' => false
           ]];
 
           if (isset($data['featured'])) {
