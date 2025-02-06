@@ -4,7 +4,7 @@ return [
     'crudFields' => [
         'url' => 'Plan Link',
     ],
-    'settings' => [
+      'settings' => [
         'default-plan-to-new-users' => 'Default plan for new users',
         'enableQr' => 'Enable QR code for users',
         'defaultPageDescription' => 'Default description in plan home page',
@@ -17,6 +17,8 @@ return [
                 'plans' => 'Plans',
             ],
         ],
+        'customUrlBuyPlan' => "URL to buy plan",
+        'helpCustomUrlBuyPlan' => "This setting saves a custom url for the get plan buttons"
     ],
     'settingHints' => [
         'default-plan-to-new-users' => 'Select a default plan for new users',
@@ -28,4 +30,8 @@ return [
         'user-not-valid-subscription' => 'Lo sentimos. El usuario <b>:name</b>, no posee en el momento ninguna suscripción vigente.',
     ],
     'planNotFound' => 'Plan not valid',
+    'date' => [
+       'from' => 'From',
+       'since' => 'to',
+    ],
 ];

@@ -2,7 +2,7 @@
 
 return [
     'crudFields' => [
-        'url' => 'Enlace del plan',
+      'url' => 'Enlace del plan'
     ],
     'settings' => [
         'default-plan-to-new-users' => 'Plan por defecto para nuevos usuarios',
@@ -17,6 +17,8 @@ return [
                 'plans' => 'Planes',
             ],
         ],
+        'customUrlBuyPlan' => "URL para compra de plan",
+        'helpCustomUrlBuyPlan' => "Este setting guarda una url personalizada para los botones de obtener plan"
     ],
     'settingHints' => [
         'default-plan-to-new-users' => 'Selecciona un plan por defecto para nuevos usuarios',
@@ -33,4 +35,8 @@ return [
         'print' => 'Imprimir',
     ],
     'planNotFound' => 'El plan no es valido',
+    'date' => [
+      'from' => 'Desde',
+      'since' => 'Hasta el',
+     ],
 ];
