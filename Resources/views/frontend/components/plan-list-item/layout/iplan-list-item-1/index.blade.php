@@ -3,7 +3,7 @@
         <div class="card-header text-center rounded">
             <h2 class="title mt-4"> {{$item->name}}</h2>
             <h3 class="price">
-                ${{formatMoney($item->product ? $item->product->discount->price ?? $item->product->price : '0',true)}}
+                {{formatMoney($item->product ? $item->product->discount->price ?? $item->product->price : '0',true)}}
                 <br>
                 {!! !empty($item->product) ? isset($item->product->discount->price) ? "<del>$".formatMoney($item->product->price)."</del>" : "" : "" !!}
             </h3>

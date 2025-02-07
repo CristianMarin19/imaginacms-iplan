@@ -196,12 +196,14 @@ class SubscriptionController extends BaseApiController
                 $this->subscriptionLimit->create($limitData);
             }
 
-            event(new SubscriptionHasStarted($entity));
+      //Important to get reedirect url
+      $resultEvent = event(new SubscriptionHasStarted($entity));
 
-            //Response
-            $response = ['data' => $entity];
-            \DB::commit(); //Commit to Data Base
-        } catch (\Exception $e) {
+      //Response
+      $response = ["data" => $entity, "resultEvent" => $resultEvent];
+      \DB::commit(); //Commit to Data Base
+    } catch (\Exception $e) {
+
       //dd($e);
             \DB::rollback(); //Rollback to Data Base
             $status = $this->getStatusError($e->getCode());
@@ -344,39 +346,58 @@ class SubscriptionController extends BaseApiController
                 'filter' => ['status' => 1],
             ])));
 
-            //Validate if exist plan
-            if (! $plan) {
-                $status = 500;
-                $response = ['messages' => [['message' => trans('iplan::common.planNotFound'), 'type' => 'error']]];
-            } else {
-                //Get user
-                $user = \Auth::user();
-                //Create subscription
-                if (! isset($plan->product) || ! $plan->product->price || $plan->trial > 0) {
-                    $this->create(new Request([
-                        'attributes' => [
-                            'entity' => 'Modules\\User\\Entities\\'.config('asgard.user.config.driver').'\\User',
-                            'entity_id' => $user->id,
-                            'plan_id' => $plan->id,
-                            'options' => $data,
-                        ],
-                    ]));
+      //Validate if exist plan
+      if (!$plan) {
+        $status = 500;
+        $response = ["messages" => [["message" => trans('iplan::common.planNotFound'), "type" => "error"]]];
+      } else {
+        //Get user
+        $user = \Auth::user();
+        //Create subscription
+        if (!isset($plan->product) || !$plan->product->price || $plan->trial>0) {
 
-                    if ($plan->trial > 0) {
-                        $redirectTo = url('/');
-                    }
-                } //Create cart to pay
-                else {
-                    //Instance cart service
-                    $cartService = app("Modules\Icommerce\Services\CartService");
-                    //Create cart
-                    $cartService->create([
-                        'products' => [['id' => $plan->product->id, 'quantity' => 1, 'options' => $data]],
-                    ]);
-                    //Set redirect to cart
-                    $locale = \LaravelLocalization::setLocale() ?: \App::getLocale();
-                    $redirectTo = route($locale.'.icommerce.store.checkout');
-                }
+          \Log::info("Iplan:: Buy|Create Subscription");
+
+          $suscriptionCreated = $this->create(new Request([
+            'attributes' => [
+              'entity' => "Modules\\User\\Entities\\" . config('asgard.user.config.driver') . "\\User",
+              'entity_id' => $user->id,
+              'plan_id' => $plan->id,
+              'options' => $data,
+            ]
+          ]));
+
+          if($plan->trial>0){
+
+            \Log::info("Iplan:: Buy|ValidationTrial");
+
+            $redirectTo = url('/iadmin');
+
+            $responseData = $suscriptionCreated->getData();
+            if(isset($responseData->resultEvent)){
+              if(isset($responseData->resultEvent[0]->redirectUrl) && !is_null($responseData->resultEvent[0]->redirectUrl)){
+                \Log::info("Iplan:: Buy|ValidationTrial|ReedirectUrl from data event");
+                $redirectTo = $responseData->resultEvent[0]->redirectUrl;
+              }
+            }
+
+          }else{
+            \Log::info("Iplan:: Buy|ValidationTrial|Trial is 0");
+          }
+
+
+        } //Create cart to pay
+        else {
+          //Instance cart service
+          $cartService = app("Modules\Icommerce\Services\CartService");
+          //Create cart
+          $cartService->create([
+            "products" => [["id" => $plan->product->id, "quantity" => 1, "options" => $data]]
+          ]);
+          //Set redirect to cart
+          $locale = \LaravelLocalization::setLocale() ?: \App::getLocale();
+          $redirectTo = route($locale . '.icommerce.store.checkout');
+        }
 
                 \DB::commit(); //Commit to Data Base
                 $response = ['data' => ['redirectTo' => $redirectTo ?? null]];
