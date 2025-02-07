@@ -31,6 +31,7 @@ return [
     'validation' => [
     ],
     'status' => [
+        'title' => 'Status',
         'inactive' => 'Inactive',
         'active' => 'Active',
     ],

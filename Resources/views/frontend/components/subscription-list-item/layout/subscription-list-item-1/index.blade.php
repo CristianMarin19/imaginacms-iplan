@@ -13,10 +13,23 @@
                 @endif
             </div>
             <div class="col-12 {{$orderClasses["status"] ?? 'order-1'}}">
-                Estado: {!!  $item->status == '1' ? "<b class='text-success'>Activo</b>" : "<b class='text-danger'>Inactivo</b>"  !!}
+                {{trans('iplan::subscriptions.status.title')}}:
+                {!!
+                    $item->status == '1' ?
+                          "<b class='text-success'>". trans('iplan::subscriptions.status.active'). "</b>" :
+                          "<b class='text-danger'>". trans('iplan::subscriptions.status.inactive'). "</b>"
+                  !!}
             </div>
             <div class="col-12 {{$orderClasses["date"] ?? 'order-2'}} item-created-date">
-                <div class="created-date">Desde {{ $item->start_date->format($formatCreatedDate) }} hasta el {{ $item->end_date->format($formatCreatedDate) }}</div>
+                <div class="created-date">
+                    {{--  Here word  "From"     --}}
+                    {{trans('iplan::common.date.from')}}
+                    {{--  First data to show   --}}
+                    {{ $item->start_date->format($formatCreatedDate) }}
+                    {{--  Here word  "to"     --}}
+                    {{trans('iplan::common.date.since')}}
+                    {{--  First data to show      --}}
+                    {{ $item->end_date->format($formatCreatedDate) }}</div>
             </div>
         </div>
     </div>
