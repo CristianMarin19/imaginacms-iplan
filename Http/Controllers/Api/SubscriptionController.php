@@ -22,6 +22,8 @@ class SubscriptionController extends BaseApiController
 
     private $subscriptionService;
 
+    private $log = "Iplan::SubscriptionController|| ";
+
     public function __construct(SubscriptionRepository $subscription,
                               PlanRepository $plan,
                               SubscriptionLimitRepository $subscriptionLimit)
@@ -102,6 +104,9 @@ class SubscriptionController extends BaseApiController
     public function create(Request $request)
     {
         \DB::beginTransaction();
+
+        \Log::info($this->log."Create");
+
         try {
             //Get data
             $data = $request->input('attributes');
@@ -134,6 +139,7 @@ class SubscriptionController extends BaseApiController
                 'status' => 1,
             ];
             $data = array_merge($subscriptionData, $data);
+            //\Log::info($this->log."Create|DataToSave: ".json_encode($data));
 
             // Check if user has another subscription
             $oldSubscription = $this->subscriptionService->checkHasUserSuscription($data);
@@ -160,6 +166,7 @@ class SubscriptionController extends BaseApiController
                         }
                     }
                 } else {
+                    \Log::info($this->log."Create|Creting new subscription");
                     $entity = $this->subscription->create($data);
                 }
             }
@@ -204,7 +211,9 @@ class SubscriptionController extends BaseApiController
       \DB::commit(); //Commit to Data Base
     } catch (\Exception $e) {
 
-      //dd($e);
+        \Log::error($this->log."Line: ".$e->getLine()." | Code: ".$e->getCode()." | Message: ".$e->getMessage()." | File: ".$e->getFile());
+
+
             \DB::rollback(); //Rollback to Data Base
             $status = $this->getStatusError($e->getCode());
             $response = ['errors' => $e->getMessage()];
