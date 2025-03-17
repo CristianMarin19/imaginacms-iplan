@@ -62,8 +62,7 @@ class SubscriptionService
         \Log::info('Iplan: Services|SubscriptionService|checkHasUserSuscription');
 
         //Get Last Active Subscription
-        $oldSubscription = app("Modules\Iplan\Repositories\SubscriptionRepository")
-            ->where('entity_id', '=', $data['entity_id'])
+        $oldSubscription = Subscription::where('entity_id', '=', $data['entity_id'])
             ->where('entity', '=', $data['entity'])
             ->where('status', '=', 1)
             ->orderBy('created_at', 'desc')
