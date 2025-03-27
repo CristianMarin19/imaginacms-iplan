@@ -42,5 +42,14 @@ return [
   ],
   'external-frequencies' => [
     []
+  ],
+  //Tenant
+  'tenant' => [
+    'dbPrefix' => 'iplan',
+    'client' => [
+      'icon' => 'fa-light fa-file-invoice',
+      'title' => '(pt) Control Your Things',
+      'description' => '(pt) Create Plans and take the control',
+    ]
   ]
 ];
