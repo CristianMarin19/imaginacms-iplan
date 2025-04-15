@@ -75,4 +75,6 @@ return [
   "helpFieldTrial" => "To enable a trial version, enter the number of days for the plan",
   'oneTime' => 'one-time',
   'recurring' => 'recurring',
+  'buyPlan' => 'Buy Plan',
+  'cancelSubscription' => 'Cancel Subscription',
 ];

@@ -75,4 +75,6 @@ return [
   "helpFieldTrial" => "Para habilitar una versión de prueba, ingresa el numero de días para el plan",
   'oneTime' => 'Unico',
   'recurring' => 'Recurrente',
+  'buyPlan' => 'Comprar Plan',
+  'cancelSubscription' => 'Cancelar Subscripción',
 ];
