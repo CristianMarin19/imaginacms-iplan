@@ -52,15 +52,16 @@ return [
     "entityName" => "Asignado a",
     "attribute" => "Atributo",
     "attributeValue" => "Valor del Atributo",
-    "module" => "Módulo"
+    "module" => "Módulo",
+    'isRecurring' => 'Tipo de Pago'
   ],
   "options" => [
     "yes" => "Sí",
     "no" => "No"
   ],
   "documentation" => [
-    'plans' => "Con los planes puedes diseñar características y capacidades que ofrece un módulo a tus usuarios. 
-    Estos planes son diseñados para que el usuario pueda elegir de entre las opciones cual se acomoda mejor 
+    'plans' => "Con los planes puedes diseñar características y capacidades que ofrece un módulo a tus usuarios.
+    Estos planes son diseñados para que el usuario pueda elegir de entre las opciones cual se acomoda mejor
     según el uso que necesite darle a tu aplicación.",
     'limits' => "Puedes limitar o restringir la características y capacidades de cada plan, según cada modulo. Estos
     limites pueden incluir desde cantidades hasta fechas limites",
@@ -71,5 +72,7 @@ return [
     'subscriptions' => "Cada plan que un usuario adquiera, se llamará subscripción, de está manera tu aplicación es
     capaz de identificar que características y capacidades le estas permitiendo a tus usuarios.",
   ],
-  "helpFieldTrial" => "Para habilitar una versión de prueba, ingresa el numero de días para el plan"
+  "helpFieldTrial" => "Para habilitar una versión de prueba, ingresa el numero de días para el plan",
+  'oneTime' => 'Unico',
+  'recurring' => 'Recurrente',
 ];

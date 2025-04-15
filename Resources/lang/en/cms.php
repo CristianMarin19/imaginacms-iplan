@@ -52,7 +52,8 @@ return [
     "entityName" => "Assigned to",
     "attribute" => "Attribute",
     "attributeValue" => "Attribute Value",
-    "module" => "Module"
+    "module" => "Module",
+    'isRecurring' => 'Payment Type'
   ],
   "options" => [
     "yes" => "Yes",
@@ -71,5 +72,7 @@ return [
     'subscriptions' => "Each plan that a user purchases will be called a subscription, this way your application is
      able to identify what features and capabilities you are allowing your users.",
   ],
-  "helpFieldTrial" => "To enable a trial version, enter the number of days for the plan"
+  "helpFieldTrial" => "To enable a trial version, enter the number of days for the plan",
+  'oneTime' => 'one-time',
+  'recurring' => 'recurring',
 ];
