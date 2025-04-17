@@ -17,22 +17,26 @@ class AccessValidator extends Component
     $this->buttonLabel = $buttonLabel;
   }
 
+  public function validateAccess()
+  {
+    $currentUser = Auth::user();
+    if (!empty($currentUser)) {
+      if (is_module_enabled('Iplan') && $currentUser) {
+        $service = app('Modules\Iplan\Services\SubscriptionService');
+        $subscription = $service->validate(app('Modules\Iad\Entities\Ad'), $currentUser);
+        $this->hasSubscription = isset($subscription->id);
+        return;
+      }
+    }
+    $this->hasSubscription = false;
+  }
+
   /*
   * Render
   *
   */
   public function render()
   {
-    $currentUser = Auth::user();
-    if (!empty($currentUser)) {
-      if (is_module_enabled('Iplan') && $currentUser) {
-        $service = app('Modules\Iplan\Services\SubscriptionService');
-        $this->hasSubscription = $service->validate(app('Modules\Iad\Entities\Ad'), $currentUser);
-      }
-    } else {
-      $this->hasSubscription = false;
-    }
-
     return view('iplan::frontend.livewire.access-validator');
   }
 }
