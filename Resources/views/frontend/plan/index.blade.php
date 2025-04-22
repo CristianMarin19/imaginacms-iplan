@@ -18,6 +18,8 @@
         </button>
       </div>
     @endif
+
+    @if($showPlans)
     <div class="py-3">
       @php
         $params = [];
@@ -40,7 +42,7 @@
               array_merge($params['filter'],$filter);
             else
               $params['filter'] = $filter;
-            
+
           }
         }
       @endphp
@@ -66,6 +68,12 @@
                     ]"
       />
     </div>
+    @else
+        <div class="alert alert-warning" role="alert">
+          {{trans('iplan::plans.messages.You already have a recurring subscription')}}
+          <a class="btn  btn-primary" href="{{url('/ipanel/#/plans/me')}}">{{trans('iplan::common.button.cancel')}}</a>
+        </div>
+      @endif
   </div>
 
   <style>

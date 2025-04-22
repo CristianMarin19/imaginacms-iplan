@@ -420,4 +420,37 @@ class SubscriptionController extends BaseApiController
         //Return response
         return response()->json($response, $status ?? 200);
     }
+
+    /**
+     * Cancel subscription
+     */
+    public function cancel($id,Request $request)
+    {
+        try {
+            //Get Parameters from URL.
+            $params = $this->getParamsRequest($request);
+
+            //Request to Repository
+            $dataEntity = $this->subscription->getItem($id, $params);
+
+            //Break if no found item
+            if (! $dataEntity) {
+                throw new \Exception('Item not found', 404);
+            }
+
+            $response = $this->subscriptionService->cancelSubscription($dataEntity);
+
+            //Response
+            $response = ['messages' => [["message" => $response['msj']]]];
+
+        } catch (\Exception $e) {
+            \Log::error($this->log."Line: ".$e->getLine()." | Code: ".$e->getCode()." | Message: ".$e->getMessage()." | File: ".$e->getFile());
+            $status = $this->getStatusError($e->getCode());
+            $response = ['messages' => [['message' => $e->getMessage(), 'type' => 'error']]];
+        }
+
+        //Return response
+        return response()->json($response, $status ?? 200);
+    }
+
 }

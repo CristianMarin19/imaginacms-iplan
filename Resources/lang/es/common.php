@@ -73,5 +73,8 @@ return [
     'my-subscriptions' => 'Mis Suscripciones',
     'print' => 'Imprimir',
   ],
-  "planNotFound" => "El plan no es valido"
+  "planNotFound" => "El plan no es valido",
+  'button' => [
+    'cancel' => 'Ir a mis suscripciones'
+  ]
 ];

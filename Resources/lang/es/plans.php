@@ -27,6 +27,8 @@ return [
         'please-assign-product' => 'Debe asignar un producto al plan <b>:name</b> para su correcta monetización',
         'selectPlan' => 'Debe seleccionar un plan',
         'plan not found' => 'Plan no encontrado',
+        'plan is not recurrence' => 'Plan no es recurrente',
+        'You already have a recurring subscription' => 'Ya tienes una suscripción recurrente, debes cancelarla antes de comprar una nueva.'
     ],
     'validation' => [
     ],

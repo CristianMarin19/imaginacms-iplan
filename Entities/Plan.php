@@ -30,7 +30,8 @@ class Plan extends CrudModel
     "price",
     "status",
     "type",
-    "trial"
+    "trial",
+    "is_recurring"
   ];
 
     protected $casts = [
