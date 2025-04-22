@@ -60,5 +60,9 @@ return [
     'user-valid-subscription' => 'El usuario <b>:name</b>, posee al menos una (1) suscripción vigente.',
     'user-not-valid-subscription' => 'Lo sentimos. El usuario <b>:name</b>, no posee en el momento ninguna suscripción vigente.',
   ],
-  "planNotFound" => "Plan not valid"
+  "planNotFound" => "Plan not valid",
+  'button' => [
+    'cancel' => 'Go to my subscriptions'
+  ]
+
 ];

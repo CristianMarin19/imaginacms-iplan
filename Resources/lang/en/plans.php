@@ -29,6 +29,8 @@ return [
         'please-assign-product' => 'Please assign a product to the plan <b>:name</b> for its correct monetize',
         'selectPlan' => 'Please select a plan.',
         'plan not found' => 'Plan not found',
+        'plan is not recurrence' => 'Plan is not recurrence',
+        'You already have a recurring subscription' => 'You already have a recurring subscription, you must cancel it before purchasing a new one.'
     ],
     'frequencies' => [
         'unique' => 'Unique',
