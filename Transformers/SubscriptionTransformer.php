@@ -22,6 +22,7 @@ class SubscriptionTransformer extends JsonResource
       'planId' => $this->plan_id,
       'startDate' => $this->when($this->start_date, $this->start_date),
       'endDate' => $this->when($this->end_date, $this->end_date),
+      'urlToCancel' => $this->urlToCancel,
       'limits' => SubscriptionLimitTransformer::collection($this->whenLoaded('limits')),
       'createdAt' => $this->when($this->created_at, $this->created_at),
       'updatedAt' => $this->when($this->updated_at, $this->updated_at),

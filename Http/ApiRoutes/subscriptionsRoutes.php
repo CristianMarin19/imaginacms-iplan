@@ -41,4 +41,11 @@ Route::prefix('subscriptions')->group(function (Router $router) {
         'uses' => 'SubscriptionController@buy',
         'middleware' => ['auth:api'],
     ]);
+
+    $router->post('/cancel/{id}', [
+      'as' => 'api.iplan.subscriptions.cancel',
+      'uses' => 'SubscriptionController@cancel',
+      'middleware' => ['auth:api']
+    ]);
+
 });

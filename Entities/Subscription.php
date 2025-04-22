@@ -79,4 +79,16 @@ class Subscription extends Model
 
         return $isAvailable;
     }
+
+    public function getUrlToCancelAttribute()
+    {
+
+      if($this->plan->is_recurring && $this->status==1){
+        return route('api.iplan.subscriptions.cancel', ['id' => $this->id]);
+      }else{
+        return null;
+      }
+
+    }
+
 }
