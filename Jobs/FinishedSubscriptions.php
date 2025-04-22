@@ -39,6 +39,9 @@ class FinishedSubscriptions implements ShouldQueue
       ->where('entity', $userNamespace)
       ->whereDate('end_date', $nowDate) // Only Subscriptions to Finish Today
       ->whereTime('end_date', '<=', $nowHour) // Hour
+      ->whereHas('plan', function ($query) {
+        $query->where('is_recurring', 0);
+      })
       ->get();
 
     if (count($result) > 0) {

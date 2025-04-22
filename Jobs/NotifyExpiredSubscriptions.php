@@ -38,6 +38,9 @@ class NotifyExpiredSubscriptions implements ShouldQueue
       ->where('status', 1)
       ->where('entity', $userNamespace)
       ->whereRaw(\DB::raw("DATEDIFF(end_date, '{$nowDate}') <= 3"))
+      ->whereHas('plan', function ($query) {
+        $query->where('is_recurring', 0);
+      })
       ->get();
 
     if (count($result) > 0) {
