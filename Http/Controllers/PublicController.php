@@ -52,9 +52,23 @@ class PublicController extends BaseApiController
 
         $plans = $this->plan->getItemsBy($params);
 
+        $showPlans = true;
+
+        //Extra Validation to get if show or not the plans
+        if(\Auth::check()){
+          $user = \Auth::user();
+          // Check if user has another subscription active
+          $userSubscription = $this->subscriptionService->checkHasUserSuscription(['entity_id'=>$user->id,'entity'=>"Modules\\User\\Entities\\Sentinel\\User"]);
+          if(!is_null($userSubscription)){
+            //Check if the subscription belongs to a recurring plan
+            if($userSubscription->plan->is_recurring);
+              $showPlans = false;
+          }
+        }
+
         //$dataRequest = $request->all();
 
-        return view($tpl, compact('plans'));
+        return view($tpl, compact('plans', 'showPlans'));
     }
 
       // view products by category
