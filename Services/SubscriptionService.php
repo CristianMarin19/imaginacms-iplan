@@ -7,6 +7,9 @@ use Modules\Iplan\Entities\Subscription;
 
 class SubscriptionService
 {
+
+    private $log = "Iplan::SubscriptionService|| ";
+
     public function validate($model, $user = null)
     {
         //Get entity attributes
@@ -112,4 +115,101 @@ class SubscriptionService
 
         return $oldSubscription;
     }
+
+    /**
+     * Process to cancel subscription whe plan is recurring
+     */
+    public function cancelSubscription($subscription)
+    {
+
+      \Log::info($this->log . "cancelSubscription");
+
+      //Validate only subscription with recurrence plan
+      if(!$subscription->status)
+        throw new \Exception(trans("iplan::subscriptions.messages.subscription is already inactive"), 422); //unprocessable entity
+
+      //Validate only subscription with recurrence plan
+      if(!$subscription->plan->is_recurring)
+        throw new \Exception(trans("iplan::subscriptions.messages.plan is not recurrence"), 422); //unprocessable entity
+
+      //Get order for this suscription
+      $params = json_decode(json_encode(['filter' => ['field' => 'suscription_id']]));
+      $order = app( 'Modules\Icommerce\Repositories\OrderRepository')->getItem($subscription->id, $params);
+      if(is_null($order))
+        throw new \Exception(trans( "iplan::subscriptions.messages.Order not found"), 404);
+
+      //Get payment method used for this Order
+      $paymentMethod = app( 'Modules\Icommerce\Repositories\PaymentMethodRepository')->getItem($order->payment_code);
+      if(is_null($paymentMethod))
+        throw new \Exception(trans("iplan::subscriptions.messages.Payment method not found"), 404);
+
+      $nameSpace = $paymentMethod->name;
+
+      //Validation Class
+      $baseClass = "Modules\\".ucfirst($nameSpace)."\Services\RecurrenceService";
+      if(!class_exists($baseClass))
+        throw new \Exception(trans("iplan::subscriptions.messages.Recurrence Service Not found"), 404);
+
+      //Validation Method
+      $service = app($baseClass);
+      if(!method_exists($service, "cancelSubscription"))
+        throw new \Exception(trans( "iplan::subscriptions.messages.Cancel Subscription Not found for the payment method"), 404);
+
+      //Payment Method Cancel Subscription
+      $result = $service->cancelSubscription($order,$paymentMethod);
+
+      if(!$result['success'])
+        throw new \Exception('Error when the payment method ['.$nameSpace.'] tries to cancel the subscription (check the log)', 422);
+
+      $this->setSubscritionToInactive($subscription);
+
+      //Response Final
+      return [
+        "success" => true,
+        "msj" => "Subscription canceled successfuly"
+      ];
+    }
+
+    /**
+     * set subscription and send notification to user
+     * Method Used by API and Confirmation Response in Payment Method
+     */
+    public function setSubscritionToInactive($subscription)
+    {
+
+      \Log::info($this->log . "setSubscritionToInactive");
+
+      if(is_numeric($subscription))
+        $subscription = Subscription::find($subscription);
+
+      //The subscription is Active
+      if($subscription->status==1){
+
+        $subscription->status = 0;
+        $subscription->save();
+        \Log::info($this->log . "setSubscritionToInactive|ID:".$subscription->id);
+
+        //Extra Validation
+        if($subscription->entity=="Modules\User\Entities\Sentinel\User"){
+          $user = $subscription->entityData;
+
+          $notificationService = app("Modules\Notification\Services\Inotification");
+
+          $notificationService->to([
+            'email' => $user->email,
+            'broadcast' => $subscription->entity_id,
+            'push' => $subscription->entity_id,
+          ])->push(
+            [
+              'title' => trans('iplan::subscriptions.alerts.subInactive'),
+              'message' => trans('iplan::subscriptions.messages.subInactive', ['name' => $subscription->name])
+            ]
+          );
+        }
+
+      }
+
+    }
+
+
 }
