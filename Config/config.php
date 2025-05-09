@@ -40,9 +40,7 @@ return [
     'entityplans' => 'iplan::cms.documentation.entityplans',
     'subscriptions' => 'iplan::cms.documentation.subscriptions',
   ],
-  'external-frequencies' => [
-    []
-  ],
+  'external-frequencies' => [],
   //Tenant
   'tenant' => [
     'dbPrefix' => 'iplan',
