@@ -123,7 +123,7 @@ class SubscriptionController extends BaseApiController
             }
 
             // Data to save in Subscription
-            $startDate = ($plan->trial > 0) ? Carbon::now()->addDays($plan->trial) : Carbon::now();
+            $startDate = Carbon::now();
 
             $totalDays = $plan->trial + $plan->frequency_id;
             $endDate = Carbon::now()->addDays($totalDays);
